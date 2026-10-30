@@ -1,0 +1,16 @@
+{
+  "_note": "Rules marked GDD come from GDD v4 and are original design. Values marked DRAFT are placeholders until the economy simulator confirms them.",
+  "status": "draft",
+  "upgradeCostGrowth": 0.14,
+  "milestoneLevels": [10, 25, 50, 100, 200],
+  "baseStorageHours": 4,
+  "maxHelpfulNeighbours": 4,
+  "treasury": {
+    "baseLimit": 600,
+    "overflowToChest": 0.3,
+    "warnAt": 0.9,
+    "minMultipleOfTopPrice": 1.5
+  },
+  "startingResources": { "coin": 260, "food": 0, "knowledge": 0, "reputation": 0 },
+  "timeModes": { "showcase": 60, "playtest": 1 }
+}

@@ -1,0 +1,142 @@
+/* Grey-box styles. Final look comes from the Art Bible (docs/ART_BIBLE.md). */
+:root {
+  --ink: #2b2118;
+  --paper: #f3ead8;
+  --panel: #fffaf0;
+  --line: #c9b896;
+  --accent: #8a5a2b;
+  --warn: #b3541e;
+  --muted: #7a6a55;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans Arabic', sans-serif;
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #2b2118; overscroll-behavior: none; }
+body { -webkit-tap-highlight-color: transparent; user-select: none; }
+
+#app {
+  position: relative;
+  max-width: 480px;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+#hud {
+  padding: calc(8px + var(--safe-top)) 10px 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 8px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+.res { display: flex; gap: 4px; align-items: baseline; white-space: nowrap; }
+.res b { font-variant-numeric: tabular-nums; }
+.res small { color: var(--muted); }
+.res.coin { grid-column: span 2; }
+
+#warn { background: var(--warn); color: #fff; font-size: 12px; padding: 4px 10px; }
+
+#stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+#stage canvas { position: absolute; inset: 0; display: block; touch-action: none; }
+
+#palette {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 8px 10px;
+  border-top: 1px solid var(--line);
+  scrollbar-width: none;
+}
+#palette::-webkit-scrollbar { display: none; }
+#palette button {
+  flex: 0 0 auto;
+  min-width: 84px;
+  min-height: 52px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  text-align: start;
+}
+#palette button[aria-pressed='true'] { border: 2px solid var(--accent); background: #f6e3c4; }
+#palette button .cost { display: block; color: var(--muted); font-size: 11px; }
+
+#bar {
+  display: flex;
+  gap: 6px;
+  padding: 6px 10px calc(8px + var(--safe-bottom));
+  font-size: 12px;
+  align-items: center;
+}
+#bar button {
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+}
+#bar .primary { background: var(--accent); color: #fff; border-color: var(--accent); flex: 1; font-weight: 600; }
+
+#panel {
+  position: absolute;
+  inset-inline: 10px;
+  bottom: 120px;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  font-size: 14px;
+}
+#panel h2 { margin: 0 0 6px; font-size: 17px; }
+#panel dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 8px 0 12px; }
+#panel dt { color: var(--muted); }
+#panel dd { margin: 0; font-variant-numeric: tabular-nums; }
+#panel .actions { display: flex; gap: 8px; }
+#panel button {
+  flex: 1;
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font: inherit;
+  color: var(--ink);
+}
+#panel button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+#panel button:disabled { opacity: 0.45; }
+
+#toast {
+  position: absolute;
+  top: 70px;
+  inset-inline: 20px;
+  padding: 10px 12px;
+  background: rgba(43, 33, 24, 0.92);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+  pointer-events: none;
+}
+
+#placeholder-notice {
+  position: absolute;
+  bottom: 4px;
+  inset-inline: 0;
+  z-index: 1;
+  text-align: center;
+  font-size: 10px;
+  color: #b0307a;
+  pointer-events: none;
+}

@@ -1,0 +1,78 @@
+{
+  "_note": "DRAFT Age V roster for the slice. GDD v4 does not list the twelve buildings; names, tags and numbers are proposals awaiting Designer tuning (economy simulator), Historian review and Filip's approval. Output for date_grove matches the GDD example (level 5 = 60 food/h, 75 beside water).",
+  "buildings": [
+    {
+      "id": "well", "nameKey": "building.well", "status": "draft",
+      "tags": ["water"], "produces": null, "outputPerLevelPerHour": 0,
+      "placeCost": 50, "firstUpgradeCost": 80, "waterUse": 0, "waterProvided": 6,
+      "allowedTerrain": ["open", "creek"], "neighbourBonuses": []
+    },
+    {
+      "id": "date_grove", "nameKey": "building.date_grove", "status": "draft",
+      "tags": ["food", "farm"], "produces": "food", "outputPerLevelPerHour": 12,
+      "placeCost": 40, "firstUpgradeCost": 30, "waterUse": 1, "waterProvided": 0,
+      "allowedTerrain": ["open", "creek"], "neighbourBonuses": [{ "fromTag": "water", "pct": 25 }]
+    },
+    {
+      "id": "fish_trap", "nameKey": "building.fish_trap", "status": "draft",
+      "tags": ["food"], "produces": "food", "outputPerLevelPerHour": 15,
+      "placeCost": 45, "firstUpgradeCost": 35, "waterUse": 0, "waterProvided": 0,
+      "allowedTerrain": ["coast"], "neighbourBonuses": [{ "fromTag": "port", "pct": 15 }]
+    },
+    {
+      "id": "barasti_house", "nameKey": "building.barasti_house", "status": "draft",
+      "tags": ["home"], "produces": null, "outputPerLevelPerHour": 0,
+      "placeCost": 30, "firstUpgradeCost": 0, "waterUse": 1, "waterProvided": 0,
+      "allowedTerrain": ["open", "dune"], "neighbourBonuses": []
+    },
+    {
+      "id": "souq", "nameKey": "building.souq", "status": "draft",
+      "tags": ["market"], "produces": "coin", "outputPerLevelPerHour": 10,
+      "placeCost": 80, "firstUpgradeCost": 60, "waterUse": 1, "waterProvided": 0,
+      "allowedTerrain": ["open"],
+      "neighbourBonuses": [{ "fromTag": "farm", "pct": 10 }, { "fromTag": "home", "pct": 10 }, { "fromTag": "port", "pct": 10 }]
+    },
+    {
+      "id": "jetty", "nameKey": "building.jetty", "status": "draft",
+      "tags": ["port"], "produces": null, "outputPerLevelPerHour": 0,
+      "placeCost": 120, "firstUpgradeCost": 0, "waterUse": 0, "waterProvided": 0,
+      "allowedTerrain": ["coast"], "neighbourBonuses": [], "maxCount": 1
+    },
+    {
+      "id": "pearl_merchant", "nameKey": "building.pearl_merchant", "status": "draft",
+      "tags": ["market"], "produces": "coin", "outputPerLevelPerHour": 14,
+      "placeCost": 150, "firstUpgradeCost": 90, "waterUse": 1, "waterProvided": 0,
+      "allowedTerrain": ["open"], "neighbourBonuses": [{ "fromTag": "port", "pct": 20 }]
+    },
+    {
+      "id": "majlis", "nameKey": "building.majlis", "status": "draft",
+      "tags": ["civic"], "produces": "reputation", "outputPerLevelPerHour": 4,
+      "placeCost": 100, "firstUpgradeCost": 70, "waterUse": 1, "waterProvided": 0,
+      "allowedTerrain": ["open"], "neighbourBonuses": [{ "fromTag": "home", "pct": 15 }], "maxCount": 1
+    },
+    {
+      "id": "scribe_house", "nameKey": "building.scribe_house", "status": "draft",
+      "tags": ["learning"], "produces": "knowledge", "outputPerLevelPerHour": 6,
+      "placeCost": 90, "firstUpgradeCost": 60, "waterUse": 1, "waterProvided": 0,
+      "allowedTerrain": ["open"], "neighbourBonuses": [{ "fromTag": "home", "pct": 10 }, { "fromTag": "civic", "pct": 10 }]
+    },
+    {
+      "id": "watchtower", "nameKey": "building.watchtower", "status": "draft",
+      "tags": ["defence"], "produces": null, "outputPerLevelPerHour": 0,
+      "placeCost": 110, "firstUpgradeCost": 0, "waterUse": 0, "waterProvided": 0,
+      "allowedTerrain": ["open", "dune", "coast"], "neighbourBonuses": []
+    },
+    {
+      "id": "treasury", "nameKey": "building.treasury", "status": "draft",
+      "tags": ["civic"], "produces": null, "outputPerLevelPerHour": 0,
+      "placeCost": 100, "firstUpgradeCost": 120, "waterUse": 0, "waterProvided": 0,
+      "allowedTerrain": ["open"], "neighbourBonuses": [], "treasuryLimitPerLevel": 400, "maxCount": 1
+    },
+    {
+      "id": "storehouse", "nameKey": "building.storehouse", "status": "draft",
+      "tags": ["storage"], "produces": null, "outputPerLevelPerHour": 0,
+      "placeCost": 70, "firstUpgradeCost": 0, "waterUse": 0, "waterProvided": 0,
+      "allowedTerrain": ["open", "dune"], "neighbourBonuses": [], "neighbourStorageBonus": 0.5
+    }
+  ]
+}

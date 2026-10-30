@@ -1,0 +1,25 @@
+{
+  "name": "ages-of-arabia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Suhail: Ages of Arabia - vertical slice (The Pearl Coast)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host --port 4173",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "e2e": "node tests/e2e/smoke.mjs",
+    "sim": "vite-node tools/simulate.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^6.4.5",
+    "vitest": "^3.2.7"
+  },
+  "dependencies": {
+    "pixi.js": "^8.22.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "_note": "DRAFT 6 by 6 starting map for the Pearl Coast slice. Row 0 is inland, row 5 is the shore.",
+  "id": "pearl-coast",
+  "status": "draft",
+  "width": 6,
+  "height": 6,
+  "rows": [
+    "d....d",
+    "..k...",
+    "..k..s",
+    "......",
+    "......",
+    "cccccc"
+  ],
+  "terrainCodes": {
+    ".": "open",
+    "c": "coast",
+    "k": "creek",
+    "d": "dune",
+    "s": "sabkha",
+    "m": "mountain",
+    "w": "wadi"
+  }
+}

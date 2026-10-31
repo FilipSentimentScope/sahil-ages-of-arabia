@@ -12,7 +12,8 @@ Each task lists acceptance criteria. The Director keeps this file current.
 | P2-03 | Grey-box town screen | Developer | done | Phone-size play-through places, collects, upgrades, saves, switches to Arabic with no console errors |
 | P2-04 | CLAUDE.md and docs | Director | done | All files listed in CLAUDE.md exist and link correctly |
 | P2-05 | Agent role files | Director | done | Five files in .claude/agents with scope, inputs, outputs, rules |
-| P2-06 | Economy simulator skeleton | Designer, Developer | todo | `npm run sim` plays heavy, engaged and casual profiles for N days with the current roster and prints coin, food, knowledge, reputation and treasury overflow per day |
+| P2-06 | Economy simulator skeleton | Designer, Developer | done | `npm run sim` plays heavy, engaged and casual profiles for N days with the current roster and prints coin, food, knowledge, reputation and treasury overflow per day. First findings in docs/SIMULATION_NOTES.md |
+| P2-09 | First balance pass: food sink, storage upgrades, welcome-back bonus, retune against GDD section 18 | Designer, Developer | todo | Simulator shows casual within about 2x of engaged; overflow under 15% of treasury income for engaged players |
 | P2-07 | Asset requirement list review | Creative | todo | ASSET_INVENTORY rows checked against GAME_DESIGN contents; counts confirmed |
 | P2-08 | Connect GitHub repository | Filip, Director | blocked | Repository exists and is reachable; history pushed |
 

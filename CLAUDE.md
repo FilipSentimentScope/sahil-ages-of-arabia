@@ -58,6 +58,7 @@ npm test             # core unit tests (must pass before any commit)
 npm run typecheck    # TypeScript check
 npm run build        # production build into dist/
 npm run e2e          # phone-size play-through (run after npm run build)
+npm run sim -- 21    # economy simulator; notes in docs/SIMULATION_NOTES.md
 ```
 
 ## 5. Rules that are never broken
@@ -145,7 +146,8 @@ is met (mirrors the brief's section 12).
 ## 11. Current priorities (update when they change)
 
 Phase 2, planning and architecture (week 1). Next up, in order:
-1. Economy simulator skeleton (Designer + Developer) using the draft roster.
+1. First balance pass (P2-09): food sink, storage upgrades, welcome-back bonus, retune against
+   GDD section 18. Findings that drive it: docs/SIMULATION_NOTES.md.
 2. Art Bible outline and three style-frame prompt sheets (Creative). Needs Gate 1 review.
 3. Research pack outline and the first five Archive drafts with sources (Historian).
 4. Routes and decision points in core, grey-box only (Developer).

@@ -23,9 +23,10 @@ Done:
 - Grey-box town screen: portrait, English and Arabic with right-to-left, place, collect, upgrade,
   autosave, production while away. Phone-size Playwright play-through passing.
 - CLAUDE.md, docs, agent role files
+- Economy simulator, first version; first findings in docs/SIMULATION_NOTES.md
 
 Remaining in Phase 2:
-- Economy simulator skeleton
+- First balance pass (P2-09)
 - Asset requirement list reviewed by Creative
 - Private GitHub repository connected (needs Filip)
 

@@ -95,6 +95,7 @@ body { -webkit-tap-highlight-color: transparent; user-select: none; }
 
 #panel {
   position: absolute;
+  z-index: 5;
   inset-inline: 10px;
   bottom: 120px;
   padding: 14px;
@@ -123,6 +124,7 @@ body { -webkit-tap-highlight-color: transparent; user-select: none; }
 
 #toast {
   position: absolute;
+  z-index: 6;
   top: 70px;
   inset-inline: 20px;
   padding: 10px 12px;

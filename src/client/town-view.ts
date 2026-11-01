@@ -2,7 +2,7 @@
  * Grey-box rendering of the town grid with PixiJS. Shapes and colours are
  * placeholders; final painted art replaces them after Gate 1 (docs/ART_BIBLE.md).
  */
-import { Application, Container, Graphics, Text } from 'pixi.js';
+import { Application, Container, Graphics, Sprite, Text, type Texture } from 'pixi.js';
 import type { LoadedContent, PlacedBuilding, TerrainId, TownState } from '../core';
 import { outputPerHour, storageCap } from '../core';
 import { t } from './i18n';
@@ -40,6 +40,23 @@ export class TownView {
   private ox = 0;
   private oy = 0;
   private builtVersion = -1;
+  private board: Texture | null = null;
+
+  /**
+   * Use a painted board for this map. Only shown when the town's terrain still matches the
+   * current map data (an old save made on an earlier map falls back to flat colours, so the
+   * painting never shows terrain the rules do not have).
+   */
+  setBoard(texture: Texture | null): void {
+    this.board = texture;
+  }
+
+  private boardMatches(s: TownState): boolean {
+    const m = this.content.map;
+    if (s.mapId !== m.id || s.width !== m.width || s.height !== m.height) return false;
+    const expected = m.rows.join('').split('').map((ch) => m.terrainCodes[ch]);
+    return expected.every((t, i) => s.terrain[i] === t);
+  }
 
   constructor(
     private readonly app: Application,
@@ -71,6 +88,23 @@ export class TownView {
 
   private drawTerrain(s: TownState): void {
     this.terrainLayer.removeChildren().forEach((c) => c.destroy());
+    if (this.board && this.boardMatches(s)) {
+      const art = new Sprite(this.board);
+      art.position.set(this.ox, this.oy);
+      art.width = this.cell * s.width;
+      art.height = this.cell * s.height;
+      this.terrainLayer.addChild(art);
+      const lines = new Graphics();
+      for (let i = 0; i <= s.width; i++) {
+        lines.moveTo(this.ox + i * this.cell, this.oy).lineTo(this.ox + i * this.cell, this.oy + s.height * this.cell);
+      }
+      for (let j = 0; j <= s.height; j++) {
+        lines.moveTo(this.ox, this.oy + j * this.cell).lineTo(this.ox + s.width * this.cell, this.oy + j * this.cell);
+      }
+      lines.stroke({ width: 1, color: 0x5a4126, alpha: 0.35 });
+      this.terrainLayer.addChild(lines);
+      return;
+    }
     const g = new Graphics();
     for (let y = 0; y < s.height; y++) {
       for (let x = 0; x < s.width; x++) {

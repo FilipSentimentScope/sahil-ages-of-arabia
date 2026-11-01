@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadDefaultContent } from '../../src/core/content-pack';
+import { testContent } from './fixtures';
 import {
   HOUR_MS,
   canPlace,
@@ -18,7 +18,7 @@ import {
   type TownState,
 } from '../../src/core';
 
-const content = loadDefaultContent();
+const content = testContent();
 const T0 = 1_000_000;
 
 function richTown(): TownState {

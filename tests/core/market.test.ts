@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadDefaultContent } from '../../src/core/content-pack';
+import { testContent } from './fixtures';
 import {
   HOUR_MS,
   coinStorageTotal,
@@ -16,7 +16,7 @@ import {
   type TownState,
 } from '../../src/core';
 
-const content = loadDefaultContent();
+const content = testContent();
 const DAY = 24 * HOUR_MS;
 
 function town(): TownState {

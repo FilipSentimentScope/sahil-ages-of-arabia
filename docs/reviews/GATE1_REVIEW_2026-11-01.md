@@ -46,3 +46,19 @@ how it sounds needs Filip's ears.
 ## Gate 1 decision needed from Filip
 Approve the **style direction** now (ART-001, the painterly portrait look, ART-003 v2 look), so the
 Scenario style model can be trained as soon as the three round 2 frames come back.
+
+---
+
+# Round 2 (1 Nov 2026, afternoon)
+
+Files: `sf_leader_ibn-majid_v03.jpg`, `sf_ui_ornaments_v03.jpg`, `sf_town_keyart_v02.jpg`,
+`sf_town_board_v02.jpg` (uploaded through the chat as JPEG; PNG originals wanted for production).
+
+| ID | Verdict | Notes |
+| --- | --- | --- |
+| ART-001 v2 (town key art) | **Approved by Filip as the style reference** | Same look as v1, warmer evening light, clearer shoreline. Later rounds: roofs still read as straw thatch rather than palm-frond mats. |
+| ART-001b v2 (board) | **Approved** | Square, no painted grid, layout as asked. Its terrain is larger than our draft map, so the map data was changed to follow the painting (content/maps/pearl-coast.json, read cell by cell). Integrated in the game and checked in a phone screenshot. |
+| ART-002 v3 (Ibn Majid) | **Approved** | Kamal now a small plate on a knotted cord running to his face, eyes on a star; lantern on the deck rail. Painterly, dignified, 4:5. Kamal handling to be confirmed by a historian later. |
+| ART-003 v3 (interface kit) | **Approved** | Straight edges, can stretch to any panel size; sadu diamonds and gypsum lattice as in v2. |
+
+**Gate 1 passed** for the style direction (Filip, 1 Nov 2026). Music round 2 follows on 2 Nov.

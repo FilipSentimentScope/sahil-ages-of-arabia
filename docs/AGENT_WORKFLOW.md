@@ -47,7 +47,7 @@ CLAUDE.md, the docs, the task board and the code.
 | Gate | Passes when | Approver |
 | --- | --- | --- |
 | G0 Direction | Phase 1 plan approved | Filip (passed 31 Oct 2026) |
-| G1 Creative foundation | Art Bible, three style frames (town, leader portrait, interface screen), theme sketch | Filip |
+| G1 Creative foundation | Art Bible, three style frames (town, leader portrait, interface screen), theme sketch | Filip (art passed 1 Nov 2026; music round 2 pending) |
 | G2 Grey box | Whole chapter playable on a phone with placeholder art; simulator shows pacing inside targets | Filip |
 | G3 Content complete | All assets integrated, placeholders listed, all text reviewed by a human historian | Filip |
 | G4 Release candidate | Definition of Done met, device tests passed, known issues listed, engine decided | Filip |

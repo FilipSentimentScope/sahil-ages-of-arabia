@@ -63,6 +63,14 @@ describe('content validation', () => {
     expect(c.building('date_grove').produces).toBe('food');
   });
 
+  it('the playable map leaves room for the slice: at least 12 open plots and a shore row', () => {
+    const c = loadDefaultContent();
+    const cells = c.map.rows.join('');
+    const open = [...cells].filter((ch) => c.map.terrainCodes[ch] === 'open').length;
+    expect(open).toBeGreaterThanOrEqual(12);
+    expect(c.map.rows.at(-1)).toMatch(/^c+$/);
+  });
+
   it('fails loudly on bad content', () => {
     const c = loadDefaultContent();
     const bad = c.buildings.map((b) => (b.id === 'souq' ? { ...b, produces: 'gold' as never } : b));

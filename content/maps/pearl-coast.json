@@ -1,14 +1,14 @@
 {
-  "_note": "DRAFT 6 by 6 starting map for the Pearl Coast slice. Row 0 is inland, row 5 is the shore.",
+  "_note": "DRAFT 6 by 6 starting map for the Pearl Coast slice, read cell by cell from the approved board painting (assets/art/processed/board_pearl-coast_v02.jpg, Gate 1 round 2). Row 0 is inland, row 5 is the shore. Change the painting and this file together.",
   "id": "pearl-coast",
   "status": "draft",
   "width": 6,
   "height": 6,
   "rows": [
-    "d....d",
-    "..k...",
-    "..k..s",
-    "......",
+    "ddk.dd",
+    "ddk.d.",
+    "..k.ss",
+    "..kk..",
     "......",
     "cccccc"
   ],

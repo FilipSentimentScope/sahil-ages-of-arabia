@@ -3,7 +3,7 @@
  * town view and an HTML interface. No game rule lives here: every change goes
  * through src/core so the simulator, tests and a future server agree.
  */
-import { Application } from 'pixi.js';
+import { Application, Assets, type Texture } from 'pixi.js';
 import {
   GameClock,
   canPlace,
@@ -35,6 +35,7 @@ import {
 import { loadDefaultContent } from '../core/content-pack';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { browserStorage } from './storage';
+import { BOARD_ART } from './art';
 import { TownView } from './town-view';
 
 const SAVE_KEY = 'aoa.slice.save.v1';
@@ -271,6 +272,14 @@ async function start(): Promise<void> {
   await app.init({ resizeTo: stage, background: 0xf3ead8, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true });
   stage.appendChild(app.canvas);
   view = new TownView(app, content, onCellTap);
+  const boardUrl = BOARD_ART[content.map.id];
+  if (boardUrl) {
+    try {
+      view.setBoard(await Assets.load<Texture>(boardUrl));
+    } catch (e) {
+      console.warn('[art] board painting failed to load; using flat terrain', e);
+    }
+  }
   view.layout(town);
   // The stage can change size without a window resize (warning banner, panel, rotation).
   new ResizeObserver(() => app.resize()).observe(stage);

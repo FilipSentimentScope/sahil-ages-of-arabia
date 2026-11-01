@@ -38,10 +38,10 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 
 | ID | Asset | Status | Tool | Prompt file | Licence | Reviewer | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| ART-001 | Style frame: town key art (sf_town_keyart_v01.png) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Approve as style reference (GATE1_REVIEW_2026-11-01) |
-| ART-001b | Style frame: town at gameplay angle (sf_town_board_v01.png) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Redo: painted grid clashes, half sea |
-| ART-002 | Style frame: leader portrait, Ahmad ibn Majid (sf_leader_ibn-majid_v01.png, v02.jpg) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Redo kamal (drawn as a large board); keep v1 style, v2 framing |
-| ART-003 | Style frame: interface ornament kit (sf_ui_ornaments_v01.png, v02.png) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Choose v2 look; redo with straight edges |
+| ART-001 | Style frame: town key art (sf_town_keyart_v01.png; v02 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v02 is the style reference for all art (Filip, 1 Nov) |
+| ART-001b | Board painting (v02 approved; processed as board_pearl-coast_v02.jpg) | integrated | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | In game since 1 Nov; map data follows the painting |
+| ART-002 | Leader portrait, Ahmad ibn Majid (v03 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v03 has a correct small kamal; artistic interpretation |
+| ART-003 | Interface ornament kit (v03 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v03: straight edges, ready to slice |
 | BLD-01..12 | Buildings, Age V | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
 | LDR-02..06, RAWI, TOOLS, TERRAIN, FIGHT, DIVE, ARC, AGES | Remaining art | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
 | MUS-01 | Main theme sketch (temp; composer brief) | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Temp only; game copy in assets/audio/processed |
@@ -58,5 +58,5 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 | Where | What | Replace with |
 | --- | --- | --- |
 | Town view | Coloured rounded squares with magenta border for all 12 buildings | Painted building art (Phase 5) |
-| Town view | Flat colour terrain tiles | Painted terrain (Phase 5) |
+| Town view | (replaced 1 Nov by the board painting; flat colours remain only as a fallback for old saves) | n/a |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

@@ -148,7 +148,8 @@ is met (mirrors the brief's section 12).
 
 Phase 2 to 3 (week 1 to 2). Done: balance pass P2-09, Art Bible v0.1, image and ElevenLabs prompt
 sheets, research pack, first five Archive drafts, story script v0.1. Next, in order:
-1. Gate 1: Filip generates the style frames and audio from assets/prompts/; Creative reviews them.
+1. Gate 1 art passed (1 Nov; ART-001 v2 is the style reference). Next art: the 12 buildings, generated
+   by Filip with ART-001 v2 attached as style reference. Music round 2 arrives 2 Nov.
 2. Routes and decision points in core, grey-box (P4-01), using docs/story/STORY_SCRIPT.md.
 3. Second balance pass (P2-10): slice sinks and a hoarding profile.
 4. Remaining 10 Archive pages and 25 questions (P3-07).

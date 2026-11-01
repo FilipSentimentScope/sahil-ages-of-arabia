@@ -4,6 +4,8 @@ Newest first. Each entry: date, decision, who decided, reason, where it is appli
 
 | Date | Decision | Decided by | Reason | Applied in |
 | --- | --- | --- | --- | --- |
+| 2026-11-01 | Gate 1 passed: art direction approved, ART-001 v2 (town key art) is the style reference for all art | Filip | Round 2 frames approved; see docs/reviews/GATE1_REVIEW_2026-11-01.md | ART_BIBLE, prompts |
+| 2026-11-01 | Map data follows the approved board painting (not the other way round) | Claude (Director) | Avoids repainting; terrain read cell by cell, at least 12 open plots kept | content/maps/pearl-coast.json |
 | 2026-11-01 | Agents draft history, music direction and story themselves until historians, a composer and writers are hired after funding; drafts stay marked 'draft' | Filip | Keep momentum before funding | HISTORICAL_RESEARCH, AUDIO_DIRECTION, docs/story |
 | 2026-11-01 | Code lives at github.com/FilipSentimentScope/sahil-ages-of-arabia | Filip | Durable record beyond the temporary workspace | Repository |
 | 2026-10-31 | Slice text is English first, with Arabic interface strings and right-to-left layout | Claude (recommendation, not contested by Filip) | Keeps Arabic quality honest until a native writer joins | i18n, content/ar |

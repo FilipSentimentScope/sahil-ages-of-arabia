@@ -38,17 +38,20 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 
 | ID | Asset | Status | Tool | Prompt file | Licence | Reviewer | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| ART-001 | Style frame: town key art | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1 |
-| ART-001b | Style frame: town at gameplay angle | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1 |
-| ART-002 | Style frame: leader portrait (Ahmad ibn Majid) | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1; artistic interpretation |
-| ART-003 | Style frame: interface ornament kit | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1 |
+| ART-001 | Style frame: town key art (sf_town_keyart_v01.png) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Approve as style reference (GATE1_REVIEW_2026-11-01) |
+| ART-001b | Style frame: town at gameplay angle (sf_town_board_v01.png) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Redo: painted grid clashes, half sea |
+| ART-002 | Style frame: leader portrait, Ahmad ibn Majid (sf_leader_ibn-majid_v01.png, v02.jpg) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Redo kamal (drawn as a large board); keep v1 style, v2 framing |
+| ART-003 | Style frame: interface ornament kit (sf_ui_ornaments_v01.png, v02.png) | reviewed | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Choose v2 look; redo with straight edges |
 | BLD-01..12 | Buildings, Age V | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
 | LDR-02..06, RAWI, TOOLS, TERRAIN, FIGHT, DIVE, ARC, AGES | Remaining art | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
-| MUS-01 | Main theme sketch (temp; composer brief) | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | Never final; human composer writes the theme |
-| MUS-02..05 | Town bed, great dive, homecoming, collapse | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | |
-| AMB-01..03 | Ambient loops | prompt-prepared | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
-| SFX-01..30 | Sound effects | prompt-prepared | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
-| VO-01 | Rawi voice and 12 English lines | prompt-prepared | ElevenLabs Voice Design + TTS | ELEVENLABS_PROMPTS.md | | | Arabic lines wait for a native writer |
+| MUS-01 | Main theme sketch (temp; composer brief) | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Temp only; game copy in assets/audio/processed |
+| MUS-02 | Town bed | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | Filip sends 2 Nov |
+| MUS-03 | Great dive loop | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Loop section to be cut (track fades out) |
+| MUS-04 | Homecoming | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Accepted |
+| MUS-05 | Collapse preview | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Check by ear: may be too full for the brief |
+| AMB-01..03 | Ambient loops | prompt-prepared (deferred by Filip) | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
+| SFX-01..30 | Sound effects | prompt-prepared (deferred by Filip) | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
+| VO-01 | Rawi voice and 12 English lines | reviewed | ElevenLabs Voice Design + TTS | ELEVENLABS_PROMPTS.md | to log | Creative | All 12 accepted; check lines 02, 04, 08 by ear; Arabic waits for a native writer |
 
 ## Placeholders in use
 

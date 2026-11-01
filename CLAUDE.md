@@ -146,8 +146,8 @@ is met (mirrors the brief's section 12).
 ## 11. Current priorities (update when they change)
 
 Phase 2, planning and architecture (week 1). Next up, in order:
-1. First balance pass (P2-09): food sink, storage upgrades, welcome-back bonus, retune against
-   GDD section 18. Findings that drive it: docs/SIMULATION_NOTES.md.
+1. Second balance pass (P2-10): slice sinks and a hoarding profile. First pass (P2-09) is done;
+   results in docs/SIMULATION_NOTES.md.
 2. Art Bible outline and three style-frame prompt sheets (Creative). Needs Gate 1 review.
 3. Research pack outline and the first five Archive drafts with sources (Historian).
 4. Routes and decision points in core, grey-box only (Developer).

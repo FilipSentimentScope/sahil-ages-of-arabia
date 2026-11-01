@@ -76,8 +76,9 @@ await page.click('[data-building="date_grove"]'); // deselect
 const placed = await page.evaluate(() => window.__aoa.town.buildings.map((b) => b.defId));
 if (placed.join(',') !== 'well,date_grove') fail(`expected well,date_grove, got ${placed}`);
 
-// Showcase time runs at 60x: 6 real seconds = 6 game minutes = 1.5 food at 15/h.
-await page.waitForTimeout(6500);
+// Showcase time runs at 60x: 1 real second = 1 game minute. Wait long enough to have food
+// worth at least one coin at the market (about 3 food at 15 food per hour).
+await page.waitForTimeout(16000);
 await page.screenshot({ path: `${OUT}/03-producing.png` });
 const stored = await page.evaluate(() => window.__aoa.town.buildings[1].stored);
 if (!(stored > 1)) fail(`date grove should have stored more than 1 food, has ${stored}`);
@@ -86,6 +87,15 @@ await page.click('#btn-collect-all');
 await page.waitForTimeout(200);
 const food = await page.evaluate(() => window.__aoa.town.resources.food);
 if (!(food >= 1)) fail(`collect should add food, food=${food}`);
+
+// Sell the food at the market.
+const coinBefore = await page.evaluate(() => window.__aoa.town.resources.coin);
+await page.click('#btn-sell-food');
+await page.waitForTimeout(200);
+const after = await page.evaluate(() => ({ food: window.__aoa.town.resources.food, coin: window.__aoa.town.resources.coin }));
+if (after.food !== 0) fail(`selling should empty food, food=${after.food}`);
+if (!(after.coin > coinBefore)) fail(`selling should pay coin: ${coinBefore} -> ${after.coin}`);
+await page.screenshot({ path: `${OUT}/03b-sold-food.png` });
 
 // Open the building panel.
 await tapCell(2, 3);

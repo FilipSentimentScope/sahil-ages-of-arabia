@@ -64,7 +64,11 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | A4 | Wells provide 6 water per level | [ASSUMPTION] | Designer |
 | A5 | Showcase speed x60 (1 real second = 1 game minute) | [ASSUMPTION] | Designer, Filip |
 | A6 | "Part of every coin you earn" goes to the savings chest (GDD section 20): the share is unspecified, so only overflow feeds the chest for now | [OPEN] | Designer |
-| A7 | Food has no cap and no use yet in the slice; uses (caravan supplies, market sale) come with routes | [OPEN] | Designer |
+| A7 | Food is sold at the market (falling price, market day); caravan supplies come with routes | [GDD] market; parameters [ASSUMPTION] | Designer |
+| A11 | Storage rises 0.5 hours per level above 1, from 4 to 10 hours | [ASSUMPTION]; 4 and 10 are [GDD] | Designer |
+| A12 | Treasury limit is at least 1.25x one full coin collection | [ASSUMPTION] | Designer |
+| A13 | Market: base 0.4 coin per food, price halves at 400 recently sold, recovers over 24 hours, market day x1.25 on day 5 of each week | [ASSUMPTION] | Designer |
+| A14 | Economy growth compounds too fast without age prices and sinks (SIMULATION_NOTES run 2) | [OPEN] | Designer |
 | A8 | Population, garrison and water are kept in the background for comprehension (R3) | [RECOMMENDATION] | Designer |
 | A9 | Fight unit counts and garrison composition | [OPEN] | Designer |
 | A10 | Diving season: day count (KPI suggests 7), loss curve, pearl grades, prices | [OPEN] | Designer |

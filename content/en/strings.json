@@ -49,5 +49,11 @@
   "err.max_count": "You already have the most of these you can build.",
   "err.max_level": "This building cannot be upgraded.",
   "err.nothing_to_collect": "Nothing to collect yet.",
-  "placeholder.notice": "Grey-box build: shapes and colours are placeholders, not final art."
+  "placeholder.notice": "Grey-box build: shapes and colours are placeholders, not final art.",
+  "ui.sell_food": "Sell food",
+  "ui.food_price": "Food price",
+  "ui.market_day": "Market day",
+  "ui.sold": "Sold",
+  "ui.welcome_back": "Welcome back. Your next three routes bring back more.",
+  "err.too_little_to_sell": "Too little food to sell yet."
 }

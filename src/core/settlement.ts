@@ -20,7 +20,9 @@ export interface PlacedBuilding {
 }
 
 export interface TownState {
-  schema: 1;
+  schema: 2;
+  /** Game time the town was founded; market days count from here. */
+  foundedAt: number;
   mapId: string;
   width: number;
   height: number;
@@ -33,6 +35,12 @@ export interface TownState {
   chest: number;
   /** Game time of the last production update, in ms. */
   lastTick: number;
+  /** Food market memory: how much food was sold recently, decaying over time. */
+  market: { foodSoldRecent: number; lastUpdate: number };
+  /** Game time of the player's last visit (for the welcome-back bonus). */
+  lastVisit: number;
+  /** Routes left that get the welcome-back bonus [GDD section 18]. */
+  welcomeBackCharges: number;
 }
 
 export type ActionError =
@@ -44,6 +52,7 @@ export type ActionError =
   | 'max_count'
   | 'max_level'
   | 'nothing_to_collect'
+  | 'too_little_to_sell'
   | 'unknown_building';
 
 export type Result<T = object> = ({ ok: true } & T) | { ok: false; error: ActionError };
@@ -56,7 +65,11 @@ export function createTown(content: LoadedContent, gameNow: number): TownState {
   const terrain: TerrainId[] = [];
   for (const row of map.rows) for (const ch of row) terrain.push(map.terrainCodes[ch] as TerrainId);
   return {
-    schema: 1,
+    schema: 2,
+    foundedAt: gameNow,
+    market: { foodSoldRecent: 0, lastUpdate: gameNow },
+    lastVisit: gameNow,
+    welcomeBackCharges: 0,
     mapId: map.id,
     width: map.width,
     height: map.height,
@@ -138,10 +151,19 @@ export function outputPerHour(s: TownState, c: LoadedContent, b: PlacedBuilding)
   return base * (1 + neighbourBonusPct(s, c, b) / 100);
 }
 
-/** Storage cap: hours of output, raised by neighbouring storehouses [ASSUMPTION for the storehouse]. */
+/**
+ * Hours of output a building can hold: 4 at level 1 [GDD], rising with level [ASSUMPTION],
+ * capped at 10 [GDD: "ten hours by the middle of the game"]. Research will add to this later.
+ */
+export function storageHours(c: LoadedContent, level: number): number {
+  const b = c.balance;
+  return Math.min(b.maxStorageHours, b.baseStorageHours + (level - 1) * b.storageHoursPerLevel);
+}
+
+/** Storage cap in units, raised by neighbouring storehouses [ASSUMPTION for the storehouse]. */
 export function storageCap(s: TownState, c: LoadedContent, b: PlacedBuilding): number {
   const bonus = neighboursOf(s, b).reduce((sum, n) => sum + (c.building(n.defId).neighbourStorageBonus ?? 0), 0);
-  return outputPerHour(s, c, b) * c.balance.baseStorageHours * (1 + bonus);
+  return outputPerHour(s, c, b) * storageHours(c, b.level) * (1 + bonus);
 }
 
 /**
@@ -187,14 +209,28 @@ export function topCurrentPrice(s: TownState, c: LoadedContent): number {
   return top;
 }
 
-/** Treasury limit: base plus treasury levels, never below 1.5x the top current price [GDD]. */
+/** Combined storage of all coin-producing buildings: what one full collection can bring in. */
+export function coinStorageTotal(s: TownState, c: LoadedContent): number {
+  return s.buildings
+    .filter((b) => c.building(b.defId).produces === 'coin')
+    .reduce((sum, b) => sum + storageCap(s, c, b), 0);
+}
+
+/**
+ * Treasury limit: base plus treasury levels, never below 1.5x the top current price [GDD],
+ * and never below 1.25x one full collection of coin [ASSUMPTION, see BalanceConfig].
+ */
 export function treasuryLimit(s: TownState, c: LoadedContent): number {
   const t = c.balance.treasury;
   const fromBuildings = s.buildings.reduce(
     (sum, b) => sum + (c.building(b.defId).treasuryLimitPerLevel ?? 0) * b.level,
     0,
   );
-  return Math.max(t.baseLimit + fromBuildings, Math.ceil(t.minMultipleOfTopPrice * topCurrentPrice(s, c)));
+  return Math.max(
+    t.baseLimit + fromBuildings,
+    Math.ceil(t.minMultipleOfTopPrice * topCurrentPrice(s, c)),
+    Math.ceil(t.minMultipleOfCoinStorage * coinStorageTotal(s, c)),
+  );
 }
 
 export interface CoinDeposit {

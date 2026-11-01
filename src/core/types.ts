@@ -60,6 +60,10 @@ export interface BalanceConfig {
   milestoneLevels: number[];
   /** Hours of output a building stores before it stops (GDD: 4 at the start). */
   baseStorageHours: number;
+  /** [ASSUMPTION] Storage hours added per level above 1 ("upgrades raise this", GDD section 6). */
+  storageHoursPerLevel: number;
+  /** Storage ceiling in hours (GDD: ten hours by the middle of the game). */
+  maxStorageHours: number;
   /** Most helpful neighbours a building counts (GDD: 4). */
   maxHelpfulNeighbours: number;
   treasury: {
@@ -70,6 +74,30 @@ export interface BalanceConfig {
     warnAt: number;
     /** Limit is at least this multiple of the most expensive current purchase (GDD: 1.5). */
     minMultipleOfTopPrice: number;
+    /**
+     * [ASSUMPTION] Limit is at least this multiple of all coin buildings' combined storage, so that
+     * collecting full stores never overflows on its own. Overflow then only punishes hoarding,
+     * which is the GDD's intent (section 9) and its 15% overflow threshold (section 25).
+     */
+    minMultipleOfCoinStorage: number;
+  };
+  /** Food market [GDD section 9: prices change daily, peak on market day, fall when you sell a lot]. */
+  market: {
+    /** Coin per food unit before saturation. */
+    foodBasePrice: number;
+    /** Food sold recently at which the price has halved. */
+    foodSaturation: number;
+    /** Hours for the price to recover after selling (GDD: over the following day). */
+    recoveryHours: number;
+    marketDayMultiplier: number;
+    /** Day of the 7-day week (0 to 6, counted from the town's founding) that is market day. */
+    marketDayIndex: number;
+  };
+  /** [GDD section 18] After this many hours away, the next routes bring back more. */
+  welcomeBack: {
+    awayHours: number;
+    routeCharges: number;
+    routeBonus: number;
   };
   startingResources: Record<ResourceId, number>;
   /** Game-time multiplier per time mode. Playtest must stay 1 (real GDD timers). */

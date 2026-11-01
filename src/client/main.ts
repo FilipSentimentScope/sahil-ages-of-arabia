@@ -11,7 +11,11 @@ import {
   collectAll,
   createTown,
   findBuilding,
+  foodPrice,
+  isMarketDay,
   loadFrom,
+  registerVisit,
+  sellFood,
   nextMilestone,
   outputPerHour,
   place,
@@ -106,7 +110,7 @@ function renderHud(): void {
   $('hud').innerHTML = `
     <div class="res coin" data-res="coin">${t('resource.coin')} <b>${fmt(r.coin)}</b><small>/ ${fmt(limit)}</small> <small>· ${t('ui.chest')} ${fmt(town.chest)}</small></div>
     <div class="res" data-res="water">${t('resource.water')} <b>${waterUsed(town, content)}/${waterCapacity(town, content)}</b></div>
-    <div class="res" data-res="food">${t('resource.food')} <b>${fmt(r.food)}</b></div>
+    <div class="res" data-res="food">${t('resource.food')} <b>${fmt(r.food)}</b><small>${t('ui.food_price')} ${foodPrice(town, content, clock.now()).toFixed(2)}${isMarketDay(town, content, clock.now()) ? ` · ${t('ui.market_day')}` : ''}</small></div>
     <div class="res" data-res="knowledge">${t('resource.knowledge')} <b>${fmt(r.knowledge)}</b></div>
     <div class="res" data-res="reputation">${t('resource.reputation')} <b>${fmt(r.reputation)}</b></div>`;
   const warn = $('warn');
@@ -152,6 +156,13 @@ function renderBar(): void {
     toast(parts.length ? parts.join('  ') : t('err.nothing_to_collect'));
     save();
   }, 'btn-collect-all');
+  mk(t('ui.sell_food'), '', () => {
+    const r = sellFood(town, content, town.resources.food, clock.now());
+    if (!r.ok) return toast(errorText(r.error));
+    toast(`${t('ui.sold')} ${fmt(r.sold)} ${t('resource.food')} · +${fmt(r.deposit.added)} ${t('resource.coin')}`);
+    save();
+    renderHud();
+  }, 'btn-sell-food');
   mk(prefs.mode === 'showcase' ? t('ui.mode_showcase') : t('ui.mode_playtest'), '', () => {
     prefs.mode = prefs.mode === 'showcase' ? 'playtest' : 'showcase';
     tick(town, content, clock.now());
@@ -279,8 +290,13 @@ async function start(): Promise<void> {
 
   app.renderer.on('resize', () => view.layout(town));
   window.setInterval(save, 5000);
+  const onVisit = () => {
+    if (registerVisit(town, content, clock.now()).welcomeBack) toast(t('ui.welcome_back'));
+  };
+  onVisit();
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') save();
+    else onVisit();
   });
   // Exposed for automated tests (tests/e2e). Not a gameplay API.
   (window as unknown as { __aoa: unknown }).__aoa = { get town() { return town; }, content, clock: () => clock };

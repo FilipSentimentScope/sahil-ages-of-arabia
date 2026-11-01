@@ -6,7 +6,7 @@
 import type { ClockSnapshot } from './clock';
 import type { TownState } from './settlement';
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export interface SaveFile {
   version: number;
@@ -37,14 +37,29 @@ export function deserialize(text: string): SaveFile {
   }
   const f = data as Partial<SaveFile>;
   if (!f || typeof f !== 'object') throw new SaveError('Save file is empty');
+  if (f.version === 1) migrateV1(f);
   if (f.version !== SAVE_VERSION) throw new SaveError(`Unsupported save version ${String(f.version)}`);
   if (!f.clock || typeof f.clock.game !== 'number' || typeof f.clock.real !== 'number' || !(f.clock.scale > 0)) {
     throw new SaveError('Save file clock is invalid');
   }
-  if (!f.town || f.town.schema !== 1 || !Array.isArray(f.town.buildings)) {
+  if (!f.town || f.town.schema !== 2 || !Array.isArray(f.town.buildings)) {
     throw new SaveError('Save file town is invalid');
   }
   return f as SaveFile;
+}
+
+/** Version 1 saves predate the market and welcome-back fields: add them with neutral values. */
+function migrateV1(f: Partial<SaveFile>): void {
+  const town = f.town as unknown as Record<string, unknown> | undefined;
+  if (town && town.schema === 1) {
+    const last = typeof town.lastTick === 'number' ? town.lastTick : 0;
+    town.schema = 2;
+    town.foundedAt = last;
+    town.market = { foodSoldRecent: 0, lastUpdate: last };
+    town.lastVisit = last;
+    town.welcomeBackCharges = 0;
+  }
+  f.version = 2;
 }
 
 /** Load a save, or return null if there is none or it is unreadable (the caller starts a new town). */

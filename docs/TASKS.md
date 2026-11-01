@@ -22,12 +22,13 @@ Each task lists acceptance criteria. The Director keeps this file current.
 
 | ID | Task | Owner | Status | Acceptance criteria |
 | --- | --- | --- | --- | --- |
-| P3-01 | Art Bible draft | Creative | todo | All sections in ART_BIBLE.md filled; reference pack with sources; banned-elements list |
-| P3-02 | Style-frame prompt sheets (town, leader portrait, interface screen) | Creative | todo | Prompts for Midjourney and Scenario, with negative prompts and reference notes |
+| P3-01 | Art Bible draft | Creative | review | All sections in ART_BIBLE.md filled; reference pack with sources; banned-elements list |
+| P3-02 | Style-frame prompt sheets (town, leader portrait, interface screen) | Creative | done (assets/prompts/IMAGE_PROMPTS.md); waiting for Filip's generations | Prompts for Midjourney and Scenario, with negative prompts and reference notes |
 | P3-03 | Historian review of style references | Historian | todo | Each reference checked for period and place; flags logged |
-| P3-04 | Audio direction draft and theme brief for the composer | Creative | todo | AUDIO_DIRECTION.md filled; theme brief one page |
-| P3-05 | Research pack outline and first five Archive drafts | Historian | todo | Each draft 120 to 250 words, sourced, younger-reader version, status draft |
-| P3-06 | Age V Rawi script, first session | Historian, Designer | todo | Max three sentences per line; no invented quotes |
+| P3-04 | Audio direction draft and theme brief for the composer | Creative | done (docs/AUDIO_DIRECTION.md, assets/prompts/ELEVENLABS_PROMPTS.md) | AUDIO_DIRECTION.md filled; theme brief one page |
+| P3-05 | Research pack outline and first five Archive drafts | Historian | done (docs/research/AGE_V_RESEARCH_PACK.md, content/archive/age5.json); 2 details flagged to verify | Each draft 120 to 250 words, sourced, younger-reader version, status draft |
+| P3-07 | Remaining 10 Archive pages and 25 history questions | Historian | todo | Sourced, 120 to 250 words, younger-reader versions; questions mostly 'why' |
+| P3-06 | Age V Rawi script, first session | Historian, Designer | done (docs/story/STORY_SCRIPT.md, with 12 decision points and diving events) | Max three sentences per line; no invented quotes |
 
 ## Phase 4 (weeks 2 to 5)
 

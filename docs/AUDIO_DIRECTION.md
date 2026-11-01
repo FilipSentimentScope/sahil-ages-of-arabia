@@ -1,29 +1,62 @@
-# Audio direction
+# Audio direction (draft v0.1)
 
-Status: **outline**. Drafted by the Creative agent in Phase 3.
+Status: **draft v0.1**, 1 Nov 2026. Prompts that apply it:
+[assets/prompts/ELEVENLABS_PROMPTS.md](../assets/prompts/ELEVENLABS_PROMPTS.md).
 
-## Fixed inputs
+## 1. The sound in one sentence
 
-- Original folk-inspired music from the relevant periods and regions, arranged with modern
-  cinematic and symphonic orchestration. Emotional, epic, culturally grounded.
-- Creative references for feeling only (The Witcher 3, Skyrim). Never copy melodies or sounds.
-- Original compositions, or properly licensed or public-domain recordings only.
-- The main theme is written by a human composer (ownership). Eleven Music may supply ambient beds
-  and temp tracks (licensed training data, commercial use on paid plans). Suno sketches are
-  reference material only and never ship.
+The voice of the boat comes first: a lead singer, a chorus answering, hand claps and drums, a clay
+pot struck like a drum. Behind it, a cinematic orchestra opens out the feeling, the way a film score
+would, without drowning the human sound.
 
-## Slice scope
+## 2. Grounding (research pack, docs/research/AGE_V_RESEARCH_PACK.md)
 
-- One main theme (with a short variation for the age change and collapse preview)
-- Three ambient loops: town, sea, souq
-- About 30 sound effects: interface, collect, build, upgrade, sea, storm, fight, reward, age change
-- Rawi narration for the first session (draft voice; final by a native speaker or actor)
+- Pearling music centred on a lead singer (*nahham*), a chorus, clapping and percussion: drums, small
+  finger cymbals and a clay pot (*jahl*) used as a drum. Songs often start slowly, build to a fast peak
+  and settle. Rhythms carry Bedouin, East African, Persian and Indian influences (sources S5, S6).
+- So on the boat: voice and percussion only. Strings, brass and melodic instruments belong to the
+  score layer, not to the scene.
+- We do not imitate or sample real fijiri recordings or living performers. The score is "inspired by"
+  the structure (call and response, slow build, clapped polyrhythm), not a copy.
 
-## Sections to write
+## 3. Instrument palette
 
-1. Instrument palette for the lower Gulf in Age V (to verify with the Historian: for example
-   pearling work songs and their traditions, percussion, oud, and other regional instruments).
-2. Theme brief for the composer (one page).
-3. Mix rules for mobile speakers; loudness targets; file formats and sizes.
-4. Sound effect list with prompt text for generation.
-5. Licensing record per file.
+| Layer | Instruments |
+| --- | --- |
+| Scene (diegetic) | Male lead voice, male chorus (wordless or vocables), hand claps, double-headed drums, frame drum, clay pot percussion, small finger cymbals, creaking wood, rope, sea |
+| Score | Low strings, cello solo, warm French horns, soft timpani, a reed or ney-like breathy flute used sparingly, harp for pearl and reward moments |
+| Interface | Wood taps, soft brass chimes, a pearl "ting" (glass-like, short), paper and cloth |
+
+## 4. Rules
+
+- **No lyrics in AI-generated music.** Use wordless vocals and vocables only. AI-written Arabic lyrics
+  risk errors and unintended religious or political content. Any sung words later come from a human
+  writer and performer.
+- **The main theme is human-composed** (ownership; AI-only music is unlikely to be protected by
+  copyright). Eleven Music output is temp and bed material and a brief for the composer.
+- **Suno never ships.** Reference sketches only.
+- Loudness: interface sounds quieter than music; nothing harsh at high frequencies on phone speakers.
+  Target integrated loudness around -16 LUFS for music beds, peaks under -1 dBTP (to verify in the mix).
+- Files: OGG (Vorbis) for the web build, plus WAV masters kept in the repository's asset store.
+- Ramadan and other regional calendar moments: tone and pacing to be developed with the advisory board
+  (GDD section 19); nothing in the slice depends on it.
+
+## 5. Slice audio list
+
+| ID | Item | Source |
+| --- | --- | --- |
+| MUS-01 | Main theme sketch (temp, brief for composer) | Eleven Music |
+| MUS-02 | Town bed (loop) | Eleven Music |
+| MUS-03 | The great dive (tension, loop) | Eleven Music |
+| MUS-04 | Homecoming (celebration) | Eleven Music |
+| MUS-05 | Collapse preview (sorrowful, short) | Eleven Music |
+| AMB-01..03 | Shore town day, on the pearl banks, souq | ElevenLabs Sound Effects (loop) |
+| SFX-01..30 | Interface, building, sea, fight, reward | ElevenLabs Sound Effects |
+| VO-01 | Rawi voice (designed) and first-session lines in English | ElevenLabs Voice Design + TTS |
+
+## 6. Theme brief for the composer (one page, for later)
+
+A proud, warm, slightly melancholy theme that can be sung by one voice on a boat and also carried
+by an orchestra. Four bars that a crew could clap to. A falling phrase that returns at the collapse.
+A rising answer that returns at every age change. Tempo around 84 to 96 bpm. It must work as a
+ten-second stinger, a two-minute main title and a quiet loop.

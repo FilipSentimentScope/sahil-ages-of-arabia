@@ -34,12 +34,21 @@ Filename convention: `<area>_<subject>_<variant>_v<NN>.<ext>` (see CLAUDE.md).
 
 ## Rows
 
+Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.md.
+
 | ID | Asset | Status | Tool | Prompt file | Licence | Reviewer | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| ART-001 | Style frame: town | required | Midjourney | | | | Gate 1 |
-| ART-002 | Style frame: leader portrait (Ahmad ibn Majid) | required | Midjourney | | | | Gate 1; Historian checks dress and objects |
-| ART-003 | Style frame: interface screen | required | Midjourney | | | | Gate 1 |
-| AUD-001 | Theme sketch | required | Composer (Suno sketch allowed as reference only) | | | | Gate 1 |
+| ART-001 | Style frame: town key art | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1 |
+| ART-001b | Style frame: town at gameplay angle | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1 |
+| ART-002 | Style frame: leader portrait (Ahmad ibn Majid) | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1; artistic interpretation |
+| ART-003 | Style frame: interface ornament kit | prompt-prepared | Midjourney | IMAGE_PROMPTS.md | | | Gate 1 |
+| BLD-01..12 | Buildings, Age V | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
+| LDR-02..06, RAWI, TOOLS, TERRAIN, FIGHT, DIVE, ARC, AGES | Remaining art | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
+| MUS-01 | Main theme sketch (temp; composer brief) | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | Never final; human composer writes the theme |
+| MUS-02..05 | Town bed, great dive, homecoming, collapse | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | |
+| AMB-01..03 | Ambient loops | prompt-prepared | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
+| SFX-01..30 | Sound effects | prompt-prepared | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
+| VO-01 | Rawi voice and 12 English lines | prompt-prepared | ElevenLabs Voice Design + TTS | ELEVENLABS_PROMPTS.md | | | Arabic lines wait for a native writer |
 
 ## Placeholders in use
 

@@ -4,6 +4,8 @@ Newest first. Each entry: date, decision, who decided, reason, where it is appli
 
 | Date | Decision | Decided by | Reason | Applied in |
 | --- | --- | --- | --- | --- |
+| 2026-11-01 | Agents draft history, music direction and story themselves until historians, a composer and writers are hired after funding; drafts stay marked 'draft' | Filip | Keep momentum before funding | HISTORICAL_RESEARCH, AUDIO_DIRECTION, docs/story |
+| 2026-11-01 | Code lives at github.com/FilipSentimentScope/sahil-ages-of-arabia | Filip | Durable record beyond the temporary workspace | Repository |
 | 2026-10-31 | Slice text is English first, with Arabic interface strings and right-to-left layout | Claude (recommendation, not contested by Filip) | Keeps Arabic quality honest until a native writer joins | i18n, content/ar |
 | 2026-10-31 | Portrait orientation | Claude (recommendation, not contested by Filip) | One-handed play in short visits; must be fixed before the Art Bible | Layout, Art Bible |
 | 2026-10-31 | Remove "demand their return" for indebted divers from the slice; Archive treatment of pearl-diving labour referred to the advisor | Filip | Historical sensitivity: enslaved and indebted divers (Hopper, *Slaves of One Master*, 2015) | GAME_DESIGN section 4 |
@@ -16,6 +18,5 @@ Newest first. Each entry: date, decision, who decided, reason, where it is appli
 
 | Item | Needed by | Notes |
 | --- | --- | --- |
-| Private GitHub repository | Week 1 | No repositories are visible to this workspace yet |
 | Image and audio tool subscriptions; allow their domains for agents? | Week 2 | Otherwise Filip generates from prompt sheets |
-| Historian, Arabic writer, composer | Weeks 6 to 8 | GDD open decision 2: the historian is the first hire |
+| Historian, Arabic writer, composer | After funding | Agents draft until then (decision of 1 Nov 2026); human review still required before any public playtest |

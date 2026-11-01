@@ -1,0 +1,72 @@
+{
+  "_note": "DRAFT Archive pages for the Pearl Coast slice. Agent-written from sources opened 1 Nov 2026 (see docs/research/AGE_V_RESEARCH_PACK.md). Not reviewed by a historian. Status must stay 'draft' until a human historian reviews.",
+  "pages": [
+    {
+      "id": "arc_diver_kit",
+      "status": "draft",
+      "unlock": "dive_season_start",
+      "title": "What a pearl diver carried",
+      "body": "A pearl diver went to the bottom of the sea with almost nothing. On his nose he wore a small clip, the fatam, usually carved from turtle shell or horn. It kept water out and helped him cope with the pressure in his ears. A cord let it hang round his neck between dives. Museum curators in Qatar note that the fatam was already described in Arabic writing about pearl diving around a thousand years ago.\n\nTo sink quickly, the diver tied a heavy stone to his leg. Leather guards, the khabt, protected his fingertips from sharp shells. Round his neck hung a net basket, the deyeen, for the oysters he gathered. A rope called the yada linked him to a hauler, the seeb, who stayed on deck. When the diver's breath ran out, he tugged the rope and the hauler pulled him up.\n\nNear the end of the pearling era, lead weights began to replace stone. For most of its long history, though, the equipment barely changed.",
+      "youngReader": "Pearl divers had very simple tools. A clip on the nose kept the water out. A heavy stone on the leg pulled the diver down fast. Leather covers protected his fingers, and a net bag round his neck held the oysters. A rope joined him to a helper on the boat, who pulled him up when he needed air.",
+      "learningObjective": "Name the main tools of a Gulf pearl diver and explain what each one was for.",
+      "illustrationBrief": "Still life on worn deck planks: a horn nose clip on a cord, leather finger guards, a rope net basket, a dark stone weight with a rope groove. Morning light.",
+      "sources": ["S1", "S2", "S3"]
+    },
+    {
+      "id": "arc_nahham",
+      "status": "draft",
+      "unlock": "first_route_sea",
+      "title": "The singer of the boat",
+      "body": "Every pearling crew needed a singer. He was called the nahham, and his voice set the rhythm of the work. Around him the crew sang back, clapped and drummed, and the songs helped men keep going through long days at sea, months away from their families.\n\nThe music that grew from this life is known as fijiri. In Bahrain it is traced back to the late nineteenth century, when pearl divers and crews sang about the hardships of the sea. Performers sit in a circle with drums, small finger cymbals and a clay water pot played as a drum, while a lead singer guides them from the centre. In 2021 UNESCO added fijiri to its list of the world's intangible cultural heritage.\n\nThe songs often start slowly, build to a fast, almost frantic peak, then settle again. Their rhythms carry Bedouin, East African, Persian and Indian echoes, because the crews themselves came from all around the Gulf and the Indian Ocean.",
+      "youngReader": "Each pearling boat had a singer called the nahham. He sang, and the crew answered, clapped and played drums. The songs helped the men work together and feel less homesick. This music, called fijiri, is still performed today.",
+      "learningObjective": "Explain why singing mattered on pearling boats and describe how fijiri is performed.",
+      "illustrationBrief": "Evening on a moored pearling boat: a seated singer in the centre, crew around him clapping, a clay pot drum, warm lantern light, no recognisable real faces.",
+      "sources": ["S5", "S6"]
+    },
+    {
+      "id": "arc_coast_houses",
+      "status": "draft",
+      "unlock": "build:barasti_house",
+      "title": "Houses of palm and coral",
+      "body": "Most people on the coast lived in houses made from the date palm. These were called arish. Builders tied palm-frond panels to a light frame. In winter the panels were woven tightly to keep out the wind; in summer they were left looser so the breeze could pass through. A well-placed arish faced the prevailing wind, much like a desert tent.\n\nFamilies with more money built in stone. Along the shore that meant blocks of coral rock set in a mortar made from gypsum. Inland, where there was no coral, people built with mud brick. Stone houses were usually arranged around a courtyard and were rarely more than one storey high, with thick walls to hold back the heat.\n\nSome of the finest houses had a barjeel, a wind tower that caught the breeze above the roofs and sent it down into the rooms. Today the barjeel is one of the best-known symbols of Emirati architecture, though in the old towns most homes were simple arish.",
+      "youngReader": "Most families lived in houses made of palm leaves, called arish. They let the breeze in and kept the sun out. Richer families built houses of coral stone. A few had a tall wind tower, the barjeel, that pushed cool air down into the rooms.",
+      "learningObjective": "Compare palm-frond and coral-stone houses and explain how each kept people cool.",
+      "illustrationBrief": "A shoreline lane: a row of palm-frond arish houses in front, one coral-stone courtyard house with a single wind tower behind, late afternoon shadows.",
+      "sources": ["S7"]
+    },
+    {
+      "id": "arc_ibn_majid",
+      "status": "draft",
+      "unlock": "leader:ibn_majid",
+      "title": "Ahmad ibn Majid, the Lion of the Sea",
+      "body": "Ahmad ibn Majid was born around 1432 in Julfar, a port on the Gulf coast in what is now Ras al Khaimah. His father and grandfather were sailors, and he became one of the most respected navigators of the Indian Ocean, remembered as the Lion of the Sea.\n\nHe wrote many works on navigation, some of them in verse so that sailors could memorise them. The best known is the Book of Benefits in the Principles of Navigation. It gathers practical knowledge: tides, monsoon winds and currents, distances between ports, reefs, and how to find a ship's latitude from the height of the pole star.\n\nOne simple instrument for that last task was the kamal, a small piece of wood on a knotted cord. Holding the cord in his teeth, a navigator lined up the wood with the horizon and the star, and counted knots.\n\nA famous story says he guided Vasco da Gama to India in 1498. Historians disagree about this, and many think he was not the pilot.",
+      "youngReader": "Ahmad ibn Majid came from Julfar on the Gulf coast. He was a great sailor and wrote books to help others find their way at sea. He used the stars, and a simple tool called the kamal, to know how far north or south his ship was.",
+      "learningObjective": "Describe how Gulf navigators used the stars and the kamal, and recognise that some stories about Ibn Majid are disputed.",
+      "illustrationBrief": "Night deck, a navigator holding a kamal at arm's length toward the pole star, horizon line visible, the man shown from behind or in shadow (no likeness claimed).",
+      "sources": ["S8"],
+      "_check": "The detail of holding the kamal cord in the teeth comes from general knowledge, not from S8. Verify in Clark 1993 or Tibbetts before review, or remove."
+    },
+    {
+      "id": "arc_pearl_collapse",
+      "status": "draft",
+      "unlock": "age_change_preview",
+      "title": "When the pearl market fell",
+      "body": "For centuries, pearls from the Gulf were among the most prized in the world. The trade grew to its greatest size at the end of the nineteenth century and the start of the twentieth, when demand from distant markets pulled more boats and more men to the oyster beds than ever before.\n\nThen, in the 1930s, it collapsed. In Japan, a way had been found to grow pearls by placing a small bead inside a living oyster. These cultured pearls looked almost the same as natural ones and cost far less. Buyers turned away from the Gulf, and towns that had lived on pearling for generations lost their main income almost overnight. UNESCO describes the end of the industry as sudden and catastrophic.\n\nThe pearling era left more than memories. In Muharraq, in Bahrain, merchants' houses, shops, a fort and three oyster beds are now protected as a World Heritage Site, a record of the wealth and the hardship the pearl once brought.",
+      "youngReader": "Gulf pearls were famous all over the world. In the 1930s, people in Japan learned to grow pearls inside oysters. These pearls were cheaper, so buyers stopped coming to the Gulf, and pearling towns lost their main way of earning money.",
+      "learningObjective": "Explain why the Gulf pearl trade collapsed in the 1930s and why depending on one source of income is risky.",
+      "illustrationBrief": "Empty pearling boats drawn up on a beach at dusk, nets and baskets left on the sand, a quiet town behind.",
+      "sources": ["S4", "S6"],
+      "_check": "The bead-nucleus method of culturing is general knowledge; add a source (e.g. a museum page on Mikimoto or cultured pearls) before review."
+    }
+  ],
+  "sourceList": {
+    "S1": "Qatar Museums, National Museum of Qatar, 'Diver's Nose Clip', collections.qm.org.qa/en/objects/divers-nose-clip-qnm2015667",
+    "S2": "Qatar Museums, 'Pearl diver's (weight)', collections.qm.org.qa/en/objects/pearl-divers-weight-arc20093115",
+    "S3": "Abu Dhabi Department of Culture and Tourism, Heritage Register, 'Diving Equipment in the Past', abudhabiculture.ae",
+    "S4": "UNESCO World Heritage Centre, 'Pearling, Testimony of an Island Economy', whc.unesco.org/en/list/1364",
+    "S5": "UNESCO Intangible Cultural Heritage, 'Fjiri', ich.unesco.org/en/RL/01747",
+    "S6": "Hannah Julia Davis, 'A Brief History of Pearl Diving Music', Smithsonian Folklife Festival blog, 1 July 2022",
+    "S7": "Gulf News, 'Know the UAE: Creating functional comfort from simplicity', updated 16 Sep 2018",
+    "S8": "Bridgette Byrd O'Connor, 'The Lion of the Sea: Ahmad Ibn Majid', OER Project"
+  }
+}

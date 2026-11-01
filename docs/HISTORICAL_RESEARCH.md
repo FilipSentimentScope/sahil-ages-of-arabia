@@ -13,6 +13,12 @@
    No invented dialogue for any real person. Matters of faith stay in the Archive in factual language.
 7. Rival towns are invented types, never real emirates, cities or tribes.
 
+## Working arrangement until funding
+
+By Filip's decision of 1 Nov 2026, the Historian agent drafts all historical content until human
+historians are hired after funding. Drafts stay `draft`. Current material:
+[docs/research/AGE_V_RESEARCH_PACK.md](research/AGE_V_RESEARCH_PACK.md) and `content/archive/age5.json`.
+
 ## Content record statuses
 
 `draft` (agent-written, sourced) → `designer-approved` (fits the game) →

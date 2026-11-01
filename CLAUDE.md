@@ -7,7 +7,8 @@ Details live in `/docs`; this file links to them and holds only what every sessi
 
 **Suhail: Ages of Arabia** is a mobile idle civilisation builder: one town grows through
 seven ages of Arab history (about 500 BCE to 1971). Source of truth for design:
-GDD v4.0 (27 Oct 2026, owner Filip Ivanovic). This repository builds the **vertical slice**,
+GDD v4.0 (27 Oct 2026, owner Filip Ivanovic), in [docs/source/](docs/source/README.md)
+together with Filip's original project brief. This repository builds the **vertical slice**,
 "The Pearl Coast": a self-contained Age V chapter in which the player founds a pearling
 town, plays one diving season, deals with one rival town, and ends with the age change
 and a scripted preview of the pearl market collapse.

@@ -137,3 +137,13 @@ block, joined edge to edge.
 
 For every image you keep, note: tool, plan, date, prompt (copy it), seed or job ID. We record it in
 docs/ASSET_INVENTORY.md. Key art (leaders, Rawi, town key art) gets a human paint-over pass before launch.
+
+
+## Round 5 (2 Nov evening): what the interface v2 needs next
+
+Same style as the twelve buildings (attach one of them as the style reference). Each object alone on
+a plain background, no ground tile or water block under it, three-quarter top-down view.
+
+1. **Rawi portrait (RAWI-01), 1024 x 1024.** `an elderly Gulf storyteller (rawi) of the early 1900s, kind lined face, white beard, plain white thobe and a brown bisht, ghutra loosely worn, seated, one hand raised as if telling a story, warm lamplight, head and shoulders, plain parchment background, [STYLE BLOCK]`. Fictional character, no real person.
+2. **Decor set (DEC-01..08), 512 x 512 each:** `a single date palm` · `a cluster of three young palms` · `a few sun-bleached rocks` · `a low saltbush shrub` · `a beached small wooden boat` · `a resting camel` · `fishing nets drying on poles` · `a pile of pearl oyster shells`. The game scatters these on empty and locked land so the town looks lived in.
+3. **Date grove and fish trap without bases:** the same two buildings with no square stone base and no block of water: just the palms and low wall, and just the reed fences standing in a little water.

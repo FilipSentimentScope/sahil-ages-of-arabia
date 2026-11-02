@@ -12,6 +12,7 @@ export interface AgePanelHost {
   content: LoadedContent;
   now(): number;
   toast(msg: string): void;
+  notice(icon: string, title: string, line: string): void;
   errorText(e: ActionError): string;
   changed(): void;
 }
@@ -29,7 +30,7 @@ export class AgePanel {
   summary(): string {
     const p = ageProgress(this.host.town(), this.host.content, this.host.now());
     if (p.complete) return t('ui.age_complete');
-    return `${t('ui.age_goals')}: ${t('ui.research')} ${p.research.done}/${p.research.of} · ${t('ui.fort')} ${p.landmark.done}/${p.landmark.of} · ${t('ui.chronicle')} ${p.chronicle.done}/${p.chronicle.of}`;
+    return `🏰 ${t('ui.age_goals')} · 📜 ${p.research.done}/${p.research.of} · 🏯 ${p.landmark.done}/${p.landmark.of} · 📖 ${p.chronicle.done}/${p.chronicle.of}`;
   }
 
   show(): void {
@@ -61,30 +62,31 @@ export class AgePanel {
     const p = ageProgress(s, c, now);
     const node = g.research.trunk[s.age.node];
     const stage = g.landmark.stages[s.age.stage];
+    const meter = (done: number, of: number) => `<div class="meter"><i style="width:${(100 * done) / Math.max(1, of)}%"></i></div>`;
     const research = p.research.busyUntil !== null
-      ? `<p class="muted">${t('ui.researching')}</p>`
+      ? `<p class="muted">⏳ ${t('ui.researching')}</p>`
       : node
-        ? `<button type="button" id="btn-research" ${s.resources.knowledge < node.knowledge || s.resources.coin < node.coin ? 'disabled' : ''}>${t('ui.start_research')} · ${fmt(node.knowledge)} ${t('resource.knowledge')} · ${fmt(node.coin)} ${t('resource.coin')}</button>`
-        : `<p class="muted">${t('ui.done')}</p>`;
+        ? `<button type="button" class="btn primary block" id="btn-research" ${s.resources.knowledge < node.knowledge || s.resources.coin < node.coin ? 'disabled' : ''}>${t('ui.start_research')} · ${fmt(node.knowledge)} 📜 · ${fmt(node.coin)} 🪙</button>`
+        : `<p class="muted">✅ ${t('ui.done')}</p>`;
     const fort = stage === undefined
-      ? `<p class="muted">${t('ui.done')}</p>`
+      ? `<p class="muted">✅ ${t('ui.done')}</p>`
       : !p.landmark.unlocked
-        ? `<p class="muted">${t('ui.fort_locked')}</p>`
-        : `<button type="button" id="btn-fort" ${s.resources.coin < stage ? 'disabled' : ''}>${t('ui.build_stage')} · ${fmt(stage)} ${t('resource.coin')}</button>`;
+        ? `<p class="muted">🔒 ${t('ui.fort_locked')}</p>`
+        : `<button type="button" class="btn primary block" id="btn-fort" ${s.resources.coin < stage ? 'disabled' : ''}>${t('ui.build_stage')} · ${fmt(stage)} 🪙</button>`;
     this.el.innerHTML = `
-      <h2>${t('ui.age_goals')}</h2>
-      ${p.complete ? `<p class="dp">${t('ui.age_complete')}</p>` : ''}
-      <ul class="routes">
-        <li><b>${t('ui.research')} ${p.research.done}/${p.research.of}</b><small>${t('ui.research_help')}</small>${research}</li>
-        <li><b>${t('ui.fort')} ${p.landmark.done}/${p.landmark.of}</b><small>${t('ui.fort_help')}</small>${fort}</li>
-        <li><b>${t('ui.chronicle')} ${p.chronicle.done}/${p.chronicle.of}</b><small>${t('ui.chronicle_help')}</small>
-          <button type="button" id="btn-question" class="placeholder">${t('ui.question_placeholder')}</button></li>
-      </ul>
-      <div class="actions"><button type="button" id="btn-age-close">${t('ui.close')}</button></div>`;
+      <div class="sheet-head"><h2>🏰 ${t('ui.age_goals')}</h2><button type="button" class="x" id="btn-age-close" aria-label="${t('ui.close')}">✕</button></div>
+      ${p.complete ? `<p class="quote">${t('ui.age_complete')}</p>` : ''}
+      <div class="active-route"><div class="top"><span class="ic">📜</span><b>${t('ui.research')} ${p.research.done}/${p.research.of}</b></div>
+        ${meter(p.research.done, p.research.of)}<p class="muted" style="margin:0 0 8px">${t('ui.research_help')}</p>${research}</div>
+      <div class="active-route"><div class="top"><span class="ic">🏰</span><b>${t('ui.fort')} ${p.landmark.done}/${p.landmark.of}</b></div>
+        ${meter(p.landmark.done, p.landmark.of)}<p class="muted" style="margin:0 0 8px">${t('ui.fort_help')}</p>${fort}</div>
+      <div class="active-route"><div class="top"><span class="ic">📖</span><b>${t('ui.chronicle')} ${p.chronicle.done}/${p.chronicle.of}</b></div>
+        ${meter(p.chronicle.done, p.chronicle.of)}<p class="muted" style="margin:0 0 8px">${t('ui.chronicle_help')}</p>
+        <button type="button" id="btn-question" class="btn placeholder block">${t('ui.question_placeholder')}</button></div>`;
     this.el.hidden = false;
     const act = (r: { ok: true } | { ok: false; error: ActionError }, msg?: string) => {
       if (!r.ok) this.host.toast(this.host.errorText(r.error));
-      else if (msg) this.host.toast(msg);
+      else if (msg) this.host.notice('🏰', t('ui.age_goals'), msg);
       this.host.changed();
       this.signature = '';
       this.update();

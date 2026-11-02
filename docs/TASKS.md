@@ -35,6 +35,7 @@ Each task lists acceptance criteria. The Director keeps this file current.
 
 | ID | Task | Owner | Status | Acceptance criteria |
 | --- | --- | --- | --- | --- |
+| UX-01 | Interface v2 from Filip's playtest (docs/UX_NOTES.md) | Developer, Creative | done (2 Nov): phone and 16:9 play-through follows the whole tutorial; screenshots reviewed |
 | P4-01 | Routes and decision points (core) | Developer | done (2 Nov): core, content, grey-box panel; 17 route tests; play-through sends, answers, unloads | Four trip lengths, decision points from content, coast or open sea odds per GDD section 12, seeded outcomes, tests |
 | P4-02 | Diving season (core) | Developer, Designer | todo | Four beats, dive-one-more-day choice, sale choice, tests |
 | P4-03 | Rival town (core) | Developer | todo | Relations scale, trade, raids both ways, daily relation cap, tests |

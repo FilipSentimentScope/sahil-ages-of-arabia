@@ -61,3 +61,18 @@ tools/cutout.py and in the game on the new hex board. Screenshots: tests/e2e/scr
 on high-end screens. Before the investor demo: each building separately at 1024 px, same style.
 
 **Hex board.** Buildings are drawn centred on their hex at 82% of its width, with a soft contact shadow.
+
+---
+
+## Round 3 (2 Nov, evening): five buildings at 1024 px (v03)
+
+Souq, palm-frond house, fish trap, date grove and well, each on its own image at 1024 px. In the game,
+replacing the v02 cut-outs (archived). Same illustrated style as the rest of the set.
+
+| Building | Verdict | Notes |
+| --- | --- | --- |
+| Well | Good | Now a pulley on a wooden frame, as asked. |
+| Palm-frond house | Good | |
+| Souq | Good | Reads as a market hall; close in shape to the palm-frond house, but the stalls and goods tell them apart. |
+| Date grove | OK | Sits on a square stone base with channels. On the hex board it reads as a tile on a tile; a version without the base would sit better. |
+| Fish trap | OK | Again on a glass-sided block of water. On the shore hex the block shows; a version with only the reed fences and a little water around them would sit better. |

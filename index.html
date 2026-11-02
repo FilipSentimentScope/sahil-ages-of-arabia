@@ -9,13 +9,26 @@
   </head>
   <body>
     <div id="app">
-      <header id="hud" aria-live="polite"></header>
+      <main id="stage"></main>
+      <header id="topbar">
+        <div id="res" aria-live="polite"></div>
+        <button type="button" id="btn-menu" class="round small" aria-label="Menu">☰</button>
+      </header>
+      <button type="button" id="btn-goals" class="goals-pill"></button>
       <div id="warn" hidden></div>
-      <main id="stage"><div id="placeholder-notice"></div></main>
-      <nav id="palette" aria-label="Build"></nav>
-      <footer id="bar"></footer>
-      <div id="panel" role="dialog" aria-modal="true" hidden></div>
-      <div id="toast" role="status" hidden></div>
+      <aside id="trackers" aria-label="Routes out"></aside>
+      <nav id="dock" aria-label="Actions"></nav>
+      <button type="button" id="btn-recenter" class="round small" aria-label="Back to town">🎯</button>
+      <div id="taskbar" role="status"></div>
+      <div id="placebar" hidden></div>
+      <div id="notice" role="status" hidden></div>
+      <div id="sheet" role="dialog" aria-modal="false" hidden></div>
+      <div id="scrim" hidden></div>
+      <div id="card" role="dialog" aria-modal="true" hidden></div>
+      <div id="rawi" role="dialog" aria-live="polite" hidden></div>
+      <div id="tooltip" hidden></div>
+      <div id="toast" role="alert" hidden></div>
+      <div id="placeholder-notice"></div>
     </div>
     <script type="module" src="/src/client/main.ts"></script>
   </body>

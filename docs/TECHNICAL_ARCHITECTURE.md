@@ -42,6 +42,10 @@ Content     Buildings, leaders | Routes, decisions | Questions, Archive | Text e
 | `core/save.ts` | Versioned save files, storage adapter | yes |
 | `client/main.ts` | Boot, interface, input, autosave | e2e |
 | `client/age-panel.ts` | Grey-box goals panel, opened from the goals line in the top bar | e2e |
+| `client/guide.ts` | Next-step bar: one suggestion read from the town's state | e2e |
+| `client/tutorial.ts` | Rawi tutorial steps; each finishes when its condition is met | e2e |
+| `client/describe.ts` | Icons, building facts from content, odds in words, time format | e2e |
+| `client/audio.ts` | Rawi's voice and the town music, started on the first tap | manual |
 | `client/routes-panel.ts` | Grey-box routes panel: send, decide, unload, repair | e2e |
 | `client/town-view.ts` | PixiJS hex board: ground rendered once to a texture, locked land greyed, town fence, buildings, storage bars, placement highlight, drag and pinch camera | e2e |
 | `client/i18n.ts` | English and Arabic text, right-to-left switch | e2e |

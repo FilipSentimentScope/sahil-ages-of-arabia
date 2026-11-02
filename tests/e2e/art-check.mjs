@@ -35,6 +35,8 @@ const browser = await chromium.launch();
 const page = await (await browser.newContext({ ...devices['Pixel 5'] })).newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
+// Skip the tutorial and sound so the board is unobstructed.
+await page.addInitScript(() => localStorage.setItem('aoa.slice.prefs.v1', JSON.stringify({ lang: 'en', mode: 'showcase', voice: false, music: false, tutorial: -1 })));
 await page.goto(URL);
 await page.waitForFunction(() => Boolean(window.__aoa));
 await page.evaluate((layout) => {

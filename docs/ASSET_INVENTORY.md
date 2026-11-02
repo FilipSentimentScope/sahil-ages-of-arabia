@@ -42,16 +42,18 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 | ART-001b | Board painting (v02 approved; board_pearl-coast_v02.jpg) | retired 2 Nov (archived) | Google Gemini (image) | IMAGE_PROMPTS.md | Gemini paid plan; see licence note | Creative | Square grid cannot follow the hex map; kept in assets/art/processed/archive as a colour reference |
 | ART-002 | Leader portrait, Ahmad ibn Majid (v03 approved) | approved | Google Gemini (image) | IMAGE_PROMPTS.md | Gemini paid plan; see licence note | Creative | v03 has a correct small kamal; artistic interpretation |
 | ART-003 | Interface ornament kit (v03 approved) | approved | Google Gemini (image) | IMAGE_PROMPTS.md | Gemini paid plan; see licence note | Creative | v03: straight edges, ready to slice |
-| BLD-01..12 | All twelve buildings, sheet v02 (bld_sheet_age5_v02.jpg; cut-outs bld_*_age5_v02.png) | integrated (candidate) | Google Gemini (image) | Prompt doc, rounds 3 and 4 | Gemini paid plan; see licence note | Creative | In game 2 Nov; jetty water block removed in processing; fish trap keeps its pool. About 250 px each on the sheet: final art needs 1024 px. See docs/reviews/BUILDINGS_REVIEW_2026-11-02.md round 2. v01 cut-outs archived |
+| BLD-01..05 | Well, date grove, fish trap, palm-frond house, souq at 1024 px (bld_*_age5_v03.jpg) | integrated (candidate) | Google Gemini (image) | Prompt doc, round 4 | Gemini paid plan; see licence note | Creative | In game 2 Nov evening, replacing their v02 cut-outs (archived). Date grove and fish trap sit on square bases; see review round 3 |
+| REF-UI-01..05 | Filip's reference screenshots for game feel and interface (assets/art/incoming/reference) | reference only | n/a | n/a | third-party screenshots: never shipped | Creative | Direction for interface v2; not to be copied |
+| BLD-06..12 | Remaining seven buildings, sheet v02 (bld_sheet_age5_v02.jpg; cut-outs bld_*_age5_v02.png) | integrated (candidate) | Google Gemini (image) | Prompt doc, rounds 3 and 4 | Gemini paid plan; see licence note | Creative | In game 2 Nov; jetty water block removed in processing; fish trap keeps its pool. About 250 px each on the sheet: final art needs 1024 px. See docs/reviews/BUILDINGS_REVIEW_2026-11-02.md round 2. v01 cut-outs archived |
 | LDR-02..06, RAWI, TOOLS, TERRAIN, FIGHT, DIVE, ARC, AGES | Remaining art | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
 | MUS-01 | Main theme sketch (temp; composer brief) | reviewed | Google Gemini (music) | ELEVENLABS_PROMPTS.md | Gemini paid plan; see licence note | Creative | Temp only; game copy in assets/audio/processed |
-| MUS-02 | Town bed ("Salt Air at Sunset"; loop cut 19.8 s to 87.6 s, 24 bars, 68 s) | reviewed | Google Gemini (music) | ELEVENLABS_PROMPTS.md | see licence note | Creative | 86 bpm (asked 84). Loop made with tools/make-loop.py; seam measured as an ordinary beat; Filip to confirm by ear (seam test file). Game copy: mus_town-bed_loop_v01.ogg, -16 LUFS |
+| MUS-02 | (playing in the game since 2 Nov evening, after the first tap) Town bed ("Salt Air at Sunset"; loop cut 19.8 s to 87.6 s, 24 bars, 68 s) | reviewed | Google Gemini (music) | ELEVENLABS_PROMPTS.md | see licence note | Creative | 86 bpm (asked 84). Loop made with tools/make-loop.py; seam measured as an ordinary beat; Filip to confirm by ear (seam test file). Game copy: mus_town-bed_loop_v01.ogg, -16 LUFS |
 | MUS-03 | Great dive loop (loop cut 18.9 s to 76.1 s, 57 s) | reviewed | Google Gemini (music) | ELEVENLABS_PROMPTS.md | see licence note | Creative | Loop cut 2 Nov (mus_great-dive_loop_v02.ogg); the full-length v01 game copy is archived |
 | MUS-04 | Homecoming | reviewed | Google Gemini (music) | ELEVENLABS_PROMPTS.md | Gemini paid plan; see licence note | Creative | Accepted |
 | MUS-05 | Collapse preview | reviewed | Google Gemini (music) | ELEVENLABS_PROMPTS.md | Gemini paid plan; see licence note | Creative | Check by ear: may be too full for the brief |
 | AMB-01..03 | Ambient loops | prompt-prepared (deferred by Filip) | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
 | SFX-01..30 | Sound effects | prompt-prepared (deferred by Filip) | ElevenLabs Sound Effects | ELEVENLABS_PROMPTS.md | | | |
-| VO-01 | Rawi voice and 12 English lines | reviewed | Google Gemini (speech) | ELEVENLABS_PROMPTS.md | Gemini paid plan; see licence note | Creative | All 12 accepted; check lines 02, 04, 08 by ear; Arabic waits for a native writer |
+| VO-01 | Rawi voice and 12 English lines (lines 01, 02, 03, 05, 06, 09, 11 play in the tutorial since 2 Nov) | integrated | Google Gemini (speech) | ELEVENLABS_PROMPTS.md | Gemini paid plan; see licence note | Creative | All 12 accepted; check lines 02, 04, 08 by ear; Arabic waits for a native writer |
 
 ## Licence note: Google Gemini (2 Nov 2026)
 
@@ -67,4 +69,6 @@ with the human composer's score as AUDIO_DIRECTION already plans. Not legal advi
 | --- | --- | --- |
 | Town view | Ground drawn from map data (soft colour per terrain, blurred, simple marks) | Painted terrain tiles (IMAGE_PROMPTS.md, terrain tiles) |
 | Town view | Magenta-bordered hexes for any building without art (none on 2 Nov) | Building art |
+| Interface | Emoji icons for resources and actions (🪙 💧 🍞 📜 ⭐ 🔨 🐪 🧺) | Painted icon set from the interface kit (ART-003) |
+| Tutorial | Rawi face: dashed magenta circle reading "Rawi (art to come)" | Rawi portrait (RAWI prompt) |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

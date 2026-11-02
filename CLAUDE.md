@@ -26,7 +26,7 @@ decisions in plain language, never claim something works without having run it.
 | Item | Choice |
 | --- | --- |
 | Targets | Browser link (investor demo), Android and iOS apps via Capacitor (later phase) |
-| Orientation | Portrait, one-handed, max layout width 480 px |
+| Orientation | Full-screen map in any shape: phone portrait first, also 16:9; interface floats over the map |
 | Language | TypeScript (strict) |
 | Rendering | PixiJS 8 (town scene) |
 | Interface | HTML and CSS overlay; right-to-left ready |
@@ -165,7 +165,7 @@ stays `draft` and needs human review before any public playtest (decision of 1 N
 - Slice framing: new pearling town in Age V ("The Pearl Coast").
 - The GDD's "demand their return" choice for indebted divers is **removed** from the slice;
   the Archive treatment of pearl-diving labour waits for the human historical advisor.
-- Portrait orientation; English first, Arabic-ready.
+- Full-screen map (phone portrait and 16:9); English first, Arabic-ready. UX feedback log: docs/UX_NOTES.md.
 - Hex board (pointy-top, odd rows shifted right), 12 by 12 map drawn in full, 6 by 6 open in the slice;
   locked land greyed until it opens (one row and column per age). Buildings keep the illustrated style of
   the 2 Nov sheet; ground stays painterly.

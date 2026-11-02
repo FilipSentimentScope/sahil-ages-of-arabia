@@ -71,3 +71,19 @@ own sinks (landmark stages, research costs in coin, repairs) before absolute tim
 
 Bug found by the phone play-through and fixed: selling a tiny amount of food paid 0 coin and
 the food vanished. Sales worth less than one coin are now refused.
+
+## Run 3 (2 Nov 2026): hex board
+
+Same balance as run 2. Changes: six neighbours per plot (cap of four helpful neighbours kept),
+and the simulator now builds inside the 6 by 6 open block of the 12 by 12 map.
+
+| Milestone | casual / engaged | engaged / heavy |
+| --- | --- | --- |
+| 100/h | 1.62 | 1.70 |
+| 200/h | 1.78 | 1.14 |
+| 400/h | 1.73 | 1.00 |
+| 800/h | 1.63 | 1.10 |
+
+Casual players stay inside the GDD target (2.0 or less); the first milestone improved from 2.17
+to 1.62, because hexes give more plots that touch a well. Growth still compounds too fast
+(value per hour about 25,000 by day 21): task P2-10 unchanged.

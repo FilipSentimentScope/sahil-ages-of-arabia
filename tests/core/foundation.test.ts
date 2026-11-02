@@ -63,20 +63,27 @@ describe('content validation', () => {
     expect(c.building('date_grove').produces).toBe('food');
   });
 
-  it('the playable map leaves room for the slice: at least 12 open plots and a shore row', () => {
+  it('the playable map leaves room for the slice inside its open block', () => {
     const c = loadDefaultContent();
-    const cells = c.map.rows.join('');
-    const open = [...cells].filter((ch) => c.map.terrainCodes[ch] === 'open').length;
-    expect(open).toBeGreaterThanOrEqual(12);
-    expect(c.map.rows.at(-1)).toMatch(/^c+$/);
+    const { openArea: a, rows, terrainCodes } = c.map;
+    // [GDD section 15] the town tops out at 12 by 12, so the map is drawn at that size.
+    expect([c.map.width, c.map.height]).toEqual([12, 12]);
+    const inside: string[] = [];
+    for (let y = a.y; y < a.y + a.size; y++) for (let x = a.x; x < a.x + a.size; x++) inside.push(terrainCodes[rows[y]![x]!]!);
+    expect(inside.filter((t) => t === 'open').length).toBeGreaterThanOrEqual(12);
+    // Shore plots for the jetty and fish traps, and creek plots for wells and groves.
+    expect(inside.filter((t) => t === 'coast').length).toBeGreaterThanOrEqual(3);
+    expect(inside.filter((t) => t === 'creek').length).toBeGreaterThanOrEqual(2);
   });
 
   it('fails loudly on bad content', () => {
     const c = loadDefaultContent();
     const bad = c.buildings.map((b) => (b.id === 'souq' ? { ...b, produces: 'gold' as never } : b));
     expect(() => loadContent({ buildings: bad, balance: c.balance, map: c.map })).toThrow(ContentError);
-    const badMap = { ...c.map, rows: [...c.map.rows.slice(0, 5), 'cccccX'] };
+    const badMap = { ...c.map, rows: [...c.map.rows.slice(0, -1), 'ccccccccccX~'] };
     expect(() => loadContent({ buildings: c.buildings, balance: c.balance, map: badMap })).toThrow(/unknown terrain code/);
+    const offMap = { ...c.map, openArea: { x: 8, y: 8, size: 6 } };
+    expect(() => loadContent({ buildings: c.buildings, balance: c.balance, map: offMap })).toThrow(/openArea leaves the map/);
     const badBalance = { ...c.balance, timeModes: { showcase: 60, playtest: 2 } };
     expect(() => loadContent({ buildings: c.buildings, balance: badBalance, map: c.map })).toThrow(/playtest must be 1/);
   });
@@ -88,7 +95,8 @@ describe('save and load', () => {
     let real = 0;
     const clock = new GameClock(() => real, 1, HOUR_MS);
     const town = createTown(c, clock.now());
-    place(town, c, 'well', 0, 3, clock.now());
+    const a = c.map.openArea;
+    expect(place(town, c, 'well', a.x + 1, a.y + 1, clock.now()).ok).toBe(true);
     const text = serialize(town, clock.snapshot());
     const file = deserialize(text);
     expect(file.town.buildings).toHaveLength(1);

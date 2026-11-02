@@ -33,3 +33,31 @@ Integrated as candidates; on-board check: `tests/e2e/screenshots/art-02-board-cl
 2. **Regenerate in the painterly style** (recommended to test first): add "no ink outlines, no line art,
    soft oil paint with visible brushstrokes exactly like the reference" to the prompts. Test on two
    buildings; if they stay readable at 60 pt, redo all twelve.
+
+---
+
+## Round 2 (2 Nov, afternoon): full sheet of twelve (bld_sheet_age5_v02.jpg)
+
+Filip sent all twelve on one sheet, including the four fixes. Same illustrated style throughout, so
+the set is consistent; taken as the style decision for buildings (DECISIONS, 2 Nov). Cut out with
+tools/cutout.py and in the game on the new hex board. Screenshots: tests/e2e/screenshots/art-0*.png.
+
+| Building | Verdict | Notes |
+| --- | --- | --- |
+| Well | Good | Minor, for the final version: the crank handle is a European winch detail; Gulf wells used a pulley on a wooden frame. |
+| Date grove | Good | Palms with fruit, falaj wall. |
+| Fish trap (hadra) | Good | Reed fence in shallow water; its own small pool sits well on a shore hex. |
+| Palm-frond house | Good | Frond walls and gable roof. |
+| Souq | Good | Awnings, sacks, spices, rope. |
+| Jetty | Fixed | Background removal took away the water block; posts and boat remain. The boat is a plain rowboat: a small local boat would be better in the final version (Historian to name the type). |
+| Pearl merchant's house | Good | Red cloth bundle and scales on the bench. |
+| Majlis | Good | Open frond shelter, cushions, coffee pots by the fire. |
+| Scribe's house | Good | |
+| Watchtower | Fixed | Castle battlements gone; raised door with ladder kept. |
+| Treasury | Fixed | Treasure chests gone. Stone still reads a little like brick; minor. |
+| Storehouse | Fixed | Roof now reads as frond mats on poles. |
+
+**Resolution.** Each building is about 250 px on the sheet. Sharp enough on most phones; slightly soft
+on high-end screens. Before the investor demo: each building separately at 1024 px, same style.
+
+**Hex board.** Buildings are drawn centred on their hex at 82% of its width, with a soft contact shadow.

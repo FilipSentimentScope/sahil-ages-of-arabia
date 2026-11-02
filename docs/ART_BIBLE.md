@@ -32,7 +32,13 @@ warm lantern light. Saturation stays moderate; only pearls, rewards and the acce
   client is preferable to baking different grain into every image).
 - Detail scales with size: buildings and icons have fewer, larger shapes; backgrounds and Archive
   illustrations carry the fine detail.
-- No outlines in black; forms are separated by value and colour, like a painting.
+- No outlines in black on the ground, backgrounds and portraits; forms are separated by value and colour,
+  like a painting.
+- Buildings (decision of 2 Nov 2026): the illustrated look of the approved building sheet, with soft brown
+  outlines and crisp shading, so they read at phone size against the soft painted ground. Keep new
+  buildings consistent with that sheet (bld_sheet_age5_v02.jpg) rather than with the key art.
+- The board is a hex map (pointy-top). Buildings are drawn as a single object on a transparent background,
+  no ground block or water block under them; the game draws the ground and the hex edges.
 
 ## 4. Character design
 

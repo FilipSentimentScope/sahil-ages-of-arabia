@@ -6,7 +6,7 @@
 import type { ClockSnapshot } from './clock';
 import type { TownState } from './settlement';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 export interface SaveFile {
   version: number;
@@ -38,11 +38,12 @@ export function deserialize(text: string): SaveFile {
   const f = data as Partial<SaveFile>;
   if (!f || typeof f !== 'object') throw new SaveError('Save file is empty');
   if (f.version === 1) migrateV1(f);
+  if (f.version === 2) migrateV2(f);
   if (f.version !== SAVE_VERSION) throw new SaveError(`Unsupported save version ${String(f.version)}`);
   if (!f.clock || typeof f.clock.game !== 'number' || typeof f.clock.real !== 'number' || !(f.clock.scale > 0)) {
     throw new SaveError('Save file clock is invalid');
   }
-  if (!f.town || f.town.schema !== 2 || !Array.isArray(f.town.buildings)) {
+  if (!f.town || f.town.schema !== 3 || !Array.isArray(f.town.buildings)) {
     throw new SaveError('Save file town is invalid');
   }
   return f as SaveFile;
@@ -60,6 +61,24 @@ function migrateV1(f: Partial<SaveFile>): void {
     town.welcomeBackCharges = 0;
   }
   f.version = 2;
+}
+
+/**
+ * Version 2 saves were made on the square 6 by 6 grid. They keep their own terrain and become a
+ * small hex town with every plot open (no buildings move). New towns use the 12 by 12 hex map.
+ */
+function migrateV2(f: Partial<SaveFile>): void {
+  const town = f.town as unknown as Record<string, unknown> | undefined;
+  if (town && town.schema === 2) {
+    const w = typeof town.width === 'number' ? town.width : 6;
+    const h = typeof town.height === 'number' ? town.height : 6;
+    const size = Math.min(w, h);
+    town.schema = 3;
+    town.openStart = { x: 0, y: 0, size };
+    town.openSize = size;
+    town.openGrowthPerAge = 1;
+  }
+  f.version = 3;
 }
 
 /** Load a save, or return null if there is none or it is unreadable (the caller starts a new town). */

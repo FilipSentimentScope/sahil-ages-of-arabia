@@ -16,10 +16,14 @@ const URL = `http://localhost:${PORT}/`;
 const OUT = 'tests/e2e/screenshots';
 mkdirSync(OUT, { recursive: true });
 
+// Plots inside the open 6 by 6 block of the 12 by 12 hex map (columns 3 to 8, rows 4 to 9).
 const LAYOUT = [
-  ['storehouse', 4, 0], ['watchtower', 5, 0], ['treasury', 3, 1], ['barasti_house', 0, 2],
-  ['majlis', 3, 2], ['well', 1, 3], ['date_grove', 2, 3], ['scribe_house', 4, 3],
-  ['pearl_merchant', 0, 4], ['souq', 1, 4], ['barasti_house', 2, 4], ['jetty', 0, 5], ['fish_trap', 2, 5],
+  ['barasti_house', 3, 4], ['well', 6, 4], ['storehouse', 8, 4],
+  ['barasti_house', 4, 5], ['date_grove', 6, 5], ['date_grove', 7, 5],
+  ['watchtower', 3, 6], ['souq', 5, 6], ['scribe_house', 8, 6],
+  ['majlis', 4, 7], ['treasury', 7, 7],
+  ['pearl_merchant', 5, 8], ['well', 7, 8],
+  ['jetty', 4, 9], ['fish_trap', 5, 9], ['fish_trap', 8, 9],
 ];
 
 const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], { stdio: 'ignore' });
@@ -45,6 +49,11 @@ await page.waitForTimeout(1500);
 await page.screenshot({ path: `${OUT}/art-01-town.png` });
 const box = await page.locator('#stage').boundingBox();
 await page.screenshot({ path: `${OUT}/art-02-board-closeup.png`, clip: box });
+// Zoomed out with the mouse wheel: the whole 12 by 12 map with the locked land around the town.
+await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+for (let i = 0; i < 8; i++) { await page.mouse.wheel(0, 200); await page.waitForTimeout(60); }
+await page.waitForTimeout(400);
+await page.screenshot({ path: `${OUT}/art-03-whole-map.png`, clip: box });
 await browser.close();
 server.kill();
 if (errors.length) { console.error('FAIL:', errors.join('\n')); process.exit(1); }

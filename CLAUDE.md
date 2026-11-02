@@ -148,8 +148,8 @@ is met (mirrors the brief's section 12).
 
 Phase 2 to 3 (week 1 to 2). Done: balance pass P2-09, Art Bible v0.1, image and ElevenLabs prompt
 sheets, research pack, first five Archive drafts, story script v0.1. Next, in order:
-1. Gate 1 art passed (1 Nov; ART-001 v2 is the style reference). Next art: the 12 buildings, generated
-   by Filip with ART-001 v2 attached as style reference. Music round 2 arrives 2 Nov.
+1. All 12 buildings in game on the hex board (2 Nov). Next art: 1024 px versions of the buildings and the
+   eight painted terrain tiles. Music round 2 and MUS-02 still to arrive.
 2. Routes and decision points in core, grey-box (P4-01), using docs/story/STORY_SCRIPT.md.
 3. Second balance pass (P2-10): slice sinks and a hoarding profile.
 4. Remaining 10 Archive pages and 25 questions (P3-07).
@@ -164,5 +164,8 @@ stays `draft` and needs human review before any public playtest (decision of 1 N
 - The GDD's "demand their return" choice for indebted divers is **removed** from the slice;
   the Archive treatment of pearl-diving labour waits for the human historical advisor.
 - Portrait orientation; English first, Arabic-ready.
+- Hex board (pointy-top, odd rows shifted right), 12 by 12 map drawn in full, 6 by 6 open in the slice;
+  locked land greyed until it opens (one row and column per age). Buildings keep the illustrated style of
+  the 2 Nov sheet; ground stays painterly.
 - No server, no real payments, no real ads, no accounts in the slice.
 - The workspace is temporary. The git repository is the single record of the project.

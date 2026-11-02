@@ -7,6 +7,7 @@
  */
 import { HOUR_MS } from './clock';
 import type { LoadedContent } from './content';
+import { hexNeighbours } from './hex';
 import type { BuildingDef, ResourceId, TerrainId } from './types';
 
 export interface PlacedBuilding {
@@ -19,8 +20,15 @@ export interface PlacedBuilding {
   stored: number;
 }
 
+/** A square block of plots in map coordinates (hex offset rows, see hex.ts). */
+export interface PlotArea {
+  x: number;
+  y: number;
+  size: number;
+}
+
 export interface TownState {
-  schema: 2;
+  schema: 3;
   /** Game time the town was founded; market days count from here. */
   foundedAt: number;
   mapId: string;
@@ -28,6 +36,12 @@ export interface TownState {
   height: number;
   /** Row-major terrain, length width * height. */
   terrain: TerrainId[];
+  /** Plots open at the start; everything outside the open area is shown but locked. */
+  openStart: PlotArea;
+  /** Current side of the open area; grows at each age change [GDD section 15]. */
+  openSize: number;
+  /** Plots added to each side of the open area per age change [GDD: one row and one column]. */
+  openGrowthPerAge: number;
   buildings: PlacedBuilding[];
   nextUid: number;
   resources: Record<ResourceId, number>;
@@ -48,6 +62,7 @@ export type ActionError =
   | 'not_enough_water'
   | 'cell_taken'
   | 'out_of_bounds'
+  | 'tile_locked'
   | 'wrong_terrain'
   | 'max_count'
   | 'max_level'
@@ -65,7 +80,10 @@ export function createTown(content: LoadedContent, gameNow: number): TownState {
   const terrain: TerrainId[] = [];
   for (const row of map.rows) for (const ch of row) terrain.push(map.terrainCodes[ch] as TerrainId);
   return {
-    schema: 2,
+    schema: 3,
+    openStart: { ...map.openArea },
+    openSize: map.openArea.size,
+    openGrowthPerAge: map.openGrowthPerAge,
     foundedAt: gameNow,
     market: { foodSoldRecent: 0, lastUpdate: gameNow },
     lastVisit: gameNow,
@@ -95,14 +113,56 @@ export function findBuilding(s: TownState, uid: number): PlacedBuilding | undefi
   return s.buildings.find((b) => b.uid === uid);
 }
 
-/** Orthogonal neighbours: at most four, which also enforces the GDD's four-neighbour cap. */
+/**
+ * Buildings on the six touching hexes. The GDD's cap of four helpful neighbours is applied in
+ * neighbourBonusPct, so on hexes the player chooses which four count [GDD section 6].
+ */
 export function neighboursOf(s: TownState, b: Pick<PlacedBuilding, 'x' | 'y'>): PlacedBuilding[] {
   const out: PlacedBuilding[] = [];
-  for (const [dx, dy] of [[0, -1], [1, 0], [0, 1], [-1, 0]] as const) {
-    const n = buildingAt(s, b.x + dx, b.y + dy);
+  for (const h of hexNeighbours(b.x, b.y)) {
+    const n = buildingAt(s, h.x, h.y);
     if (n) out.push(n);
   }
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// Open and locked land. The GDD grows the town one row and one column at every age change,
+// from 6 by 6 in Age I to 12 by 12 in Age VII [GDD section 15]. The whole map is drawn from the
+// start; plots outside the open area are locked, so the player sees where the town will grow.
+
+/** The open block now. It grows around its starting block and never leaves the map. */
+export function openArea(s: TownState): PlotArea {
+  const size = Math.min(s.openSize, s.width, s.height);
+  const grown = size - s.openStart.size;
+  // [ASSUMPTION] Growth alternates sides: the first new row and column go above and to the left.
+  const x = clamp(s.openStart.x - Math.ceil(grown / 2), 0, s.width - size);
+  const y = clamp(s.openStart.y - Math.ceil(grown / 2), 0, s.height - size);
+  return { x, y, size };
+}
+
+export function isOpen(s: TownState, x: number, y: number): boolean {
+  const a = openArea(s);
+  return x >= a.x && y >= a.y && x < a.x + a.size && y < a.y + a.size;
+}
+
+/** Open more land at an age change. Returns the plots that opened. */
+export function growTown(s: TownState): { x: number; y: number }[] {
+  const before = openArea(s);
+  s.openSize = Math.min(s.openSize + s.openGrowthPerAge, Math.min(s.width, s.height));
+  const after = openArea(s);
+  const opened: { x: number; y: number }[] = [];
+  for (let y = after.y; y < after.y + after.size; y++) {
+    for (let x = after.x; x < after.x + after.size; x++) {
+      const was = x >= before.x && y >= before.y && x < before.x + before.size && y < before.y + before.size;
+      if (!was) opened.push({ x, y });
+    }
+  }
+  return opened;
+}
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.max(lo, Math.min(hi, v));
 }
 
 // ---------------------------------------------------------------------------
@@ -263,6 +323,7 @@ export function canPlace(s: TownState, c: LoadedContent, defId: string, x: numbe
   if (!def) return { ok: false, error: 'unknown_building' };
   const terrain = terrainAt(s, x, y);
   if (terrain === undefined) return { ok: false, error: 'out_of_bounds' };
+  if (!isOpen(s, x, y)) return { ok: false, error: 'tile_locked' };
   if (buildingAt(s, x, y)) return { ok: false, error: 'cell_taken' };
   const allowed = def.allowedTerrain.length ? def.allowedTerrain : ['open'];
   if (!allowed.includes(terrain)) return { ok: false, error: 'wrong_terrain' };

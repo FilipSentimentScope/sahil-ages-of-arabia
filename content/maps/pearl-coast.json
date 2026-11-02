@@ -1,16 +1,24 @@
 {
-  "_note": "DRAFT 6 by 6 starting map for the Pearl Coast slice, read cell by cell from the approved board painting (assets/art/processed/board_pearl-coast_v02.jpg, Gate 1 round 2). Row 0 is inland, row 5 is the shore. Change the painting and this file together.",
+  "_note": "DRAFT 12 by 12 hex map for the Pearl Coast slice (2 Nov 2026). Pointy-top hexes, odd rows shifted right (src/core/hex.ts). Row 0 is inland, rows 10 and 11 are open sea. A creek (khor) runs from the shore inland, as at the Gulf pearling towns. The open block (openArea) is the 6 by 6 the slice starts with; everything else is drawn but locked and opens one row and one column per age change [GDD section 15]. Replaces the 6 by 6 square map read from the retired board painting.",
   "id": "pearl-coast",
   "status": "draft",
-  "width": 6,
-  "height": 6,
+  "width": 12,
+  "height": 12,
+  "openArea": { "x": 3, "y": 4, "size": 6 },
+  "openGrowthPerAge": 1,
   "rows": [
-    "ddk.dd",
-    "ddk.d.",
-    "..k.ss",
-    "..kk..",
-    "......",
-    "cccccc"
+    "ddddd..ddddd",
+    "dddd....dddd",
+    "dd...k....dd",
+    "d....k....dd",
+    "ddsd..k....d",
+    "ds....k...ss",
+    "ss.d..k....s",
+    "s.....k...ss",
+    "cc.....ks.cc",
+    "~cccccckccc~",
+    "~~~~~~~~~~~~",
+    "~~~~~~~~~~~~"
   ],
   "terrainCodes": {
     ".": "open",
@@ -19,6 +27,7 @@
     "d": "dune",
     "s": "sabkha",
     "m": "mountain",
-    "w": "wadi"
+    "w": "wadi",
+    "~": "sea"
   }
 }

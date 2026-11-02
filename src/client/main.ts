@@ -5,6 +5,7 @@
  */
 import { Application, Assets, type Texture } from 'pixi.js';
 import {
+  isOpen,
   GameClock,
   canPlace,
   collect,
@@ -35,7 +36,7 @@ import {
 import { loadDefaultContent } from '../core/content-pack';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { browserStorage } from './storage';
-import { BOARD_ART, BUILDING_ART } from './art';
+import { BUILDING_ART } from './art';
 import { TownView } from './town-view';
 
 const SAVE_KEY = 'aoa.slice.save.v1';
@@ -260,6 +261,7 @@ function onCellTap({ x, y }: { x: number; y: number }): void {
     renderPanel();
   } else {
     closePanel();
+    if (!isOpen(town, x, y)) toast(errorText('tile_locked'));
   }
 }
 
@@ -269,17 +271,9 @@ let view: TownView;
 async function start(): Promise<void> {
   const stage = $('stage');
   renderAll(); // render the interface first so the stage has its final size
-  await app.init({ resizeTo: stage, background: 0xf3ead8, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true });
+  await app.init({ resizeTo: stage, background: 0x8f8576, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true });
   stage.appendChild(app.canvas);
   view = new TownView(app, content, onCellTap);
-  const boardUrl = BOARD_ART[content.map.id];
-  if (boardUrl) {
-    try {
-      view.setBoard(await Assets.load<Texture>(boardUrl));
-    } catch (e) {
-      console.warn('[art] board painting failed to load; using flat terrain', e);
-    }
-  }
   try {
     const ids = Object.keys(BUILDING_ART);
     const textures = await Promise.all(ids.map((id) => Assets.load<Texture>(BUILDING_ART[id] as string)));
@@ -315,7 +309,13 @@ async function start(): Promise<void> {
     else onVisit();
   });
   // Exposed for automated tests (tests/e2e). Not a gameplay API.
-  (window as unknown as { __aoa: unknown }).__aoa = { get town() { return town; }, content, clock: () => clock };
+  (window as unknown as { __aoa: unknown }).__aoa = {
+    get town() { return town; },
+    content,
+    clock: () => clock,
+    cellPoint: (x: number, y: number) => view.screenPointOf(x, y),
+    redraw: () => { version++; view.layout(town); },
+  };
 }
 
 /** Refresh numbers in the open panel without rebuilding its buttons (keeps taps reliable). */

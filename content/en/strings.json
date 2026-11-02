@@ -55,5 +55,6 @@
   "ui.market_day": "Market day",
   "ui.sold": "Sold",
   "ui.welcome_back": "Welcome back. Your next three routes bring back more.",
-  "err.too_little_to_sell": "Too little food to sell yet."
+  "err.too_little_to_sell": "Too little food to sell yet.",
+  "err.tile_locked": "This land opens at the next age."
 }

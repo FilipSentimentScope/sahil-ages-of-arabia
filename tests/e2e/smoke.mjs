@@ -49,14 +49,11 @@ await page.goto(URL);
 await page.waitForFunction(() => Boolean(window.__aoa));
 await page.waitForTimeout(500);
 
-/** Centre of grid cell (x, y) in page coordinates, mirroring TownView.layout. */
+/** Centre of hex plot (x, y) in page coordinates, from the town view's own camera. */
 async function cellCentre(x, y) {
-  const box = await page.locator('#stage').boundingBox();
-  const pad = 12;
-  const cell = Math.floor(Math.min((box.width - pad * 2) / 6, (box.height - pad * 2) / 6));
-  const ox = Math.floor((box.width - cell * 6) / 2);
-  const oy = Math.floor((box.height - cell * 6) / 2);
-  return { x: box.x + ox + (x + 0.5) * cell, y: box.y + oy + (y + 0.5) * cell };
+  const box = await page.locator('#stage canvas').boundingBox();
+  const p = await page.evaluate(([cx, cy]) => window.__aoa.cellPoint(cx, cy), [x, y]);
+  return { x: box.x + p.x, y: box.y + p.y };
 }
 
 async function tapCell(x, y) {
@@ -67,11 +64,16 @@ async function tapCell(x, y) {
 await page.screenshot({ path: `${OUT}/01-new-town.png` });
 
 // Place a well, then a date grove beside it (water bonus).
+// Locked land outside the open 6 by 6 block refuses a building.
 await page.click('[data-building="well"]');
+await tapCell(2, 5);
+await page.waitForTimeout(200);
+if ((await page.evaluate(() => window.__aoa.town.buildings.length)) !== 0) fail('a building was placed on locked land');
+if (!(await page.locator('#toast').textContent()).includes('next age')) fail('no locked-land message');
 await page.screenshot({ path: `${OUT}/02-placing-well.png` });
-await tapCell(1, 3);
+await tapCell(6, 5); // creek plot
 await page.click('[data-building="date_grove"]');
-await tapCell(2, 3);
+await tapCell(5, 5); // touches the well
 await page.click('[data-building="date_grove"]'); // deselect
 const placed = await page.evaluate(() => window.__aoa.town.buildings.map((b) => b.defId));
 if (placed.join(',') !== 'well,date_grove') fail(`expected well,date_grove, got ${placed}`);
@@ -98,7 +100,7 @@ if (!(after.coin > coinBefore)) fail(`selling should pay coin: ${coinBefore} -> 
 await page.screenshot({ path: `${OUT}/03b-sold-food.png` });
 
 // Open the building panel.
-await tapCell(2, 3);
+await tapCell(5, 5);
 await page.waitForSelector('#panel:not([hidden])');
 await page.screenshot({ path: `${OUT}/04-building-panel.png` });
 await page.click('#btn-close');

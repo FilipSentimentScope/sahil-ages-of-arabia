@@ -5,7 +5,7 @@
 import type { BalanceConfig, BuildingDef, ContentPack, MapDef, ResourceId, TerrainId } from './types';
 import { RESOURCE_IDS } from './types';
 
-const TERRAINS: readonly TerrainId[] = ['open', 'coast', 'creek', 'dune', 'sabkha', 'mountain', 'wadi'];
+const TERRAINS: readonly TerrainId[] = ['open', 'coast', 'creek', 'dune', 'sabkha', 'mountain', 'wadi', 'sea'];
 
 export class ContentError extends Error {
   constructor(message: string) {
@@ -78,6 +78,10 @@ function validateMap(m: MapDef): void {
       req(t !== undefined && TERRAINS.includes(t), `map "${m.id}" row ${y}: unknown terrain code "${ch}"`);
     }
   });
+  const a = m.openArea;
+  req(a && isNum(a.x) && isNum(a.y) && isNum(a.size) && a.size >= 1, `map "${m.id}": openArea missing`);
+  req(a.x >= 0 && a.y >= 0 && a.x + a.size <= m.width && a.y + a.size <= m.height, `map "${m.id}": openArea leaves the map`);
+  req(Number.isInteger(m.openGrowthPerAge) && m.openGrowthPerAge >= 0, `map "${m.id}": openGrowthPerAge must be a whole number`);
 }
 
 export interface LoadedContent extends ContentPack {

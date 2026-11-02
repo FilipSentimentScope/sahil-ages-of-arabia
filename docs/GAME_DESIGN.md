@@ -8,7 +8,7 @@ Source of truth: GDD v4.0. This file specifies what the slice builds and labels 
 ## 1. The chapter in one paragraph
 
 The player founds a small pearling town on the lower Gulf coast in Age V (about 1650 to 1929).
-They build on a 6 by 6 grid, send caravans and ships, run one diving season, deal with one
+They build on a hex map, 6 by 6 plots open at the start, send caravans and ships, run one diving season, deal with one
 rival town (the Island Harbour), and clear the three locks of the age. The chapter ends with
 the age change to VI, shown through the town restyle, and a scripted preview of the pearl
 market collapse. Target length of a first run in Showcase mode: about 25 minutes.
@@ -23,7 +23,7 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 
 | # | Item | Treatment | Label | Build status |
 | --- | --- | --- | --- | --- |
-| 1 | 6 by 6 town, twelve buildings, neighbour bonuses | Draft roster in `content/buildings.json` | [GDD], roster [ASSUMPTION] | Core done, grey-box done |
+| 1 | Hex town on a 12 by 12 map, 6 by 6 open at the start, twelve buildings, neighbour bonuses | Roster in `content/buildings.json`; map in `content/maps/pearl-coast.json` | [GDD] growth and cap of four; hexes [RECOMMENDATION accepted]; start size [ASSUMPTION] | Core done, art for all twelve buildings in game |
 | 2 | Production, storage (4 h), production while away | Full speed until store is full | [GDD] | Core done |
 | 3 | Water as the limit | Buildings reserve water; wells provide it per level | [GDD] | Core done |
 | 4 | Upgrades, 14% cost growth, doubling at 10/25/50/100/200 | As written | [GDD] | Core done |
@@ -69,6 +69,9 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | A12 | Treasury limit is at least 1.25x one full coin collection | [ASSUMPTION] | Designer |
 | A13 | Market: base 0.4 coin per food, price halves at 400 recently sold, recovers over 24 hours, market day x1.25 on day 5 of each week | [ASSUMPTION] | Designer |
 | A14 | Economy growth compounds too fast without age prices and sinks (SIMULATION_NOTES run 2) | [OPEN] | Designer |
+| A15 | The slice's new town starts at 6 by 6 although the GDD's Age V town would be 10 by 10 (6 + one per age); a town founded in Age V starts small so the slice can teach from the beginning. The age change at the end opens a 7th row and column | [ASSUMPTION] | Designer, Filip |
+| A16 | The open block grows around its start, first new row and column above and to the left, never leaving the map | [ASSUMPTION] | Designer |
+| A17 | Open sea is a terrain no building can use; it is only lightly dimmed when locked | [ASSUMPTION] | Designer |
 | A8 | Population, garrison and water are kept in the background for comprehension (R3) | [RECOMMENDATION] | Designer |
 | A9 | Fight unit counts and garrison composition | [OPEN] | Designer |
 | A10 | Diving season: day count (KPI suggests 7), loss curve, pearl grades, prices | [OPEN] | Designer |

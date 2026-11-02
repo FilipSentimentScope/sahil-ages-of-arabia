@@ -39,11 +39,10 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 | ID | Asset | Status | Tool | Prompt file | Licence | Reviewer | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | ART-001 | Style frame: town key art (sf_town_keyart_v01.png; v02 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v02 is the style reference for all art (Filip, 1 Nov) |
-| ART-001b | Board painting (v02 approved; processed as board_pearl-coast_v02.jpg) | integrated | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | In game since 1 Nov; map data follows the painting |
+| ART-001b | Board painting (v02 approved; board_pearl-coast_v02.jpg) | retired 2 Nov (archived) | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | Square grid cannot follow the hex map; kept in assets/art/processed/archive as a colour reference |
 | ART-002 | Leader portrait, Ahmad ibn Majid (v03 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v03 has a correct small kamal; artistic interpretation |
 | ART-003 | Interface ornament kit (v03 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v03: straight edges, ready to slice |
-| BLD-06, 07, 08, 09, 10, 11, 12 | Jetty, pearl merchant, majlis, scribe's house, watchtower, treasury, storehouse (batch 1) | integrated (candidate) | tool to confirm | Prompt doc, round 3 | to log | Creative | Illustrated style with ink outlines, not the painterly reference; jetty redo; treasury and watchtower fixes. See docs/reviews/BUILDINGS_REVIEW_2026-11-02.md |
-| BLD-01..05 | Well, date grove, fish trap, palm-frond house, souq | generated (Filip sends later) | | Prompt doc, round 3 | | | |
+| BLD-01..12 | All twelve buildings, sheet v02 (bld_sheet_age5_v02.jpg; cut-outs bld_*_age5_v02.png) | integrated (candidate) | tool to confirm | Prompt doc, rounds 3 and 4 | to log | Creative | In game 2 Nov; jetty water block removed in processing; fish trap keeps its pool. About 250 px each on the sheet: final art needs 1024 px. See docs/reviews/BUILDINGS_REVIEW_2026-11-02.md round 2. v01 cut-outs archived |
 | LDR-02..06, RAWI, TOOLS, TERRAIN, FIGHT, DIVE, ARC, AGES | Remaining art | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
 | MUS-01 | Main theme sketch (temp; composer brief) | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Temp only; game copy in assets/audio/processed |
 | MUS-02 | Town bed | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | Filip sends 2 Nov |
@@ -58,6 +57,6 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 
 | Where | What | Replace with |
 | --- | --- | --- |
-| Town view | Coloured rounded squares with magenta border for buildings without art (5 of 12 on 2 Nov) | Building art |
-| Town view | (replaced 1 Nov by the board painting; flat colours remain only as a fallback for old saves) | n/a |
+| Town view | Ground drawn from map data (soft colour per terrain, blurred, simple marks) | Painted terrain tiles (IMAGE_PROMPTS.md, terrain tiles) |
+| Town view | Magenta-bordered hexes for any building without art (none on 2 Nov) | Building art |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

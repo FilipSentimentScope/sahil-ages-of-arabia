@@ -13,7 +13,11 @@ export function testContent(): LoadedContent {
     map: {
       ...c.map,
       id: 'test-map',
+      width: 6,
+      height: 6,
       rows: ['d....d', '..k...', '..k..s', '......', '......', 'cccccc'],
+      openArea: { x: 0, y: 0, size: 6 },
+      openGrowthPerAge: 1,
     },
   });
 }

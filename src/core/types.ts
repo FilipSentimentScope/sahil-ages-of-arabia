@@ -11,7 +11,7 @@ export type ResourceId = 'coin' | 'food' | 'knowledge' | 'reputation';
 export const RESOURCE_IDS: readonly ResourceId[] = ['coin', 'food', 'knowledge', 'reputation'];
 
 /** Fixed terrain on a grid cell (GDD section 6, "Placement and neighbours"). */
-export type TerrainId = 'open' | 'coast' | 'creek' | 'dune' | 'sabkha' | 'mountain' | 'wadi';
+export type TerrainId = 'open' | 'coast' | 'creek' | 'dune' | 'sabkha' | 'mountain' | 'wadi' | 'sea';
 
 /** Review status carried by every content record. Nothing ships while "draft". */
 export type ContentStatus = 'draft' | 'designer-approved' | 'historian-reviewed' | 'approved';
@@ -112,6 +112,10 @@ export interface MapDef {
   /** Row-major terrain codes, one string per row. See terrainCodes. */
   rows: string[];
   terrainCodes: Record<string, TerrainId>;
+  /** Block of plots open at the start of the age; the rest of the map is locked. */
+  openArea: { x: number; y: number; size: number };
+  /** Rows and columns added to the open block at each age change [GDD section 15: 1]. */
+  openGrowthPerAge: number;
 }
 
 export interface ContentPack {

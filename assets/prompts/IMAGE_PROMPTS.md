@@ -85,8 +85,10 @@ Age VI restyle preview (same 12, for the age change): append `in the 1930s, slig
 
 Landmark, the Great Fort in 3 stages (1024 x 1024): `coral-stone coastal fort on a low headland, square towers, [stage 1: foundations and scaffolding of palm poles | stage 2: walls half built, one tower | stage 3: complete fort with a flagless round tower], three-quarter top-down view, [STYLE BLOCK]`
 
-### Terrain tiles (7), 512 x 512, seamless top-down texture
-`seamless top-down painted texture of [open sand with faint footprints | wet shoreline sand with a thin foam edge | shallow creek water over sand | rippled dune sand | white crusted salt flat (sabkha) | rocky wadi bed | rough mountain rock], flat lighting, [STYLE BLOCK]`
+### Terrain tiles (8), 1024 x 1024, seamless top-down texture (next after the buildings)
+The game fills each hex with one of these and blends the edges, so no tile may contain objects,
+shadows from objects, a horizon or hex lines. Must tile seamlessly (check with an offset of half the image).
+`seamless tileable top-down painted texture of [open sand with faint footprints | wet shoreline sand with a thin foam edge | shallow turquoise creek water over sand | rippled golden dune sand | white crusted salt flat (sabkha) | rocky wadi bed | rough mountain rock | deep blue-green open sea with soft light ripples], flat even lighting, no objects, no horizon, soft oil paint, [STYLE BLOCK]`
 
 ### Leaders (5 more), 1024 x 1280, same framing as ART-002, use `--oref`/reference for the style
 | ID | Subject (artistic interpretation; Historian checks dress) |

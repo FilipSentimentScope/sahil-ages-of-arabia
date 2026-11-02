@@ -41,6 +41,13 @@ export class TownView {
   private oy = 0;
   private builtVersion = -1;
   private board: Texture | null = null;
+  private buildingArt: Record<string, Texture> = {};
+
+  /** Art per building id; buildings without art keep the grey-box placeholder. */
+  setBuildingArt(art: Record<string, Texture>): void {
+    this.buildingArt = art;
+    this.builtVersion = -1;
+  }
 
   /**
    * Use a painted board for this map. Only shown when the town's terrain still matches the
@@ -122,7 +129,9 @@ export class TownView {
     if (version === this.builtVersion) return;
     this.builtVersion = version;
     this.buildingLayer.removeChildren().forEach((c) => c.destroy({ children: true }));
-    for (const b of s.buildings) this.buildingLayer.addChild(this.drawBuilding(b));
+    // Back rows first so buildings lower on the board overlap the ones behind them.
+    const ordered = [...s.buildings].sort((a, b) => a.y - b.y || a.x - b.x);
+    for (const b of ordered) this.buildingLayer.addChild(this.drawBuilding(b));
   }
 
   private drawBuilding(b: PlacedBuilding): Container {
@@ -132,6 +141,20 @@ export class TownView {
     const x = this.ox + b.x * this.cell + m;
     const y = this.oy + b.y * this.cell + m;
     const size = this.cell - m * 2;
+    const art = this.buildingArt[b.defId];
+    if (art) {
+      // Art is drawn a little larger than its plot and stands on the plot's lower edge,
+      // so roofs and towers can rise into the row behind, as in a painted town.
+      const sprite = new Sprite(art);
+      const drawn = this.cell * 1.18;
+      sprite.anchor.set(0.5, 1);
+      sprite.width = drawn;
+      sprite.height = drawn;
+      sprite.position.set(this.ox + (b.x + 0.5) * this.cell, this.oy + (b.y + 1) * this.cell + this.cell * 0.04);
+      c.addChild(sprite);
+      if (def.firstUpgradeCost > 0 || def.produces) c.addChild(this.levelBadge(b.level, x, y));
+      return c;
+    }
     const colour = def.tags.includes('water') ? RESOURCE_COLOUR.water : RESOURCE_COLOUR[def.produces ?? 'none'];
     const body = new Graphics()
       .roundRect(x, y, size, size, 6)
@@ -146,12 +169,20 @@ export class TownView {
     name.anchor.set(0.5);
     name.position.set(x + size / 2, y + size / 2 - 2);
     c.addChild(name);
-    if (def.firstUpgradeCost > 0 || def.produces) {
-      const lvl = new Text({ text: String(b.level), style: { fontSize: Math.max(8, Math.floor(this.cell / 6)), fill: 0xffffff, fontWeight: '700' } });
-      lvl.position.set(x + 3, y + 1);
-      c.addChild(lvl);
-    }
+    if (def.firstUpgradeCost > 0 || def.produces) c.addChild(this.levelBadge(b.level, x, y));
     return c;
+  }
+
+  /** Small level number in a dark disc, readable on both painted art and placeholders. */
+  private levelBadge(level: number, x: number, y: number): Container {
+    const r = Math.max(7, Math.floor(this.cell / 7));
+    const badge = new Container();
+    badge.addChild(new Graphics().circle(x + r, y + r, r).fill({ color: 0x2b2118, alpha: 0.8 }));
+    const lvl = new Text({ text: String(level), style: { fontSize: Math.floor(r * 1.2), fill: 0xffffff, fontWeight: '700' } });
+    lvl.anchor.set(0.5);
+    lvl.position.set(x + r, y + r);
+    badge.addChild(lvl);
+    return badge;
   }
 
   /** Per-frame: storage bars and the placement highlight. */

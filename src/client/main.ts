@@ -35,7 +35,7 @@ import {
 import { loadDefaultContent } from '../core/content-pack';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { browserStorage } from './storage';
-import { BOARD_ART } from './art';
+import { BOARD_ART, BUILDING_ART } from './art';
 import { TownView } from './town-view';
 
 const SAVE_KEY = 'aoa.slice.save.v1';
@@ -279,6 +279,13 @@ async function start(): Promise<void> {
     } catch (e) {
       console.warn('[art] board painting failed to load; using flat terrain', e);
     }
+  }
+  try {
+    const ids = Object.keys(BUILDING_ART);
+    const textures = await Promise.all(ids.map((id) => Assets.load<Texture>(BUILDING_ART[id] as string)));
+    view.setBuildingArt(Object.fromEntries(ids.map((id, i) => [id, textures[i] as Texture])));
+  } catch (e) {
+    console.warn('[art] building art failed to load; using placeholders', e);
   }
   view.layout(town);
   // The stage can change size without a window resize (warning banner, panel, rotation).

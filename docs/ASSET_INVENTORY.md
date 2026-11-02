@@ -42,7 +42,8 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 | ART-001b | Board painting (v02 approved; processed as board_pearl-coast_v02.jpg) | integrated | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | In game since 1 Nov; map data follows the painting |
 | ART-002 | Leader portrait, Ahmad ibn Majid (v03 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v03 has a correct small kamal; artistic interpretation |
 | ART-003 | Interface ornament kit (v03 approved) | approved | tool to confirm | IMAGE_PROMPTS.md | to log | Creative | v03: straight edges, ready to slice |
-| BLD-01..12 | Buildings, Age V | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
+| BLD-06, 07, 08, 09, 10, 11, 12 | Jetty, pearl merchant, majlis, scribe's house, watchtower, treasury, storehouse (batch 1) | integrated (candidate) | tool to confirm | Prompt doc, round 3 | to log | Creative | Illustrated style with ink outlines, not the painterly reference; jetty redo; treasury and watchtower fixes. See docs/reviews/BUILDINGS_REVIEW_2026-11-02.md |
+| BLD-01..05 | Well, date grove, fish trap, palm-frond house, souq | generated (Filip sends later) | | Prompt doc, round 3 | | | |
 | LDR-02..06, RAWI, TOOLS, TERRAIN, FIGHT, DIVE, ARC, AGES | Remaining art | prompt-prepared | Scenario (after Gate 1) | IMAGE_PROMPTS.md | | | Phase B |
 | MUS-01 | Main theme sketch (temp; composer brief) | reviewed | Eleven Music | ELEVENLABS_PROMPTS.md | to log | Creative | Temp only; game copy in assets/audio/processed |
 | MUS-02 | Town bed | prompt-prepared | Eleven Music | ELEVENLABS_PROMPTS.md | | | Filip sends 2 Nov |
@@ -57,6 +58,6 @@ Prompts: assets/prompts/IMAGE_PROMPTS.md and assets/prompts/ELEVENLABS_PROMPTS.m
 
 | Where | What | Replace with |
 | --- | --- | --- |
-| Town view | Coloured rounded squares with magenta border for all 12 buildings | Painted building art (Phase 5) |
+| Town view | Coloured rounded squares with magenta border for buildings without art (5 of 12 on 2 Nov) | Building art |
 | Town view | (replaced 1 Nov by the board painting; flat colours remain only as a fallback for old saves) | n/a |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

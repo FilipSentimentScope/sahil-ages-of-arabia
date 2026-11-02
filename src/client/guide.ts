@@ -7,7 +7,9 @@ import type { LoadedContent, TownState } from '../core';
 import {
   ageProgress,
   canPlace,
+  nextQuestion,
   outputPerHour,
+  questionsLeftToday,
   pendingDecision,
   routeDef,
   storageCap,
@@ -26,6 +28,7 @@ export type GuideAction =
   | { kind: 'unload'; uid: number }
   | { kind: 'routes' }
   | { kind: 'goals' }
+  | { kind: 'question' }
   | { kind: 'open'; uid: number }
   | { kind: 'none' };
 
@@ -79,7 +82,9 @@ export function suggest(s: TownState, c: LoadedContent, now: number, waitText: (
   if (p.landmark.unlocked && stage !== undefined && s.resources.coin >= stage) {
     return { icon: '🏰', text: t('guide.fort'), action: { kind: 'goals' }, go };
   }
-  if (p.chronicle.done < p.chronicle.of) return { icon: '📖', text: t('guide.question'), action: { kind: 'goals' }, go };
+  if (p.chronicle.done < p.chronicle.of && nextQuestion(s, c) && questionsLeftToday(s, c, now) > 0) {
+    return { icon: '📖', text: t('guide.question'), action: { kind: 'question' }, go };
+  }
   // 5. The cheapest useful upgrade the player can afford.
   let best: { uid: number; name: string; cost: number } | null = null;
   for (const b of s.buildings) {

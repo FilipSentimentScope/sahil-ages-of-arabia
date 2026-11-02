@@ -24,7 +24,7 @@
 * { box-sizing: border-box; }
 /* Panels set their own display; the hidden switch must still win. */
 [hidden] { display: none !important; }
-html, body { margin: 0; height: 100%; background: #8f8576; overscroll-behavior: none; }
+html, body { margin: 0; height: 100%; background: #a8916a; overscroll-behavior: none; }
 body { -webkit-tap-highlight-color: transparent; user-select: none; overflow: hidden; }
 button { font: inherit; color: inherit; cursor: pointer; }
 button:disabled { cursor: default; }

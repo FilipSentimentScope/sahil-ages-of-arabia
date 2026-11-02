@@ -2,6 +2,18 @@
 
 Playtest feedback and what changed in response. Newest first.
 
+## Filip's second look, 2 Nov 2026 night
+
+| Feedback | What we changed | Where |
+| --- | --- | --- |
+| The question button fills the Chronicle without asking anything | Real history questions: 14 drafts written from the cited research pack (no labour topic, nothing contested). A card asks the question with three answers in a fixed shuffled order; a right answer gives 40 knowledge, counts for the Chronicle and opens an Archive page; a wrong one shows the answer and explanation and earns nothing, and the question comes back later; 6 a day [GDD]. The Archive reader shows each opened page with sources and a younger-reader version. All marked draft, awaiting a historian | `content/questions/age5.json`, `src/core/age.ts`, `src/client/questions-ui.ts` |
+| The music restart is clearly heard; want 5+ minutes and a smoother transition | No more hard loop: the town plays full tracks in turn (town bed, then the main theme sketch), each with its own soft opening and ending, with 6 seconds of quiet between: about 4 minutes before anything repeats. Prompts for three more 3-minute town tracks would make it about 13 minutes. Audio now MP3 so iPhones play it | `src/client/audio.ts`, ELEVENLABS_PROMPTS round 3 |
+| Enrich the land outside the town: oasis, palms, ships, dunes | Scenery on locked land, past the map edge and at sea: an oasis near the head of the creek, palms (more near water), rocks, scrub, dune crests, beached boats and dhows drifting on the sea. Drawn in code as placeholders until the painted decor set arrives. Land past the map now continues instead of ending in grey | `src/client/town-view.ts` |
+
+Performance note: the scenery first halved the headless frame rate; static ground and scenery are now
+baked into single images, which brought it back (5 fps headless against 6 before; real phones use
+the GPU and need their own test, P4-08).
+
 ## Filip's first playtest, 2 Nov 2026 (interface v2)
 
 | Feedback | What we changed | Where |

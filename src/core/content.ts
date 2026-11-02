@@ -2,7 +2,7 @@
  * Loads and validates content. Bad content fails loudly at startup with a
  * message that names the file field, instead of misbehaving in play.
  */
-import type { AgeGoalsConfig, BalanceConfig, BuildingDef, ContentPack, MapDef, ResourceId, RoutesConfig, TerrainId } from './types';
+import type { AgeGoalsConfig, ArchiveConfig, BalanceConfig, BuildingDef, ContentPack, MapDef, QuestionsConfig, ResourceId, RoutesConfig, TerrainId } from './types';
 import { RESOURCE_IDS } from './types';
 
 const TERRAINS: readonly TerrainId[] = ['open', 'coast', 'creek', 'dune', 'sabkha', 'mountain', 'wadi', 'sea'];
@@ -124,6 +124,27 @@ function validateAgeGoals(g: AgeGoalsConfig): void {
   req(isNum(g.question?.knowledge) && g.question.knowledge >= 0, 'ageGoals.question.knowledge missing');
 }
 
+function validateQuestions(q: QuestionsConfig, a: ArchiveConfig): void {
+  req(Array.isArray(a?.pages), 'archive.pages must be an array');
+  const pages = new Set(a.pages.map((p) => p.id));
+  req(Number.isInteger(q?.dailyCap) && q.dailyCap >= 1, 'questions.dailyCap must be a whole number >= 1');
+  const ids = new Set<string>();
+  for (const x of q.questions) {
+    const at = `question "${String(x.id)}"`;
+    req(typeof x.id === 'string' && !ids.has(x.id), `${at}: id missing or duplicate`);
+    ids.add(x.id);
+    req(Array.isArray(x.sources) && x.sources.length > 0, `${at}: every question cites a source (CLAUDE.md rule 4)`);
+    req(pages.has(x.archive), `${at}: unknown archive page "${x.archive}"`);
+    for (const lang of ['en', 'ar'] as const) {
+      const t = x[lang];
+      if (!t) continue;
+      req(typeof t.prompt === 'string' && Array.isArray(t.options) && t.options.length >= 2, `${at} (${lang}): prompt and options needed`);
+      req(Number.isInteger(x.answer) && x.answer >= 0 && x.answer < t.options.length, `${at} (${lang}): answer out of range`);
+    }
+    req(Boolean(x.en), `${at}: English text missing`);
+  }
+}
+
 export interface LoadedContent extends ContentPack {
   byId: Map<string, BuildingDef>;
   building(id: string): BuildingDef;
@@ -141,6 +162,7 @@ export function loadContent(raw: ContentPack): LoadedContent {
   }
   validateRoutes(raw.routes, new Set(byId.keys()));
   validateAgeGoals(raw.ageGoals);
+  validateQuestions(raw.questions, raw.archive);
   return {
     ...raw,
     byId,

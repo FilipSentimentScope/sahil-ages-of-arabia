@@ -38,7 +38,7 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | 13 | Diving season, one cycle, four beats | Fit out, dive, town alone, homecoming and sale | [GDD] | Not started |
 | 14 | Fights | Painted tableau, one pre-fight choice, up to two ability taps, counter triangle | [GDD] rules, presentation [RECOMMENDATION] | Not started |
 | 15 | Pinch point with two free ways past it | Mock shop, no payments | [GDD] | Not started |
-| 16 | 25 history questions, 15 Archive pages | Sourced; each page also in a younger-reader version | [GDD] + [RECOMMENDATION] | Not started |
+| 16 | 25 history questions, 15 Archive pages | Sourced; each page also in a younger-reader version | [GDD] + [RECOMMENDATION] | 14 draft questions and 5 draft pages in the game, with the Archive reader |
 | 17 | Rawi script | New Age V script, max three sentences at a time | [GDD] rule | Not started |
 | 18 | One town style, one leader outfit | Cosmetic demo | [GDD] | Not started |
 | 19 | Classroom setting | Hides shop and Dana; learning objective per page; younger-reader text; end summary | [RECOMMENDATION] | Not started |

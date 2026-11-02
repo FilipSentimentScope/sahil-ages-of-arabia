@@ -25,6 +25,8 @@ const S = 40;
 const HEX_W = Math.sqrt(3) * S;
 /** Vertical squash of the ground: the board seen at a tilt. */
 const FLAT = 0.66;
+/** Rings of land and sea drawn past the map edge, so the world does not stop at the border. */
+const RING = 6;
 
 /** Ground colours, warm and low-contrast as in the Art Bible's painted board. */
 const TERRAIN_COLOUR: Record<TerrainId, number> = {
@@ -77,6 +79,9 @@ export class TownView {
   private readonly terrainLayer = new Container();
   private readonly gridLayer = new Graphics();
   private readonly highlight = new Graphics();
+  /** Scenery on land the player cannot build on yet, and boats on the sea. */
+  private readonly decorLayer = new Container();
+  private boats: { c: Container; x: number; y: number; phase: number; range: number }[] = [];
   private readonly buildingLayer = new Container();
   private readonly fillLayer = new Graphics();
   private readonly floatLayer = new Container();
@@ -105,7 +110,7 @@ export class TownView {
     this.ground.addChild(this.terrainLayer, this.gridLayer, this.highlight);
     this.ground.scale.y = FLAT;
     this.gridLayer.visible = false;
-    this.world.addChild(this.ground, this.buildingLayer, this.fillLayer, this.floatLayer);
+    this.world.addChild(this.ground, this.decorLayer, this.buildingLayer, this.fillLayer, this.floatLayer);
     app.stage.addChild(this.world);
     this.bindInput(app.canvas);
   }
@@ -306,12 +311,19 @@ export class TownView {
     // 1. Soft paint: oversized hex fills, blurred together. Two extra rings past the map edge
     //    repeat the edge ground, so the blur does not fade the border to the background.
     const paint = new Graphics();
-    for (let y = -2; y < s.height + 2; y++) {
-      for (let x = -2; x < s.width + 2; x++) {
+    for (let y = -RING; y < s.height + RING; y++) {
+      for (let x = -RING; x < s.width + RING; x++) {
         const { px, py } = hexCentre(x, y, S);
         paint.poly(hexCorners(px, py, S * 1.03)).fill(TERRAIN_COLOUR[terrainOf(x, y)]);
       }
     }
+    // Backdrop far past the painted rings: sand inland, sea beyond the shore, so zooming out never
+    // reaches an empty edge.
+    const shore = hexCentre(0, s.height - 2, S).py;
+    const backdrop = new Graphics()
+      .rect(-20000, -20000, 40000, 20000 + shore).fill(0xc9a96e)
+      .rect(-20000, shore, 40000, 20000).fill(0x3f93a3);
+    this.terrainLayer.addChild(backdrop);
     const blurred = new Container();
     blurred.addChild(paint);
     blurred.filters = [new BlurFilter({ strength: S * 0.2, quality: 3 })];
@@ -319,9 +331,11 @@ export class TownView {
     // filtering every frame. The frame is set explicitly (Pixi's automatic bounds clip filtered
     // content that starts at negative coordinates). Resolution 2 stays crisp when zoomed in.
     const pb = paint.getLocalBounds();
+    // Resolution 1: the ground is soft anyway, and a smaller texture stays within what older
+    // phones can load (the ground with its outer rings is over 3,000 pixels wide at resolution 2).
     const ground = this.app.renderer.generateTexture({
       target: blurred,
-      resolution: 2,
+      resolution: 1,
       antialias: true,
       frame: new Rectangle(pb.x, pb.y, pb.width, pb.height),
     });
@@ -342,18 +356,18 @@ export class TownView {
     const locked = new Graphics();
     const grid = new Graphics();
     const lockedGrid = new Graphics();
-    for (let y = -2; y < s.height + 2; y++) {
-      for (let x = -2; x < s.width + 2; x++) {
+    for (let y = -RING; y < s.height + RING; y++) {
+      for (let x = -RING; x < s.width + RING; x++) {
         const { px, py } = hexCentre(x, y, S);
         const corners = hexCorners(px, py, S);
         const onMap = x >= 0 && y >= 0 && x < s.width && y < s.height;
         if (!onMap) {
           // Past the map edge: dimmed like locked land, without grid lines.
-          locked.poly(corners).fill({ color: 0x57524b, alpha: terrainOf(x, y) === 'sea' ? 0.2 : 0.5 });
+          locked.poly(corners).fill({ color: 0x57524b, alpha: terrainOf(x, y) === 'sea' ? 0.15 : 0.38 });
         } else if (isOpen(s, x, y)) grid.poly(corners); // drawn into gridLayer below, shown while placing
         else {
           // Sea is never buildable, so it is only lightly dimmed; locked land is clearly greyed.
-          locked.poly(corners).fill({ color: 0x57524b, alpha: terrainOf(x, y) === 'sea' ? 0.12 : 0.4 });
+          locked.poly(corners).fill({ color: 0x57524b, alpha: terrainOf(x, y) === 'sea' ? 0.1 : 0.3 });
           lockedGrid.poly(corners);
         }
       }
@@ -394,6 +408,19 @@ export class TownView {
     fence.stroke({ width: 4, color: 0x3a2a18, alpha: 0.35, cap: 'round' });
     fence.stroke({ width: 2, color: 0xe2b85c, alpha: 0.95, cap: 'round' });
     this.terrainLayer.addChild(fence);
+    // Bake everything above the backdrop (painted ground, details, locked land, border) into one
+    // texture: it never changes between redraws, and one layer is far cheaper to draw each frame
+    // than five see-through ones on slow devices.
+    const layers = this.terrainLayer.children.filter((ch) => ch !== backdrop);
+    const bake = new Container();
+    for (const ch of layers) bake.addChild(ch);
+    const bb = bake.getLocalBounds();
+    const baked = this.app.renderer.generateTexture({ target: bake, resolution: 1, antialias: true, frame: new Rectangle(bb.x, bb.y, bb.width, bb.height) });
+    bake.destroy({ children: true, texture: true });
+    const bakedSprite = new Sprite(baked);
+    bakedSprite.position.set(bb.x, bb.y);
+    this.terrainLayer.addChild(bakedSprite);
+    this.drawScenery(s, terrainOf);
   }
 
   private drawDetail(g: Graphics, terr: TerrainId, x: number, y: number): void {
@@ -429,6 +456,112 @@ export class TownView {
         g.stroke({ width: 2, color: 0xffffff, alpha: 0.35, cap: 'round' });
       }
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // Scenery [placeholder until the decor set DEC-01..08 arrives; drawn in code in the palette]
+  //
+  // Only on land outside the open block (and past the map edge) and on the sea, so it never sits on
+  // a plot the player can use. Placement is a fixed hash of the plot, so it does not change between
+  // visits. When land opens at an age change, the scenery on it goes.
+
+  private drawScenery(s: TownState, terrainOf: (x: number, y: number) => TerrainId): void {
+    this.decorLayer.removeChildren().forEach((c) => c.destroy({ children: true, texture: c instanceof Sprite }));
+    this.boats = [];
+    const ground = new Graphics(); // flat marks drawn on the tilted ground: dune shading, the oasis pool
+    const items: { y: number; g: Container }[] = [];
+    const oasis = this.oasisPlot(s, terrainOf);
+    for (let y = -RING; y < s.height + RING; y++) {
+      for (let x = -RING; x < s.width + RING; x++) {
+        if (x >= 0 && y >= 0 && x < s.width && y < s.height && isOpen(s, x, y)) continue;
+        const terr = terrainOf(x, y);
+        const { px, py: rawY } = hexCentre(x, y, S);
+        const py = rawY * FLAT;
+        const r = (k: number) => hash(x + 50, y + 50, k + 100);
+        if (oasis && x === oasis.x && y === oasis.y) {
+          ground.ellipse(px, py + 2, S * 0.62, S * 0.3).fill({ color: 0x8aa35a, alpha: 0.9 });
+          ground.ellipse(px, py + 2, S * 0.48, S * 0.22).fill(0x3f9aa8);
+          ground.ellipse(px - S * 0.12, py - 2, S * 0.2, S * 0.07).fill({ color: 0xbfe6e6, alpha: 0.7 });
+          for (const [dx, dy, h] of [[-0.55, -0.15, 1.1], [0.5, -0.2, 1.25], [0.15, -0.35, 0.95], [-0.25, 0.32, 1.05], [0.6, 0.3, 0.9]] as const) {
+            items.push({ y: py + dy * S, g: palm(px + dx * S, py + dy * S, S * h, r(dx * 10 + dy)) });
+          }
+          continue;
+        }
+        if (terr === 'sea') {
+          if (r(1) < 0.07) {
+            const boat = dhow(r(2) < 0.5);
+            boat.position.set(px, py);
+            this.boats.push({ c: boat, x: px, y: py, phase: r(3) * 6.28, range: S * (0.3 + r(4) * 0.5) });
+            items.push({ y: py, g: boat });
+          }
+          continue;
+        }
+        if (terr === 'dune') {
+          // A soft mound: light face towards the sun, shadow behind.
+          if (r(18) < 0.35) continue; // not every dune plot has a crest: avoids a wallpaper pattern
+          const ox = px + (r(5) - 0.5) * S * 0.8;
+          const oy = py + (r(19) - 0.5) * S * 0.4;
+          const k = 0.6 + r(21) * 0.7;
+          ground.ellipse(ox, oy, S * 0.55 * k, S * 0.2 * k).fill({ color: 0xf2d38f, alpha: 0.5 });
+          ground.ellipse(ox + S * 0.18 * k, oy + S * 0.06 * k, S * 0.35 * k, S * 0.12 * k).fill({ color: 0xb98a4a, alpha: 0.28 });
+          continue;
+        }
+        if (terr === 'sabkha') continue;
+        const roll = r(6);
+        const nearWater = terr === 'creek' || terr === 'coast' || (terr === 'open' && [terrainOf(x + 1, y), terrainOf(x - 1, y), terrainOf(x, y + 1), terrainOf(x, y - 1)].some((t) => t === 'creek'));
+        if (terr === 'creek') continue;
+        if (roll < (nearWater ? 0.45 : 0.16)) {
+          const n = 1 + Math.floor(r(7) * 2.5);
+          for (let i = 0; i < n; i++) {
+            const dx = (r(8 + i) - 0.5) * S * 0.9;
+            const dy = (r(12 + i) - 0.5) * S * 0.5;
+            items.push({ y: py + dy, g: palm(px + dx, py + dy, S * (0.85 + r(16 + i) * 0.45), r(20 + i)) });
+          }
+        } else if (roll < 0.62) {
+          items.push({ y: py, g: rocks(px + (r(9) - 0.5) * S * 0.6, py + (r(10) - 0.5) * S * 0.3, r(11)) });
+        } else if (roll < 0.8) {
+          items.push({ y: py, g: shrub(px + (r(13) - 0.5) * S * 0.6, py + (r(14) - 0.5) * S * 0.3, r(15)) });
+        } else if (terr === 'coast' && roll < 0.9) {
+          const boat = dhow(r(17) < 0.5, true);
+          boat.position.set(px, py);
+          items.push({ y: py, g: boat });
+        }
+      }
+    }
+    // Static scenery is baked into one texture (hundreds of small shapes drawn every frame cost too
+    // much on slow devices); only the boats stay live so they can drift.
+    const still = new Container();
+    const flatGround = new Container();
+    flatGround.addChild(ground);
+    still.addChild(flatGround);
+    const boats = new Set(this.boats.map((b) => b.c));
+    const sorted = items.sort((a, b) => a.y - b.y);
+    for (const i of sorted) if (!boats.has(i.g)) still.addChild(i.g);
+    const b = still.getLocalBounds();
+    if (b.width > 0 && b.height > 0) {
+      const tex = this.app.renderer.generateTexture({ target: still, resolution: 1, antialias: true, frame: new Rectangle(b.x, b.y, b.width, b.height) });
+      const sprite = new Sprite(tex);
+      sprite.position.set(b.x, b.y);
+      this.decorLayer.addChild(sprite);
+    }
+    still.destroy({ children: true });
+    for (const i of sorted) if (boats.has(i.g)) this.decorLayer.addChild(i.g);
+  }
+
+  /** A locked open plot inland, near the head of the creek, for a small oasis. */
+  private oasisPlot(s: TownState, terrainOf: (x: number, y: number) => TerrainId): { x: number; y: number } | null {
+    let best: { x: number; y: number; d: number } | null = null;
+    for (let y = 0; y < s.height; y++) {
+      for (let x = 0; x < s.width; x++) {
+        if (isOpen(s, x, y) || terrainOf(x, y) !== 'open') continue;
+        const a = openArea(s);
+        if (y >= a.y) continue; // inland of the town
+        const creek = hexNeighbours(x, y).some((n) => terrainOf(n.x, n.y) === 'creek');
+        const d = (creek ? 0 : 10) + Math.abs(y - (a.y - 3)) + Math.abs(x - (a.x + a.size)) * 0.5;
+        if (!best || d < best.d) best = { x, y, d };
+      }
+    }
+    return best;
   }
 
   // -------------------------------------------------------------------------
@@ -521,6 +654,12 @@ export class TownView {
         this.fillLayer.circle(px + HEX_W * 0.3, py - S * 0.95 + bob, 7).fill(0xffd75e).stroke({ width: 1.5, color: 0x8a5a2b });
       }
     }
+    const now = performance.now() / 1000;
+    for (const b of this.boats) {
+      // Slow drift along the coast and a gentle bob: existing objects only, nothing created.
+      b.c.x = b.x + Math.sin(now * 0.08 + b.phase) * b.range;
+      b.c.y = b.y + Math.sin(now * 1.3 + b.phase) * 1.2;
+    }
     for (let i = this.floats.length - 1; i >= 0; i--) {
       const f = this.floats[i]!;
       f.age += dtMs;
@@ -543,4 +682,78 @@ export class TownView {
       }
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+// Placeholder scenery shapes, drawn in code in the Art Bible palette.
+
+/** A date palm standing at (x, y), about h tall. */
+function palm(x: number, y: number, h: number, r: number): Container {
+  const c = new Container();
+  const g = new Graphics();
+  const lean = (r - 0.5) * h * 0.25;
+  const tx = x + lean;
+  const ty = y - h;
+  g.ellipse(x + h * 0.12, y + 1, h * 0.22, h * 0.07).fill({ color: 0x3a2a18, alpha: 0.18 });
+  g.moveTo(x, y).quadraticCurveTo(x + lean * 0.2, y - h * 0.5, tx, ty).stroke({ width: Math.max(2.5, h * 0.09), color: 0x7a5a36, cap: 'round' });
+  for (let i = 1; i < 5; i++) {
+    const t = i / 5;
+    const px = x + (tx - x) * t * t;
+    const py = y + (ty - y) * t;
+    g.moveTo(px - h * 0.04, py).lineTo(px + h * 0.04, py).stroke({ width: 1, color: 0x5a4126, alpha: 0.6 });
+  }
+  const fronds = 8;
+  for (let i = 0; i < fronds; i++) {
+    const a = (Math.PI * 2 * i) / fronds + r;
+    const len = h * (0.42 + ((i * 37) % 10) / 60);
+    const ex = tx + Math.cos(a) * len;
+    const ey = ty + Math.sin(a) * len * 0.45 + len * 0.35; // fronds droop
+    const cx = tx + Math.cos(a) * len * 0.5;
+    const cy = ty + Math.sin(a) * len * 0.25 - len * 0.12;
+    g.moveTo(tx, ty).quadraticCurveTo(cx, cy, ex, ey).stroke({ width: Math.max(2, h * 0.08), color: i % 2 ? 0x4f7a34 : 0x6b8f3a, cap: 'round' });
+  }
+  if (r > 0.4) g.circle(tx - h * 0.05, ty + h * 0.06, h * 0.05).circle(tx + h * 0.05, ty + h * 0.07, h * 0.045).fill(0xc0692c);
+  c.addChild(g);
+  return c;
+}
+
+function rocks(x: number, y: number, r: number): Container {
+  const c = new Container();
+  const g = new Graphics();
+  const n = 2 + Math.floor(r * 3);
+  for (let i = 0; i < n; i++) {
+    const ox = x + (i - n / 2) * 6 + r * 4;
+    const sz = 4 + ((i * 7 + r * 10) % 5);
+    g.ellipse(ox, y - sz * 0.4, sz, sz * 0.7).fill(i % 2 ? 0xa08c70 : 0x8b7962);
+    g.ellipse(ox - sz * 0.3, y - sz * 0.7, sz * 0.4, sz * 0.25).fill({ color: 0xe8dcc4, alpha: 0.5 });
+  }
+  c.addChild(g);
+  return c;
+}
+
+function shrub(x: number, y: number, r: number): Container {
+  const c = new Container();
+  const g = new Graphics();
+  g.ellipse(x, y + 1, 9, 3).fill({ color: 0x3a2a18, alpha: 0.15 });
+  for (let i = 0; i < 4; i++) g.circle(x + (i - 1.5) * 4, y - 3 - ((i * 3 + r * 7) % 4), 4.5).fill(i % 2 ? 0x7a8a46 : 0x5f7a3a);
+  c.addChild(g);
+  return c;
+}
+
+/** A small dhow with a lateen sail; beached ones lie on their side without the sail. */
+function dhow(flip: boolean, beached = false): Container {
+  const c = new Container();
+  const g = new Graphics();
+  const d = flip ? -1 : 1;
+  if (!beached) g.ellipse(0, 3, 24, 4).fill({ color: 0xffffff, alpha: 0.25 });
+  g.poly([-18 * d, -2, 20 * d, -4, 14 * d, 5, -12 * d, 5]).fill(0x6b4a2b).stroke({ width: 1, color: 0x3a2a18 });
+  g.moveTo(-16 * d, -2).lineTo(19 * d, -4).stroke({ width: 1.5, color: 0xc49a5c });
+  if (!beached) {
+    g.moveTo(2 * d, -3).lineTo(0, -34).stroke({ width: 1.5, color: 0x4a3420 });
+    g.poly([-2 * d, -36, 18 * d, -8, -14 * d, -6]).fill(0xf2e6c9).stroke({ width: 1, color: 0xb9a57e });
+  } else {
+    c.rotation = d * 0.15;
+  }
+  c.addChild(g);
+  return c;
 }

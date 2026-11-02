@@ -98,3 +98,17 @@ Settings to start from: stability medium-high, style low, speed slightly slow. G
 
 Arabic narration is not generated yet: the Arabic lines must first be written by a native writer
 (not translated by us), then voiced with the same designed voice or by a human actor.
+
+
+## Round 3 (2 Nov evening): more town music, so the loop is not heard
+
+The game now plays the town music as a playlist of full tracks with a short quiet gap between them
+(no hard loop). Each new track should **start softly and end softly** (a fade or a held note), be
+about **3 minutes** (the longest Gemini makes), and stay calm with no big climax. Same shared style
+line as above. Three tracks would make the cycle about 13 minutes.
+
+| ID | Length | Prompt |
+| --- | --- | --- |
+| MUS-02b Town, morning | 3:00 | Calm early-morning music for a small pearling town waking up by the sea. Opens softly with a solo reed flute over gentle waves, light frame drum enters after 30 seconds, soft hand claps on off-beats, a warm low string pad, unhurried, about 80 bpm, no big climax, ends softly with the flute alone. + shared style line |
+| MUS-02c Town, busy afternoon | 3:00 | Warm, busy-but-relaxed afternoon music for a coastal town at work, people building, trading and mending nets. Gentle frame drum and clay pot rhythm, light clapping, a small chorus humming a simple call and answer in the middle, plucked strings, about 88 bpm, steady and unhurried, soft fade-in and soft fade-out. + shared style line |
+| MUS-02d Town, evening | 3:00 | Peaceful evening music as the sun sets over a pearling town and the boats rest at anchor. Slow, warm, a distant single male voice humming over soft strings, very light percussion, the sound of small waves, about 70 bpm, gentle and a little wistful, ends on a quiet held chord. + shared style line |

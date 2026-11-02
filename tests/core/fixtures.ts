@@ -12,6 +12,8 @@ export function testContent(): LoadedContent {
     balance: c.balance,
     routes: c.routes,
     ageGoals: c.ageGoals,
+    questions: c.questions,
+    archive: c.archive,
     map: {
       ...c.map,
       id: 'test-map',

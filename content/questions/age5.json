@@ -1,0 +1,276 @@
+{
+  "_note": "DRAFT history questions for the Age V Chronicle, written by an agent from docs/research/AGE_V_RESEARCH_PACK.md (sources S1 to S8). Not reviewed by a historian: every question needs a human historian and a second reader before any public playtest (CLAUDE.md rules 4 and the 1 Nov drafting decision). Labour (flag H1) and the contested Vasco da Gama story are deliberately not asked. Arabic questions are to be written separately by a native writer, not translated [GDD]. Answers are shuffled when shown. Rules [GDD section 18 'History questions']: no timer, no penalty; a wrong answer shows the explanation and earns nothing; a right answer gives knowledge, counts for the Chronicle and opens the linked Archive page; at most dailyCap questions a game day.",
+  "status": "draft",
+  "dailyCap": 6,
+  "questions": [
+    {
+      "id": "q5_fatam",
+      "kind": "why",
+      "status": "draft",
+      "archive": "arc_diver_kit",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "en": {
+        "prompt": "Why did a pearl diver wear a clip, the fatam, on his nose?",
+        "options": [
+          "To keep water out and help with the pressure in his ears",
+          "To show which boat he belonged to",
+          "To hold a reed he could breathe through"
+        ],
+        "explanation": "The fatam kept water out of the nose and helped the diver cope with the pressure in his ears. It was usually turtle shell or horn and hung on a cord between dives."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_weight",
+      "kind": "why",
+      "status": "draft",
+      "archive": "arc_diver_kit",
+      "sources": [
+        "S2",
+        "S3"
+      ],
+      "en": {
+        "prompt": "Why did a diver tie a heavy stone to his leg?",
+        "options": [
+          "To sink quickly to the oyster beds",
+          "To anchor the boat in the current",
+          "To weigh the pearls before sale"
+        ],
+        "explanation": "The stone took him down fast, saving breath for gathering oysters. The hauler on deck pulled the stone back up."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_stone",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_diver_kit",
+      "sources": [
+        "S2"
+      ],
+      "en": {
+        "prompt": "For most of the pearling era, what were divers' weights made of?",
+        "options": [
+          "Dense stone, such as haematite",
+          "Iron cast in European foundries",
+          "Fired clay bricks"
+        ],
+        "explanation": "Weights were dense stone such as haematite. Lead weights became common only near the end of the industry, in the early twentieth century."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_seeb",
+      "kind": "how",
+      "status": "draft",
+      "archive": "arc_diver_kit",
+      "sources": [
+        "S3"
+      ],
+      "en": {
+        "prompt": "How did a diver get back to the surface when his breath ran out?",
+        "options": [
+          "He tugged a rope and the hauler on deck pulled him up",
+          "He climbed the anchor chain hand over hand",
+          "He let go of a float tied to his waist"
+        ],
+        "explanation": "A rope, the yada, linked him to the hauler, the seeb. A tug on it told the hauler to pull him up."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_deyeen",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_diver_kit",
+      "sources": [
+        "S3"
+      ],
+      "en": {
+        "prompt": "What was the deyeen that a diver wore round his neck?",
+        "options": [
+          "A net basket for the oysters he gathered",
+          "A charm against sharks",
+          "A pouch of dates for the dive"
+        ],
+        "explanation": "The deyeen was a rope or thread net basket worn round the neck to hold oysters. Leather finger guards, the khabt, protected his fingertips."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_fjiri",
+      "kind": "why",
+      "status": "draft",
+      "archive": "arc_nahham",
+      "sources": [
+        "S5"
+      ],
+      "en": {
+        "prompt": "Why did pearling crews sing the songs known as fjiri?",
+        "options": [
+          "To express the hardships of life at sea",
+          "To call fish towards the boat",
+          "To signal to other boats at night"
+        ],
+        "explanation": "Fjiri was performed by pearl divers and crews to express the hardships of the sea. It began on Muharraq in Bahrain and was inscribed by UNESCO in 2021."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_nahham",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_nahham",
+      "sources": [
+        "S6"
+      ],
+      "en": {
+        "prompt": "On a pearling boat, who was the nahham?",
+        "options": [
+          "The lead singer",
+          "The captain",
+          "The pearl buyer"
+        ],
+        "explanation": "The nahham led the singing, joined by a chorus who sang, clapped and drummed."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_arish",
+      "kind": "why",
+      "status": "draft",
+      "archive": "arc_coast_houses",
+      "sources": [
+        "S7"
+      ],
+      "en": {
+        "prompt": "Why were palm-frond (arish) houses woven tighter in winter and looser in summer?",
+        "options": [
+          "To keep out cold winds in winter and let breezes through in summer",
+          "Because fresh fronds could only be cut in summer",
+          "To show which family lived inside"
+        ],
+        "explanation": "The panels faced the prevailing wind and were woven to suit the season, giving comfort from simple materials."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_coral",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_coast_houses",
+      "sources": [
+        "S7"
+      ],
+      "en": {
+        "prompt": "On the coast, what did builders use for stone walls?",
+        "options": [
+          "Coral rock set in gypsum-based mortar",
+          "Marble shipped from overseas",
+          "Fired red brick"
+        ],
+        "explanation": "Coastal masonry used coral rock with gypsum-based mortar. Inland, people built with mud brick and mud mortar."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_barjeel",
+      "kind": "why",
+      "status": "draft",
+      "archive": "arc_coast_houses",
+      "sources": [
+        "S7"
+      ],
+      "en": {
+        "prompt": "Why did some houses have a barjeel, a wind tower?",
+        "options": [
+          "To catch the wind and cool the rooms below",
+          "To watch for ships coming home",
+          "To store rainwater"
+        ],
+        "explanation": "A barjeel caught the wind and sent it down into the rooms. In a town of this period they were few and belonged to wealthier houses."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_kamal",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_ibn_majid",
+      "sources": [
+        "S8"
+      ],
+      "en": {
+        "prompt": "What did a navigator measure with a kamal?",
+        "options": [
+          "His latitude, by sighting the pole star",
+          "The depth of the water",
+          "The speed of the ship"
+        ],
+        "explanation": "The kamal was a piece of wood on a knotted cord. Held against the pole star, it showed how far north the ship was."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_fawaid",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_ibn_majid",
+      "sources": [
+        "S8"
+      ],
+      "en": {
+        "prompt": "What was Ahmad ibn Majid's best-known book about?",
+        "options": [
+          "Navigation: tides, monsoon winds, ports and reefs",
+          "The history of Julfar's rulers",
+          "Grading and pricing pearls"
+        ],
+        "explanation": "His Book of Benefits in the Principles of Navigation covers tides, monsoon winds, currents, distances between ports, latitude and reefs."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_cultured",
+      "kind": "why",
+      "status": "draft",
+      "archive": "arc_pearl_collapse",
+      "sources": [
+        "S4",
+        "S6"
+      ],
+      "en": {
+        "prompt": "Why did the Gulf pearl trade decline sharply in the 1930s?",
+        "options": [
+          "Cultured pearls from Japan reached the market",
+          "The oyster beds suddenly ran dry",
+          "Pearl diving was banned by law"
+        ],
+        "explanation": "Sources point to cultured pearls developed in Japan reaching the market in the 1930s. The GDD also names the world depression; a historian will confirm how much each mattered."
+      },
+      "answer": 0
+    },
+    {
+      "id": "q5_long",
+      "kind": "what",
+      "status": "draft",
+      "archive": "arc_pearl_collapse",
+      "sources": [
+        "S4"
+      ],
+      "en": {
+        "prompt": "According to UNESCO, for how long did pearling shape the Gulf economy?",
+        "options": [
+          "From about the 2nd century to the early 20th century",
+          "For about fifty years",
+          "Only during the 1800s"
+        ],
+        "explanation": "UNESCO describes pearling as dominating the Gulf economy from about the second century until the early twentieth, peaking around 1900."
+      },
+      "answer": 0
+    }
+  ]
+}

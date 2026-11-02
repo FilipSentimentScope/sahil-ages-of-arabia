@@ -79,13 +79,13 @@ describe('content validation', () => {
   it('fails loudly on bad content', () => {
     const c = loadDefaultContent();
     const bad = c.buildings.map((b) => (b.id === 'souq' ? { ...b, produces: 'gold' as never } : b));
-    expect(() => loadContent({ buildings: bad, balance: c.balance, map: c.map, routes: c.routes, ageGoals: c.ageGoals })).toThrow(ContentError);
+    expect(() => loadContent({ buildings: bad, balance: c.balance, map: c.map, routes: c.routes, ageGoals: c.ageGoals, questions: c.questions, archive: c.archive })).toThrow(ContentError);
     const badMap = { ...c.map, rows: [...c.map.rows.slice(0, -1), 'ccccccccccX~'] };
-    expect(() => loadContent({ buildings: c.buildings, balance: c.balance, map: badMap, routes: c.routes, ageGoals: c.ageGoals })).toThrow(/unknown terrain code/);
+    expect(() => loadContent({ buildings: c.buildings, balance: c.balance, map: badMap, routes: c.routes, ageGoals: c.ageGoals, questions: c.questions, archive: c.archive })).toThrow(/unknown terrain code/);
     const offMap = { ...c.map, openArea: { x: 8, y: 8, size: 6 } };
-    expect(() => loadContent({ buildings: c.buildings, balance: c.balance, map: offMap, routes: c.routes, ageGoals: c.ageGoals })).toThrow(/openArea leaves the map/);
+    expect(() => loadContent({ buildings: c.buildings, balance: c.balance, map: offMap, routes: c.routes, ageGoals: c.ageGoals, questions: c.questions, archive: c.archive })).toThrow(/openArea leaves the map/);
     const badBalance = { ...c.balance, timeModes: { showcase: 60, playtest: 2 } };
-    expect(() => loadContent({ buildings: c.buildings, balance: badBalance, map: c.map, routes: c.routes, ageGoals: c.ageGoals })).toThrow(/playtest must be 1/);
+    expect(() => loadContent({ buildings: c.buildings, balance: badBalance, map: c.map, routes: c.routes, ageGoals: c.ageGoals, questions: c.questions, archive: c.archive })).toThrow(/playtest must be 1/);
   });
 });
 

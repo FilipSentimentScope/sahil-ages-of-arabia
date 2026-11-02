@@ -11,6 +11,7 @@
  */
 import type { LoadedContent } from './content';
 import { tick, type Result, type TownState } from './settlement';
+import type { QuestionDef } from './types';
 
 export function trunkLearned(s: TownState, c: LoadedContent, now: number): boolean {
   return s.age.node >= c.ageGoals.research.trunk.length && s.age.researchDoneAt <= now;
@@ -79,4 +80,66 @@ export function recordCorrectAnswer(s: TownState, c: LoadedContent, now: number)
   s.resources.knowledge += k;
   s.age.questions += 1;
   return { ok: true, knowledge: k };
+}
+
+// ---------------------------------------------------------------------------
+// History questions for the Chronicle [GDD section 18]: no timer and no penalty. A right answer
+// gives knowledge, counts for the Chronicle and opens the question's Archive page. A wrong answer
+// earns nothing, shows the explanation, and the question comes back later. At most dailyCap a day.
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function questionDay(s: TownState, now: number): number {
+  return Math.floor(Math.max(0, now - s.foundedAt) / DAY_MS);
+}
+
+export function questionsLeftToday(s: TownState, c: LoadedContent, now: number): number {
+  const used = s.age.questionsToday.day === questionDay(s, now) ? s.age.questionsToday.count : 0;
+  return Math.max(0, c.questions.dailyCap - used);
+}
+
+/** The next question to ask: new ones first, in order; then missed ones, oldest miss first. */
+export function nextQuestion(s: TownState, c: LoadedContent): QuestionDef | undefined {
+  const done = new Set(s.age.answered);
+  const missed = new Set(s.age.missed);
+  const fresh = c.questions.questions.find((q) => !done.has(q.id) && !missed.has(q.id));
+  if (fresh) return fresh;
+  const again = s.age.missed.find((id) => !done.has(id));
+  return again ? c.questions.questions.find((q) => q.id === again) : undefined;
+}
+
+/** Archive pages opened by right answers, in question order, without repeats. */
+export function unlockedArchive(s: TownState, c: LoadedContent): string[] {
+  const done = new Set(s.age.answered);
+  const out: string[] = [];
+  for (const q of c.questions.questions) if (done.has(q.id) && !out.includes(q.archive)) out.push(q.archive);
+  return out;
+}
+
+export function answerQuestion(
+  s: TownState,
+  c: LoadedContent,
+  questionId: string,
+  choice: number,
+  now: number,
+): Result<{ correct: boolean; knowledge: number; archive: string; newPage: boolean }> {
+  tick(s, c, now);
+  const q = c.questions.questions.find((x) => x.id === questionId);
+  if (!q) return { ok: false, error: 'unknown_question' };
+  if (s.age.answered.includes(q.id)) return { ok: false, error: 'already_answered' };
+  if (questionsLeftToday(s, c, now) <= 0) return { ok: false, error: 'question_cap' };
+  const day = questionDay(s, now);
+  if (s.age.questionsToday.day !== day) s.age.questionsToday = { day, count: 0 };
+  s.age.questionsToday.count += 1;
+  s.age.missed = s.age.missed.filter((id) => id !== q.id);
+  if (choice !== q.answer) {
+    s.age.missed.push(q.id); // asked again later, after the others
+    return { ok: true, correct: false, knowledge: 0, archive: q.archive, newPage: false };
+  }
+  const before = unlockedArchive(s, c).includes(q.archive);
+  s.age.answered.push(q.id);
+  const k = c.ageGoals.question.knowledge;
+  s.resources.knowledge += k;
+  s.age.questions += 1;
+  return { ok: true, correct: true, knowledge: k, archive: q.archive, newPage: !before };
 }

@@ -152,7 +152,7 @@ sheets, research pack, first five Archive drafts, story script v0.1. Next, in or
    eight painted terrain tiles. Music round 2 and MUS-02 still to arrive.
 2. Diving season in core (P4-02), which also brings the sailing season for the Bombay voyage.
    Done: routes (P4-01), balance pass with routes and goals (P2-10), the age's goals in core (part of P4-06).
-3. Remaining 10 Archive pages and 25 questions (P3-07), so the Chronicle placeholder can go.
+3. Remaining Archive pages and questions (P3-07): 14 draft questions and 5 pages are in; 11 questions and 10 pages to go.
 4. Rival town (P4-03), then the age change and collapse preview (rest of P4-06).
 Playable preview: https://claude.ai/artifact/XnXbACadhsKDTdK7BFR13j (republish after each milestone).
 

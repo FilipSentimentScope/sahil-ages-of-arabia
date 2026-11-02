@@ -4,7 +4,8 @@
  * until the question bank arrives (P3-07): it records a correct answer without asking anything.
  */
 import type { LoadedContent, TownState } from '../core';
-import { ageProgress, buildLandmarkStage, recordCorrectAnswer, startResearch, type ActionError } from '../core';
+import { ageProgress, buildLandmarkStage, nextQuestion, questionsLeftToday, startResearch, unlockedArchive, type ActionError } from '../core';
+import { tr } from './describe';
 import { fmt, t } from './i18n';
 
 export interface AgePanelHost {
@@ -15,6 +16,8 @@ export interface AgePanelHost {
   notice(icon: string, title: string, line: string): void;
   errorText(e: ActionError): string;
   changed(): void;
+  openQuestion(): void;
+  openArchive(): void;
 }
 
 export class AgePanel {
@@ -48,7 +51,7 @@ export class AgePanel {
     const s = this.host.town();
     const p = ageProgress(s, this.host.content, this.host.now());
     // Rebuild when progress or affordability changes, so buttons stay tappable in between.
-    const sig = JSON.stringify([p, Math.floor(s.resources.coin / 100), Math.floor(s.resources.knowledge / 10)]);
+    const sig = JSON.stringify([p, Math.floor(s.resources.coin / 100), Math.floor(s.resources.knowledge / 10), s.age.answered.length, s.age.questionsToday]);
     if (sig === this.signature) return;
     this.signature = sig;
     this.render();
@@ -82,7 +85,9 @@ export class AgePanel {
         ${meter(p.landmark.done, p.landmark.of)}<p class="muted" style="margin:0 0 8px">${t('ui.fort_help')}</p>${fort}</div>
       <div class="active-route"><div class="top"><span class="ic">📖</span><b>${t('ui.chronicle')} ${p.chronicle.done}/${p.chronicle.of}</b></div>
         ${meter(p.chronicle.done, p.chronicle.of)}<p class="muted" style="margin:0 0 8px">${t('ui.chronicle_help')}</p>
-        <button type="button" id="btn-question" class="btn placeholder block">${t('ui.question_placeholder')}</button></div>`;
+        <div class="row"><button type="button" id="btn-question" class="btn primary" ${nextQuestion(s, c) && questionsLeftToday(s, c, now) > 0 ? '' : 'disabled'}>📖 ${t('ui.answer_question')}</button>
+        <button type="button" id="btn-archive" class="btn">📚 ${t('ui.archive')} (${unlockedArchive(s, c).length})</button></div>
+        <p class="muted" style="margin:6px 0 0;font-size:12px">${tr('ui.left_today', { n: questionsLeftToday(s, c, now) })}</p></div>`;
     this.el.hidden = false;
     const act = (r: { ok: true } | { ok: false; error: ActionError }, msg?: string) => {
       if (!r.ok) this.host.toast(this.host.errorText(r.error));
@@ -97,9 +102,7 @@ export class AgePanel {
     });
     this.el.querySelector('#btn-research')?.addEventListener('click', () => act(startResearch(this.host.town(), c, this.host.now()), t('ui.research_started')));
     this.el.querySelector('#btn-fort')?.addEventListener('click', () => act(buildLandmarkStage(this.host.town(), c, this.host.now()), t('ui.stage_built')));
-    this.el.querySelector('#btn-question')?.addEventListener('click', () => {
-      const r = recordCorrectAnswer(this.host.town(), c, this.host.now());
-      act(r, r.ok ? `+${fmt(r.knowledge)} ${t('resource.knowledge')}` : undefined);
-    });
+    this.el.querySelector('#btn-question')?.addEventListener('click', () => this.host.openQuestion());
+    this.el.querySelector('#btn-archive')?.addEventListener('click', () => this.host.openArchive());
   }
 }

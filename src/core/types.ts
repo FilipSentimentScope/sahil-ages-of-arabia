@@ -124,6 +124,8 @@ export interface ContentPack {
   map: MapDef;
   routes: RoutesConfig;
   ageGoals: AgeGoalsConfig;
+  questions: QuestionsConfig;
+  archive: ArchiveConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -216,4 +218,49 @@ export interface AgeGoalsConfig {
   chronicle: { questions: number };
   /** [ASSUMPTION] Knowledge earned per correct history question. */
   question: { knowledge: number };
+}
+
+// ---------------------------------------------------------------------------
+// History questions and the Archive [GDD section 18 "History questions", "The Archive"]
+
+export interface QuestionText {
+  prompt: string;
+  options: string[];
+  explanation: string;
+}
+
+export interface QuestionDef {
+  id: string;
+  /** why / what / how / follow: the GDD wants mostly "why". */
+  kind: string;
+  status: ContentStatus;
+  /** Archive page a right answer opens. */
+  archive: string;
+  sources: string[];
+  /** Text per language; Arabic is written separately, never translated [GDD]. */
+  en: QuestionText;
+  ar?: QuestionText;
+  /** Index of the right option in the text's options. */
+  answer: number;
+}
+
+export interface QuestionsConfig {
+  status: ContentStatus;
+  /** Questions per game day [GDD section 18: 6, the daily cap]. */
+  dailyCap: number;
+  questions: QuestionDef[];
+}
+
+export interface ArchivePage {
+  id: string;
+  status: ContentStatus;
+  title: string;
+  body: string;
+  youngReader: string;
+  sources: string[];
+}
+
+export interface ArchiveConfig {
+  pages: ArchivePage[];
+  sourceList: Record<string, string> | { id: string; [k: string]: unknown }[];
 }

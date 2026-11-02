@@ -52,6 +52,7 @@ import { ICON, buildingFacts, tr, waitText } from './describe';
 import { suggest, type Suggestion } from './guide';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { RoutesPanel, routeIcon } from './routes-panel';
+import { openArchive, openQuestion, type QuestionsHost } from './questions-ui';
 import { browserStorage } from './storage';
 import { TownView } from './town-view';
 import { STEPS, currentStep } from './tutorial';
@@ -184,6 +185,16 @@ const routesPanel = new RoutesPanel(sheet, {
   },
   changed,
 });
+const questionsHost: QuestionsHost = {
+  town: () => town,
+  content,
+  now: () => clock.now(),
+  toast,
+  errorText,
+  openCard,
+  closeCard,
+  changed,
+};
 const agePanel = new AgePanel(sheet, {
   town: () => town,
   content,
@@ -192,6 +203,8 @@ const agePanel = new AgePanel(sheet, {
   notice,
   errorText,
   changed,
+  openQuestion: () => openQuestion(questionsHost),
+  openArchive: () => openArchive(questionsHost),
 });
 
 function closeSheet(): void {
@@ -610,6 +623,7 @@ function runSuggestion(s: Suggestion): void {
   if (a.kind === 'unload') return routesPanel.unload(a.uid);
   if (a.kind === 'routes') return openSheet('routes');
   if (a.kind === 'goals') return openSheet('goals');
+  if (a.kind === 'question') return openQuestion(questionsHost);
   if (a.kind === 'open') return openBuilding(a.uid);
 }
 
@@ -748,7 +762,7 @@ const app = new Application();
 async function start(): Promise<void> {
   const stage = $('stage');
   buildChrome();
-  await app.init({ resizeTo: stage, background: 0x8f8576, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true });
+  await app.init({ resizeTo: stage, background: 0xa8916a, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true });
   stage.appendChild(app.canvas);
   view = new TownView(app, content, onCellTap);
   view.onHover = showTooltip;

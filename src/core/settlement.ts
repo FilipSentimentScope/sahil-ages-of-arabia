@@ -45,7 +45,7 @@ export interface ActiveRoute {
 }
 
 export interface TownState {
-  schema: 5;
+  schema: 6;
   /** Game time the town was founded; market days count from here. */
   foundedAt: number;
   mapId: string;
@@ -91,6 +91,11 @@ export interface TownState {
     stage: number;
     /** History questions answered correctly this age. */
     questions: number;
+    /** Questions answered right (they open their Archive page) and answered wrong (asked again later). */
+    answered: string[];
+    missed: string[];
+    /** Questions tried on the current game day, for the daily cap [GDD section 18]. */
+    questionsToday: { day: number; count: number };
   };
 }
 
@@ -117,7 +122,10 @@ export type ActionError =
   | 'research_busy'
   | 'not_enough_knowledge'
   | 'landmark_done'
-  | 'landmark_locked';
+  | 'landmark_locked'
+  | 'unknown_question'
+  | 'already_answered'
+  | 'question_cap';
 
 export type Result<T = object> = ({ ok: true } & T) | { ok: false; error: ActionError };
 
@@ -129,8 +137,8 @@ export function createTown(content: LoadedContent, gameNow: number, seed: number
   const terrain: TerrainId[] = [];
   for (const row of map.rows) for (const ch of row) terrain.push(map.terrainCodes[ch] as TerrainId);
   return {
-    schema: 5,
-    age: { node: 0, researchDoneAt: gameNow, stage: 0, questions: 0 },
+    schema: 6,
+    age: { node: 0, researchDoneAt: gameNow, stage: 0, questions: 0, answered: [], missed: [], questionsToday: { day: 0, count: 0 } },
     rngState: seed >>> 0,
     routes: [],
     nextRouteUid: 1,

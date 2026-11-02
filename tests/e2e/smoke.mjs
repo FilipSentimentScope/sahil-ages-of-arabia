@@ -157,10 +157,27 @@ await expectGlow('#btn-goals', 'goals step');
 await page.click('#btn-goals');
 await page.waitForSelector('#btn-question');
 if (!(await page.locator('#btn-research').isDisabled())) await fail('research should need knowledge first');
-await page.click('#btn-question');
-await page.waitForTimeout(300);
-if ((await town()).age.questions !== 1) await fail('placeholder question should count once');
 await shot('10-goals');
+// A real history question: first a wrong answer (nothing earned, explanation shown), then a right one.
+await page.click('#btn-question');
+await page.waitForSelector('#card:not([hidden]) [data-answer]');
+await shot('10b-question');
+const q0 = await state(() => window.__aoa.content.questions.questions[0]);
+await page.click(`[data-answer="${(q0.answer + 1) % q0.en.options.length}"]`);
+await page.waitForSelector('#btn-q-next');
+if ((await town()).age.questions !== 0) await fail('a wrong answer should not count');
+await shot('10c-question-wrong');
+await page.click('#btn-q-next');
+await page.waitForSelector('#card:not([hidden]) [data-answer]');
+const q1 = await state(() => window.__aoa.content.questions.questions[1]);
+await page.click(`[data-answer="${q1.answer}"]`);
+await page.waitForSelector('[data-read]');
+if ((await town()).age.questions !== 1) await fail('a right answer should count for the Chronicle');
+await shot('10d-question-right');
+await page.click('[data-read]');
+await page.waitForSelector('#btn-archive-back');
+await shot('10e-archive-page');
+await page.click('#btn-q-close');
 await page.click('#btn-age-close');
 
 // 11. The tutorial ends; the next-step bar takes over.

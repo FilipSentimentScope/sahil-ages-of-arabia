@@ -1,5 +1,5 @@
 {
-  "_note": "DRAFT routes for the Pearl Coast slice. Trip lengths, slots, daily limit, coast/open sea odds and hull repair are [GDD section 12]. Routes and decision points come from docs/story/STORY_SCRIPT.md section 2 (draft). Base coin per trip, the over-limit share, relation steps and 'requires' are [ASSUMPTION], to tune in P2-10. Leader fragments and Archive pages as route rewards come with P4-05.",
+  "_note": "DRAFT routes for the Pearl Coast slice. Trip lengths, slots, daily limit, coast/open sea odds and hull repair are [GDD section 12]. Routes and decision points come from docs/story/STORY_SCRIPT.md section 2 (draft). Base coin per trip, the over-limit share, relation steps and 'requires' are [ASSUMPTION], to tune in P2-10. Leader fragments and Archive pages as route rewards come with P4-05. Cargo also grows with the town: each trip adds townIncomeHours times the town's coin per hour at departure [ASSUMPTION, P2-10], so routes stay the main coin source as the town grows (GDD section 12). Short trips pay more per hour and long trips are convenient, following the GDD's 'a player with ten minutes sends a short errand; a player going to bed sends a season voyage'.",
   "status": "draft",
   "slots": 3,
   "dailyFullRewards": 12,
@@ -13,22 +13,26 @@
     {
       "id": "errand",
       "minutes": 8,
-      "baseCoin": 20
+      "baseCoin": 20,
+      "townIncomeHours": 0.5
     },
     {
       "id": "day",
       "minutes": 120,
-      "baseCoin": 180
+      "baseCoin": 180,
+      "townIncomeHours": 3
     },
     {
       "id": "long",
       "minutes": 360,
-      "baseCoin": 480
+      "baseCoin": 480,
+      "townIncomeHours": 7.5
     },
     {
       "id": "season",
       "minutes": 840,
-      "baseCoin": 1000
+      "baseCoin": 1000,
+      "townIncomeHours": 14
     }
   ],
   "routes": [

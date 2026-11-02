@@ -7,3 +7,4 @@ export * from './settlement';
 export * from './save';
 export * from './market';
 export * from './routes';
+export * from './age';

@@ -40,6 +40,7 @@ import { browserStorage } from './storage';
 import { BUILDING_ART } from './art';
 import { TownView } from './town-view';
 import { RoutesPanel } from './routes-panel';
+import { AgePanel } from './age-panel';
 
 const SAVE_KEY = 'aoa.slice.save.v1';
 const PREFS_KEY = 'aoa.slice.prefs.v1';
@@ -84,6 +85,17 @@ let town: TownState;
 let version = 0; // bumps whenever the grid changes, so the view rebuilds shapes
 let selected: string | null = null;
 let openUid: number | null = null;
+const agePanel = new AgePanel($('panel'), {
+  town: () => town,
+  content,
+  now: () => clock.now(),
+  toast,
+  errorText: (e) => errorText(e),
+  changed: () => {
+    save();
+    renderHud();
+  },
+});
 const routesPanel = new RoutesPanel($('panel'), {
   town: () => town,
   content,
@@ -123,12 +135,36 @@ function errorText(e: ActionError): string {
 function renderHud(): void {
   const r = town.resources;
   const limit = treasuryLimit(town, content);
-  $('hud').innerHTML = `
+  // Resources are redrawn every quarter second; the goals button is created once so taps on it land.
+  const hud = $('hud');
+  let res = document.getElementById('hud-res');
+  if (!res) {
+    res = document.createElement('div');
+    res.id = 'hud-res';
+    hud.appendChild(res);
+    const goals = document.createElement('button');
+    goals.type = 'button';
+    goals.id = 'btn-goals';
+    goals.className = 'goals';
+    goals.addEventListener('click', () => {
+      openUid = null;
+      routesPanel.hide();
+      if (agePanel.open) {
+        agePanel.hide();
+        $('panel').hidden = true;
+      } else agePanel.show();
+    });
+    hud.appendChild(goals);
+  }
+  res.innerHTML = `
     <div class="res coin" data-res="coin">${t('resource.coin')} <b>${fmt(r.coin)}</b><small>/ ${fmt(limit)}</small> <small>· ${t('ui.chest')} ${fmt(town.chest)}</small></div>
     <div class="res" data-res="water">${t('resource.water')} <b>${waterUsed(town, content)}/${waterCapacity(town, content)}</b></div>
     <div class="res" data-res="food">${t('resource.food')} <b>${fmt(r.food)}</b><small>${t('ui.food_price')} ${foodPrice(town, content, clock.now()).toFixed(2)}${isMarketDay(town, content, clock.now()) ? ` · ${t('ui.market_day')}` : ''}</small></div>
     <div class="res" data-res="knowledge">${t('resource.knowledge')} <b>${fmt(r.knowledge)}</b></div>
     <div class="res" data-res="reputation">${t('resource.reputation')} <b>${fmt(r.reputation)}</b></div>`;
+  const goalsText = agePanel.summary();
+  const goalsBtn = $('btn-goals');
+  if (goalsBtn.textContent !== goalsText) goalsBtn.textContent = goalsText;
   const warn = $('warn');
   const full = treasuryNearlyFull(town, content);
   warn.hidden = !full;
@@ -174,6 +210,7 @@ function renderBar(): void {
   }, 'btn-collect-all');
   mk(t('ui.routes'), '', () => {
     openUid = null;
+    agePanel.hide();
     if (routesPanel.open) {
       routesPanel.hide();
       $('panel').hidden = true;
@@ -214,6 +251,7 @@ function renderBar(): void {
 function closePanel(): void {
   openUid = null;
   routesPanel.hide();
+  agePanel.hide();
   $('panel').hidden = true;
 }
 
@@ -264,6 +302,7 @@ function renderAll(): void {
   renderBar();
   renderPanel();
   if (routesPanel.open) routesPanel.show(); // re-render in the current language
+  if (agePanel.open) agePanel.show();
   $('placeholder-notice').textContent = t('placeholder.notice');
 }
 
@@ -281,6 +320,7 @@ function onCellTap({ x, y }: { x: number; y: number }): void {
   const b = town.buildings.find((bb) => bb.x === x && bb.y === y);
   if (b) {
     routesPanel.hide();
+    agePanel.hide();
     openUid = b.uid;
     renderPanel();
   } else {
@@ -321,6 +361,7 @@ async function start(): Promise<void> {
       renderHud();
       if (openUid !== null) updatePanelNumbers();
       routesPanel.update();
+      agePanel.update();
       const rb = document.getElementById('btn-routes');
       if (rb) rb.classList.toggle('attention', routesPanel.needsAttention());
     }

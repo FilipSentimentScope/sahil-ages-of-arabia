@@ -2,7 +2,7 @@
  * Loads and validates content. Bad content fails loudly at startup with a
  * message that names the file field, instead of misbehaving in play.
  */
-import type { BalanceConfig, BuildingDef, ContentPack, MapDef, ResourceId, RoutesConfig, TerrainId } from './types';
+import type { AgeGoalsConfig, BalanceConfig, BuildingDef, ContentPack, MapDef, ResourceId, RoutesConfig, TerrainId } from './types';
 import { RESOURCE_IDS } from './types';
 
 const TERRAINS: readonly TerrainId[] = ['open', 'coast', 'creek', 'dune', 'sabkha', 'mountain', 'wadi', 'sea'];
@@ -92,7 +92,7 @@ function validateRoutes(r: RoutesConfig, buildingIds: Set<string>): void {
   req(isNum(r.hull?.damagedCargoMult) && isNum(r.hull?.repairCost) && isNum(r.hull?.repairHours), 'routes.hull incomplete');
   const trips = new Set<string>();
   for (const t of r.trips) {
-    req(typeof t.id === 'string' && isNum(t.minutes) && t.minutes > 0 && isNum(t.baseCoin), `routes trip "${String(t.id)}" incomplete`);
+    req(typeof t.id === 'string' && isNum(t.minutes) && t.minutes > 0 && isNum(t.baseCoin) && isNum(t.townIncomeHours), `routes trip "${String(t.id)}" incomplete`);
     trips.add(t.id);
   }
   const ids = new Set<string>();
@@ -114,6 +114,16 @@ function validateRoutes(r: RoutesConfig, buildingIds: Set<string>): void {
   }
 }
 
+function validateAgeGoals(g: AgeGoalsConfig): void {
+  req(g && Array.isArray(g.research?.trunk) && g.research.trunk.length >= 1, 'ageGoals.research.trunk needs nodes');
+  for (const n of g.research.trunk) {
+    req(typeof n.id === 'string' && isNum(n.knowledge) && isNum(n.coin) && isNum(n.minutes) && n.minutes >= 0, `ageGoals research node "${String(n.id)}" incomplete`);
+  }
+  req(Array.isArray(g.landmark?.stages) && g.landmark.stages.length >= 1 && g.landmark.stages.every((c) => isNum(c) && c > 0), 'ageGoals.landmark.stages must be positive numbers');
+  req(Number.isInteger(g.chronicle?.questions) && g.chronicle.questions >= 0, 'ageGoals.chronicle.questions must be a whole number');
+  req(isNum(g.question?.knowledge) && g.question.knowledge >= 0, 'ageGoals.question.knowledge missing');
+}
+
 export interface LoadedContent extends ContentPack {
   byId: Map<string, BuildingDef>;
   building(id: string): BuildingDef;
@@ -130,6 +140,7 @@ export function loadContent(raw: ContentPack): LoadedContent {
     byId.set(b.id, b);
   }
   validateRoutes(raw.routes, new Set(byId.keys()));
+  validateAgeGoals(raw.ageGoals);
   return {
     ...raw,
     byId,

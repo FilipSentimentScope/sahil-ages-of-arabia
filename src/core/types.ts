@@ -123,6 +123,7 @@ export interface ContentPack {
   balance: BalanceConfig;
   map: MapDef;
   routes: RoutesConfig;
+  ageGoals: AgeGoalsConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -166,6 +167,8 @@ export interface TripDef {
   minutes: number;
   /** Coin a route of this length brings home before decisions and bonuses [ASSUMPTION values]. */
   baseCoin: number;
+  /** [ASSUMPTION] Plus this many hours of the town's coin income at departure (more per hour on short trips). */
+  townIncomeHours: number;
 }
 
 export interface RouteDef {
@@ -191,4 +194,26 @@ export interface RoutesConfig {
   hull: { damagedCargoMult: number; repairCost: number; repairHours: number };
   trips: TripDef[];
   routes: RouteDef[];
+}
+
+// ---------------------------------------------------------------------------
+// The age's three goals [GDD section 4 "How an age ends", section 8 research]
+
+export interface ResearchNodeDef {
+  id: string;
+  knowledge: number;
+  coin: number;
+  minutes: number;
+}
+
+export interface AgeGoalsConfig {
+  status: ContentStatus;
+  /** Trunk nodes in order; the last one unlocks the landmark [GDD section 8]. */
+  research: { trunk: ResearchNodeDef[] };
+  /** The landmark, paid in stages over several visits [GDD section 9]. */
+  landmark: { id: string; stages: number[] };
+  /** Questions needed to complete the age's Chronicle chapter (slice: 8). */
+  chronicle: { questions: number };
+  /** [ASSUMPTION] Knowledge earned per correct history question. */
+  question: { knowledge: number };
 }

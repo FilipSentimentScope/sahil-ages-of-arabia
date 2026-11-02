@@ -12,7 +12,7 @@
     "overflowToChest": 0.3,
     "warnAt": 0.9,
     "minMultipleOfTopPrice": 1.5,
-    "minMultipleOfCoinStorage": 1.25
+    "minMultipleOfCoinStorage": 2
   },
   "market": {
     "foodBasePrice": 0.4,

@@ -63,7 +63,7 @@ export class RoutesPanel {
     const s = this.host.town();
     const now = this.host.now();
     const c = this.host.content;
-    const routes = s.routes.map((r) => `${r.uid}:${r.returnAt <= now ? 'home' : (pendingDecision(s, c, r.uid, now) ?? '-')}`);
+    const routes = s.routes.map((r) => `${r.uid}:${r.returnAt <= now ? 'home' : 'out'}:${pendingDecision(s, c, r.uid, now) ?? '-'}`);
     return JSON.stringify([routes, s.hull, s.resources.coin >= c.routes.hull.repairCost]);
   }
 
@@ -104,13 +104,15 @@ export class RoutesPanel {
         const home = r.returnAt <= now;
         const i = pendingDecision(s, c, r.uid, now);
         let body = '';
-        if (home) {
-          body = `<button type="button" class="primary" data-unload="${r.uid}">${t('ui.unload')} · ${fmt(routeCargo(c, r))} ${t('resource.coin')}</button>`;
-        } else if (i !== undefined) {
+        if (i !== undefined) {
+          // Open decisions come first, even when the route is home (a trip report to answer).
           const d = def.decisions[i]!;
           body = `<p class="dp">${t(d.textKey)}</p><div class="actions">${d.options
             .map((o) => `<button type="button" data-choose="${r.uid}:${o.id}">${t(o.textKey)}<small>${t(`ui.${o.kind === 'safe' ? 'safer' : 'riskier'}`)}</small></button>`)
             .join('')}</div>`;
+          if (home) body += `<p class="muted"><button type="button" class="link" data-unload="${r.uid}">${t('ui.unload_now')}</button></p>`;
+        } else if (home) {
+          body = `<button type="button" class="primary" data-unload="${r.uid}">${t('ui.unload')} · ${fmt(routeCargo(c, r))} ${t('resource.coin')}</button>`;
         } else {
           body = `<p class="muted">${t('ui.returns_in')} <span data-countdown="${r.uid}"></span></p>`;
         }

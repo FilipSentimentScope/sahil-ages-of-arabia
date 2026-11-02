@@ -87,3 +87,42 @@ and the simulator now builds inside the 6 by 6 open block of the 12 by 12 map.
 Casual players stay inside the GDD target (2.0 or less); the first milestone improved from 2.17
 to 1.62, because hexes give more plots that touch a well. Growth still compounds too fast
 (value per hour about 25,000 by day 21): task P2-10 unchanged.
+
+## Run 4 (2 Nov 2026): routes, the age's goals and a hoarder (P2-10)
+
+**What changed in the simulator.** It now plays Age V to its end, using the real core rules:
+routes (sent and answered as the GDD's player table says: heavy 12 routes and 6 questions a day,
+engaged 6 and 3, casual 3 and 1), the three goals in `src/core/age.ts` (research trunk, Great Fort
+in 3 stages, 8-question Chronicle), and a fourth player, the hoarder (engaged visits, never
+upgrades). Overflow is measured up to the end of the age. `--seed=N` checks results against luck.
+
+**What changed in the rules and numbers, and why.**
+
+| Change | Why | Label |
+| --- | --- | --- |
+| Goal costs: research 1,950/5,850/14,300 knowledge and 5,100/15,300/37,400 coin; fort stages 51,000/102,000/153,000 | Sweep to the GDD's "about five days" for an engaged player | [ASSUMPTION] values |
+| Fort stages and the next research node count in the treasury's safety rule | Without it, a fort stage cost more than the limit and heavy players could never finish | [GDD section 9] rule, now applied |
+| Route cargo adds hours of the town's coin income: errand 0.5, day 3, long 7.5, season 14 | Fixed cargo made routes 3% to 10% of coin; the GDD calls routes the main source. Short trips pay more per hour, so heavy players send their 12 | [ASSUMPTION] |
+| The treasury keeps room for cargo that is out, and for 2 (was 1.25) full collections | A returning ship overflowed even a player who spends; casual players lost 25% | [ASSUMPTION] |
+| Bug: unloading removed the route before depositing, so its kept room vanished | Found by this run; test added that failed before the fix | Bug fix |
+| Decisions stay open after the route is home, until it is unloaded | An engaged player (a visit every 2 h 40 min) never saw a decision on a 2-hour trip | [ASSUMPTION], replaces A18 |
+
+**Result (16 days, five seeds).**
+
+| Player | Age V done | Target | Overflow | Coin from routes |
+| --- | --- | --- | --- | --- |
+| Heavy | 3.6 to 3.7 days | about 1.5x faster than engaged: 1.44 to 1.48 | 0% to 1.4% | 61% to 66% |
+| Engaged | 5.3 days | about 5 days | 0.6% to 4.2% | 39% to 43% |
+| Casual | 8.0 days | at most 1.8x engaged: 1.50 | 3.5% to 19.7% | 57% to 67% |
+| Hoarder | never (16 days) | should feel the limit | about 42% | 68% |
+
+**Open points.**
+
+1. Casual players finish on day 8 because the Chronicle needs 8 questions at one a day; their economy
+   is ready by day 5. Fewer questions in the chapter, or more than one question a day for casual
+   players, would close the gap. Designer and Filip to decide (A26).
+2. Casual overflow crosses 15% on some seeds (worst 19.7%). The cause is big lumps of coin after
+   8-hour gaps while saving for a fort stage.
+3. Buildings still reach high levels (600 to 700 in total by day 16); the goals absorb the coin,
+   not the upgrade curve. Fine inside one age; the age change (P4-06) must restyle and reprice.
+4. Leaders, doctrines, rivals and the diving season are not in yet; each adds income or speed.

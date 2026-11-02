@@ -14,6 +14,7 @@ import {
   storageHours,
   treasuryLimit,
   type TownState,
+  SAVE_VERSION,
 } from '../../src/core';
 
 const content = testContent();
@@ -116,8 +117,8 @@ describe('save migration', () => {
       town: { ...createTown(content, 5000), schema: 1, foundedAt: undefined, market: undefined },
     };
     const f = deserialize(JSON.stringify(v1));
-    expect(f.version).toBe(4);
-    expect(f.town.schema).toBe(4);
+    expect(f.version).toBe(SAVE_VERSION);
+    expect(f.town.schema).toBe(SAVE_VERSION);
     expect(f.town.market.foodSoldRecent).toBe(0);
     expect(f.town.welcomeBackCharges).toBe(0);
   });
@@ -126,7 +127,7 @@ describe('save migration', () => {
     const { openStart: _a, openSize: _b, openGrowthPerAge: _c, ...old } = createTown(content, 5000);
     const v2 = { version: 2, savedAtReal: 0, clock: { game: 5000, real: 0, scale: 1 }, town: { ...old, schema: 2 } };
     const f = deserialize(JSON.stringify(v2));
-    expect(f.version).toBe(4);
+    expect(f.version).toBe(SAVE_VERSION);
     expect(f.town.openStart).toEqual({ x: 0, y: 0, size: 6 });
     expect(f.town.openSize).toBe(6);
   });

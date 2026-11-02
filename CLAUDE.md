@@ -150,10 +150,11 @@ Phase 2 to 3 (week 1 to 2). Done: balance pass P2-09, Art Bible v0.1, image and 
 sheets, research pack, first five Archive drafts, story script v0.1. Next, in order:
 1. All 12 buildings in game on the hex board (2 Nov). Next art: 1024 px versions of the buildings and the
    eight painted terrain tiles. Music round 2 and MUS-02 still to arrive.
-2. Second balance pass (P2-10): routes in the simulator, slice sinks and a hoarding profile.
-   Routes and decision points (P4-01) are done in core with a grey-box panel.
-3. Diving season in core (P4-02), which also brings the sailing season for the Bombay voyage.
-4. Remaining 10 Archive pages and 25 questions (P3-07).
+2. Diving season in core (P4-02), which also brings the sailing season for the Bombay voyage.
+   Done: routes (P4-01), balance pass with routes and goals (P2-10), the age's goals in core (part of P4-06).
+3. Remaining 10 Archive pages and 25 questions (P3-07), so the Chronicle placeholder can go.
+4. Rival town (P4-03), then the age change and collapse preview (rest of P4-06).
+Playable preview: https://claude.ai/artifact/XnXbACadhsKDTdK7BFR13j (republish after each milestone).
 
 Drafting arrangement: until funding, agents draft history, music direction and story; everything
 stays `draft` and needs human review before any public playtest (decision of 1 Nov 2026).

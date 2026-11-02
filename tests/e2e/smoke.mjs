@@ -126,6 +126,17 @@ if (route.out !== 0 || !(route.coin > coinBeforeRoute)) fail(`unloading should p
 await page.screenshot({ path: `${OUT}/04c-routes-panel.png` });
 await page.click('#btn-routes-close');
 
+// Age goals: the panel opens from the top bar; the placeholder question counts towards the Chronicle.
+await page.click('#btn-goals');
+await page.waitForSelector('#btn-question');
+if (!(await page.locator('#btn-research').isDisabled())) fail('research should need knowledge first');
+await page.click('#btn-question');
+await page.waitForTimeout(300);
+const age = await page.evaluate(() => window.__aoa.town.age);
+if (age.questions !== 1) fail(`placeholder question should count once: ${JSON.stringify(age)}`);
+await page.screenshot({ path: `${OUT}/04d-age-goals.png` });
+await page.click('#btn-age-close');
+
 // Arabic and right-to-left.
 await page.click('#btn-lang');
 await page.waitForTimeout(300);

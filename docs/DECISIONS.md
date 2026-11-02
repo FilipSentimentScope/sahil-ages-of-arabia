@@ -4,6 +4,7 @@ Newest first. Each entry: date, decision, who decided, reason, where it is appli
 
 | Date | Decision | Decided by | Reason | Applied in |
 | --- | --- | --- | --- | --- |
+| 2026-11-02 | Balance pass P2-10 adopted: goal costs, route cargo that grows with the town, treasury room for cargo and 2 collections, decisions open until unloading | Claude (Director); assumptions listed for Filip | Meets the GDD's Age V length and player-type ratios in simulation | SIMULATION_NOTES run 4, content/age5-goals.json, routes.json, balance.json |
 | 2026-11-02 | Town board uses pointy-top hexes (as in Civilization), six neighbours; the GDD cap of four helpful neighbours still applies | Filip | Hexes read more naturally and make placement a richer puzzle | src/core/hex.ts, settlement, town-view |
 | 2026-11-02 | The whole 12 by 12 map is drawn from the start; the open block (6 by 6 in the slice) is fenced in gold and the rest is greyed out until it opens, one row and one column per age change | Filip, following GDD section 15 | Player sees where the town will grow | content/maps/pearl-coast.json, settlement (openArea, growTown) |
 | 2026-11-02 | Buildings sit centred on their hex at about 80% of its width, so ground and grid stay visible | Filip | Readability; the board should not look crowded | town-view |

@@ -29,7 +29,7 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | 4 | Upgrades, 14% cost growth, doubling at 10/25/50/100/200 | As written | [GDD] | Core done |
 | 5 | Treasury limit, 30% overflow to savings chest, 1.5x safety rule | As written | [GDD] | Core done |
 | 6 | Savings chest weekly free opening | Simulated in Showcase mode | [GDD], timing [ASSUMPTION] | Not started |
-| 7 | Three locks: research, landmark, Chronicle | Mini trunk (3 nodes + 1 branch), Great Fort in 3 stages, 8-question chapter | [ADJUSTED] | Not started |
+| 7 | Three locks: research, landmark, Chronicle | Mini trunk (3 nodes + 1 branch), Great Fort in 3 stages, 8-question chapter | [ADJUSTED] | Goals in core with a grey-box panel; branch, age change and real questions to do |
 | 8 | Age change V to VI | Restyle animation, collapse preview, end card | [ADJUSTED] | Not started |
 | 9 | Six leaders, abilities, resonance, tools in 3 qualities | Navigators (Ibn Majid, Maryam al-Ijliya), Merchants (Ibn Battuta, Ibn Khaldun), Guardians (Zenobia, Salah al-Din) | [GDD] leaders, grouping [RECOMMENDATION] | Not started |
 | 10 | Doctrine choice | Offered in the first session, between the three doctrines above | [ADJUSTED] | Not started |
@@ -72,7 +72,11 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | A15 | The slice's new town starts at 6 by 6 although the GDD's Age V town would be 10 by 10 (6 + one per age); a town founded in Age V starts small so the slice can teach from the beginning. The age change at the end opens a 7th row and column | [ASSUMPTION] | Designer, Filip |
 | A16 | The open block grows around its start, first new row and column above and to the left, never leaving the map | [ASSUMPTION] | Designer |
 | A17 | Open sea is a terrain no building can use; it is only lightly dimmed when locked | [ASSUMPTION] | Designer |
-| A18 | Decision points never stop a route. They come due at even steps, wait in order, and whatever is unanswered when the route comes home takes the safer default | [ASSUMPTION] | Designer |
+| A18 | Decision points never stop a route. They come due at even steps and wait in order, also after the route is home (no time effects then); whatever is still open at unloading takes the safer default | [ASSUMPTION] | Designer |
+| A23 | Age V goal costs (content/age5-goals.json) and 40 knowledge per correct answer | [ASSUMPTION], tuned in SIMULATION_NOTES run 4 | Designer |
+| A24 | Route cargo adds hours of the town's coin income (errand 0.5, day 3, long 7.5, season 14) | [ASSUMPTION] | Designer |
+| A25 | Treasury keeps room for 2 full coin collections plus cargo that is out | [ASSUMPTION] | Designer |
+| A26 | Casual players finish Age V on day 8 because of the 8-question Chronicle at one question a day | [OPEN] | Designer, Filip |
 | A19 | Base coin per trip: errand 20, day 180, long 480, season 1,000 (the season value follows the GDD's 1,000-coin example) | [ASSUMPTION] | Designer (P2-10) |
 | A20 | Sea routes need a jetty, the oasis caravan needs a souq; one hull state for all ships; ships cannot sail during repair | [ASSUMPTION] | Designer |
 | A21 | Routes past the GDD's 12 a day pay 25% | [ASSUMPTION] | Designer |

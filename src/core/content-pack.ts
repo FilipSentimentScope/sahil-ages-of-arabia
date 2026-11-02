@@ -3,8 +3,9 @@ import buildingsFile from '../../content/buildings.json';
 import balanceFile from '../../content/balance.json';
 import mapFile from '../../content/maps/pearl-coast.json';
 import routesFile from '../../content/routes.json';
+import ageGoalsFile from '../../content/age5-goals.json';
 import { loadContent, type LoadedContent } from './content';
-import type { BalanceConfig, BuildingDef, MapDef, RoutesConfig } from './types';
+import type { AgeGoalsConfig, BalanceConfig, BuildingDef, MapDef, RoutesConfig } from './types';
 
 export function loadDefaultContent(): LoadedContent {
   return loadContent({
@@ -12,5 +13,6 @@ export function loadDefaultContent(): LoadedContent {
     balance: balanceFile as unknown as BalanceConfig,
     map: mapFile as unknown as MapDef,
     routes: routesFile as unknown as RoutesConfig,
+    ageGoals: ageGoalsFile as unknown as AgeGoalsConfig,
   });
 }

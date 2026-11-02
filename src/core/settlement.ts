@@ -34,6 +34,8 @@ export interface ActiveRoute {
   departedAt: number;
   /** Game time it returns; decisions can move it. */
   returnAt: number;
+  /** Cargo in coin before decisions and bonuses, fixed at departure (grows with the town). */
+  baseCoin?: number;
   /** Product of all cargo effects from decisions so far. */
   cargoMult: number;
   /** Fixed at departure: welcome-back bonus, damaged hull, daily limit. */
@@ -43,7 +45,7 @@ export interface ActiveRoute {
 }
 
 export interface TownState {
-  schema: 4;
+  schema: 5;
   /** Game time the town was founded; market days count from here. */
   foundedAt: number;
   mapId: string;
@@ -80,6 +82,16 @@ export interface TownState {
   hull: { damaged: boolean; repairDoneAt: number | null };
   /** Relations with rival towns, by id. The full scale comes with P4-03. */
   relations: Record<string, number>;
+  /** Progress on the age's three goals [GDD section 4]. See age.ts. */
+  age: {
+    /** Trunk nodes started (a node counts as learned once its research time has passed). */
+    node: number;
+    researchDoneAt: number;
+    /** Landmark stages built. */
+    stage: number;
+    /** History questions answered correctly this age. */
+    questions: number;
+  };
 }
 
 export type ActionError =
@@ -100,7 +112,12 @@ export type ActionError =
   | 'ship_in_repair'
   | 'route_not_back'
   | 'no_decision'
-  | 'hull_fine';
+  | 'hull_fine'
+  | 'research_done'
+  | 'research_busy'
+  | 'not_enough_knowledge'
+  | 'landmark_done'
+  | 'landmark_locked';
 
 export type Result<T = object> = ({ ok: true } & T) | { ok: false; error: ActionError };
 
@@ -112,7 +129,8 @@ export function createTown(content: LoadedContent, gameNow: number, seed: number
   const terrain: TerrainId[] = [];
   for (const row of map.rows) for (const ch of row) terrain.push(map.terrainCodes[ch] as TerrainId);
   return {
-    schema: 4,
+    schema: 5,
+    age: { node: 0, researchDoneAt: gameNow, stage: 0, questions: 0 },
     rngState: seed >>> 0,
     routes: [],
     nextRouteUid: 1,
@@ -304,10 +322,24 @@ export function topCurrentPrice(s: TownState, c: LoadedContent): number {
     const cost = upgradeCost(c.building(b.defId), b.level, c.balance.upgradeCostGrowth);
     if (cost !== undefined) top = Math.max(top, cost);
   }
+  // The next research node and, once the trunk is started through, the next landmark stage:
+  // the GDD's safety rule must never let the limit block them [GDD section 9].
+  const g = c.ageGoals;
+  const next = g.research.trunk[s.age.node];
+  if (next) top = Math.max(top, next.coin);
+  else if (s.age.stage < g.landmark.stages.length) top = Math.max(top, g.landmark.stages[s.age.stage]!);
   return top;
 }
 
 /** Combined storage of all coin-producing buildings: what one full collection can bring in. */
+/**
+ * Coin on its way home in routes that are out. The treasury makes room for it, as it does for full
+ * building stores, so a returning ship does not overflow a player who spends [ASSUMPTION, P2-10].
+ */
+export function cargoOut(s: TownState): number {
+  return s.routes.reduce((sum, r) => sum + (r.baseCoin ?? 0) * r.cargoMult * r.sendMult, 0);
+}
+
 export function coinStorageTotal(s: TownState, c: LoadedContent): number {
   return s.buildings
     .filter((b) => c.building(b.defId).produces === 'coin')
@@ -327,7 +359,7 @@ export function treasuryLimit(s: TownState, c: LoadedContent): number {
   return Math.max(
     t.baseLimit + fromBuildings,
     Math.ceil(t.minMultipleOfTopPrice * topCurrentPrice(s, c)),
-    Math.ceil(t.minMultipleOfCoinStorage * coinStorageTotal(s, c)),
+    Math.ceil(t.minMultipleOfCoinStorage * (coinStorageTotal(s, c) + cargoOut(s))),
   );
 }
 

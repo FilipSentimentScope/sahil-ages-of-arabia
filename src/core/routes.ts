@@ -9,11 +9,13 @@
  * - Trip lengths, routes out at once (3 in Age V), 12 fully rewarded routes a day, the coast or
  *   open sea odds and hull repair: [GDD section 12], numbers in content/routes.json.
  * - Welcome-back bonus on the next routes after a long absence: [GDD section 18].
- * - Decision points come due at even steps along the trip and wait, in order, for the player. A
- *   decision never stops the trip: whatever is still unanswered when the route comes home takes
- *   its default (safer) option, so a player who is asleep is never punished [ASSUMPTION]. (An
- *   earlier draft answered a point as soon as the next came due; in Showcase time that left under
- *   three seconds per point on the short errand.)
+ * - Decision points come due at even steps along the trip and wait, in order, for the player, even
+ *   after the route is home: the player can answer them on return, like reading a trip report.
+ *   A decision never stops the trip. Once the route is home, time effects no longer apply (the trip
+ *   is over). Whatever is still unanswered when the player unloads takes its default (safer)
+ *   option [ASSUMPTION]. History: the first draft answered a point as soon as the next came due
+ *   (under three seconds per point on the errand in Showcase time); the second answered all at the
+ *   return, which meant a player visiting every few hours never saw a decision on a 2-hour trip.
  * - One hull state for all the town's ships; ships cannot sail while in repair [ASSUMPTION].
  *
  * Every random outcome uses the town's saved Rng state, so results repeat for the same actions.
@@ -21,7 +23,7 @@
 import { HOUR_MS } from './clock';
 import type { LoadedContent } from './content';
 import { Rng } from './rng';
-import { depositCoin, tick, type ActiveRoute, type CoinDeposit, type Result, type TownState } from './settlement';
+import { depositCoin, outputPerHour, tick, type ActiveRoute, type CoinDeposit, type Result, type TownState } from './settlement';
 import type { DecisionDef, OutcomeDef, RouteDef, TripDef } from './types';
 
 const MINUTE_MS = 60_000;
@@ -57,20 +59,10 @@ export function expectedCargoMult(outcomes: OutcomeDef[]): number {
 // ---------------------------------------------------------------------------
 // Progress: answer overdue decisions for the player and finish hull repairs.
 
-/** Bring routes and the hull up to `now`. Called by every route action; safe to call any time. */
-export function advanceRoutes(s: TownState, c: LoadedContent, now: number): void {
+/** Bring the hull up to `now` (repairs finish). Called by every route action; safe to call any time. */
+export function advanceRoutes(s: TownState, _c: LoadedContent, now: number): void {
   if (s.hull.repairDoneAt !== null && s.hull.repairDoneAt <= now) {
     s.hull = { damaged: false, repairDoneAt: null };
-  }
-  for (const r of s.routes) {
-    const def = routeDef(c, r.routeId);
-    if (!def) continue;
-    // Answer for the player only once the route is home. A default that adds time can move the
-    // return later again, in which case the remaining points wait for the player once more.
-    for (let i = 0; i < def.decisions.length && r.returnAt <= now; i++) {
-      if (r.choices[i]) continue;
-      resolve(s, c, r, def, i, def.decisions[i]!.defaultOption, true, now);
-    }
   }
 }
 
@@ -101,10 +93,12 @@ function resolve(
   const out = opt.outcomes[pick]!;
   r.choices[i] = { option, outcome: pick, auto };
   if (out.cargoMult !== undefined) r.cargoMult *= out.cargoMult;
-  // Time effects never move the return into the past: a route already due stays due now.
-  const floor = Math.min(r.returnAt, Math.max(now, decisionDueAt(c, r, i)));
-  if (out.timePct !== undefined) r.returnAt = Math.max(floor, r.returnAt + out.timePct * baseMs(c, def));
-  if (out.delayHours !== undefined) r.returnAt += out.delayHours * HOUR_MS;
+  // Time effects apply only while the route is still out, and never move the return into the past.
+  if (r.returnAt > now) {
+    const floor = Math.max(now, decisionDueAt(c, r, i));
+    if (out.timePct !== undefined) r.returnAt = Math.max(floor, r.returnAt + out.timePct * baseMs(c, def));
+    if (out.delayHours !== undefined) r.returnAt += out.delayHours * HOUR_MS;
+  }
   if (out.hullDamage) s.hull.damaged = true;
   if (out.relation) s.relations[out.relation.rival] = (s.relations[out.relation.rival] ?? 0) + out.relation.delta;
   return out;
@@ -120,7 +114,7 @@ export function freeRouteSlots(s: TownState, c: LoadedContent): number {
 /** The decision a route is waiting on now, if any (index into the route's decisions). */
 export function pendingDecision(s: TownState, c: LoadedContent, uid: number, now: number): number | undefined {
   const r = s.routes.find((x) => x.uid === uid);
-  if (!r || r.returnAt <= now) return undefined;
+  if (!r) return undefined;
   const def = routeDef(c, r.routeId);
   if (!def) return undefined;
   const i = r.choices.findIndex((ch) => ch === null);
@@ -128,10 +122,28 @@ export function pendingDecision(s: TownState, c: LoadedContent, uid: number, now
   return i;
 }
 
+/** The town's coin production per hour (coin buildings only). */
+export function townCoinPerHour(s: TownState, c: LoadedContent): number {
+  return s.buildings.reduce((sum, b) => (c.building(b.defId).produces === 'coin' ? sum + outputPerHour(s, c, b) : sum), 0);
+}
+
+/**
+ * Cargo of a route before decisions and bonuses: the trip's base coin plus some hours of the town's
+ * coin income [ASSUMPTION, P2-10], so routes keep pace with the town. Short trips carry more hours
+ * of income per hour away, long trips fewer: attention pays, absence is convenient.
+ */
+export function routeBaseCoin(s: TownState, c: LoadedContent, routeId: string): number {
+  const def = routeDef(c, routeId);
+  if (!def) return 0;
+  const trip = tripOf(c, def);
+  return trip.baseCoin + townCoinPerHour(s, c) * trip.townIncomeHours;
+}
+
 /** Coin the route will bring if nothing else changes (before the treasury limit). */
 export function routeCargo(c: LoadedContent, r: ActiveRoute): number {
   const def = routeDef(c, r.routeId)!;
-  return Math.floor(tripOf(c, def).baseCoin * r.cargoMult * r.sendMult);
+  // Saves from before 2 Nov evening have no baseCoin: they keep the flat trip value.
+  return Math.floor((r.baseCoin ?? tripOf(c, def).baseCoin) * r.cargoMult * r.sendMult);
 }
 
 // ---------------------------------------------------------------------------
@@ -162,6 +174,7 @@ export function sendRoute(s: TownState, c: LoadedContent, routeId: string, now: 
     routeId,
     departedAt: now,
     returnAt: now + baseMs(c, def),
+    baseCoin: routeBaseCoin(s, c, routeId),
     cargoMult: 1,
     sendMult,
     choices: def.decisions.map(() => null),
@@ -200,9 +213,16 @@ export function collectRoute(
   const r = s.routes.find((x) => x.uid === uid);
   if (!r) return { ok: false, error: 'unknown_route' };
   if (r.returnAt > now) return { ok: false, error: 'route_not_back' };
+  // Decisions the player left open take their safer default (time no longer matters: it is home).
+  const def = routeDef(c, r.routeId)!;
+  for (let i = 0; i < def.decisions.length; i++) {
+    if (!r.choices[i]) resolve(s, c, r, def, i, def.decisions[i]!.defaultOption, true, now);
+  }
   const coin = routeCargo(c, r);
+  // Deposit while the route is still listed, so the room the treasury kept for it counts.
+  const deposit = depositCoin(s, c, coin);
   s.routes = s.routes.filter((x) => x.uid !== uid);
-  return { ok: true, coin, deposit: depositCoin(s, c, coin) };
+  return { ok: true, coin, deposit };
 }
 
 /** Pay to repair a damaged hull; ships stay in port until it is done [GDD: 200 coin, one hour]. */

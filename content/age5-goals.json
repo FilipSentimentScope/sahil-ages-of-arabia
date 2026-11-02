@@ -1,0 +1,40 @@
+{
+  "_note": "DRAFT Age V goals for the slice. Structure is [GDD section 4 'How an age ends' and section 8]: an age ends when the research trunk is finished, the landmark is built (in stages, so it is paid over several visits) and the Chronicle chapter is complete. The slice uses a mini trunk of 3 nodes, the Great Fort in 3 stages and an 8-question chapter ([ADJUSTED] in docs/GAME_DESIGN.md item 7). All costs, times and the knowledge per question are [ASSUMPTION], tuned with the economy simulator so an engaged player finishes in about 5 days (GDD: Age V about five days). Rules in src/core/age.ts; research and the fort count in the treasury's safety rule (GDD section 9).",
+  "status": "draft",
+  "research": {
+    "trunk": [
+      {
+        "id": "pearl_banks",
+        "knowledge": 1950,
+        "coin": 5100,
+        "minutes": 60
+      },
+      {
+        "id": "pilot_books",
+        "knowledge": 5850,
+        "coin": 15300,
+        "minutes": 120
+      },
+      {
+        "id": "coral_masonry",
+        "knowledge": 14300,
+        "coin": 37400,
+        "minutes": 180
+      }
+    ]
+  },
+  "landmark": {
+    "id": "great_fort",
+    "stages": [
+      51000,
+      102000,
+      153000
+    ]
+  },
+  "chronicle": {
+    "questions": 8
+  },
+  "question": {
+    "knowledge": 40
+  }
+}

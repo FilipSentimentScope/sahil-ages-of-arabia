@@ -167,6 +167,9 @@ describe('treasury limit [GDD section 9]', () => {
 
   it('rises with treasury levels', () => {
     const s = richTown();
+    // With the age's goals finished, only buildings set the price floor, so the base limit shows.
+    s.age.node = content.ageGoals.research.trunk.length;
+    s.age.stage = content.ageGoals.landmark.stages.length;
     expect(treasuryLimit(s, content)).toBe(600);
     const t = mustPlace(s, 'treasury', 3, 1);
     expect(treasuryLimit(s, content)).toBe(1000);

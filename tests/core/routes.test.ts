@@ -11,10 +11,13 @@ import {
   pendingDecision,
   registerVisit,
   repairHull,
+  routeBaseCoin,
   routeCargo,
   routeDef,
   sendRoute,
+  treasuryLimit,
   type TownState,
+  SAVE_VERSION,
 } from '../../src/core';
 import { loadContent } from '../../src/core/content';
 import { testContent } from './fixtures';
@@ -100,20 +103,27 @@ describe('decision points', () => {
     expect(pendingDecision(s, c, r.uid, T0 + 100 * MIN)).toBe(2);
   });
 
-  it('never stop the trip: unanswered points take the safe default when the route comes home [ASSUMPTION]', () => {
+  it('stay open after the route is home, without time effects, until it is unloaded [ASSUMPTION]', () => {
     const s = town();
-    const r = send(s, 'oasis_market');
-    advanceRoutes(s, c, T0 + 119 * MIN);
+    const r = send(s, 'island_harbour');
+    const home = T0 + 3 * HOUR_MS; // a player who looks in after the trip is over
     expect(r.choices).toEqual([null, null, null]);
-    advanceRoutes(s, c, T0 + 120 * MIN);
-    expect(r.choices.every((ch) => ch?.auto && ch.option === 'a')).toBe(true);
+    expect(pendingDecision(s, c, r.uid, home)).toBe(0);
+    chooseOption(s, c, r.uid, 'a', home); // coast
+    chooseOption(s, c, r.uid, 'a', home); // wait for the tide: +25% time, but the trip is over
+    expect(r.returnAt - T0).toBe(120 * MIN);
+    // The last point is left open: unloading takes its default (pay the fee).
+    const res = collectRoute(s, c, r.uid, home);
+    expect(res.ok).toBe(true);
+    expect(r.choices[2]).toMatchObject({ option: 'a', auto: true });
   });
 
   it('pay the base cargo for a route left alone with only free safe options', () => {
     const s = town();
+    const expected = Math.floor(routeBaseCoin(s, c, 'date_gardens'));
     const r = send(s, 'date_gardens');
     const res = collectRoute(s, c, r.uid, T0 + 8 * MIN);
-    expect(res.ok && res.coin).toBe(20);
+    expect(res.ok && res.coin).toBe(expected);
     expect(s.routes).toHaveLength(0);
   });
 
@@ -131,13 +141,14 @@ describe('decision points', () => {
     expect(r.returnAt - T0).toBe(150 * MIN);
   });
 
-  it('a route left alone takes every default, including ones that add time', () => {
+  it('a route left alone takes every default when unloaded', () => {
     const s = town();
+    const base = routeBaseCoin(s, c, 'island_harbour');
     const r = send(s, 'island_harbour');
-    // Defaults: coast, wait for the tide (+25% time), pay the fee (-10% cargo, relations up).
-    expect(collectRoute(s, c, r.uid, T0 + 121 * MIN)).toEqual({ ok: false, error: 'route_not_back' });
-    const res = collectRoute(s, c, r.uid, T0 + 150 * MIN);
-    expect(res.ok && res.coin).toBe(162);
+    // Defaults: coast, wait for the tide (no time effect once home), pay the fee (-10% cargo, relations up).
+    expect(collectRoute(s, c, r.uid, T0 + 119 * MIN)).toEqual({ ok: false, error: 'route_not_back' });
+    const res = collectRoute(s, c, r.uid, T0 + 120 * MIN);
+    expect(res.ok && res.coin).toBe(Math.floor(base * 0.9));
     expect(s.relations.island_harbour).toBe(2);
   });
 
@@ -172,6 +183,37 @@ describe('decision points', () => {
     }
     expect(storms / n).toBeGreaterThan(0.27);
     expect(storms / n).toBeLessThan(0.33);
+  });
+});
+
+describe('cargo grows with the town [ASSUMPTION, P2-10]', () => {
+  it('adds hours of the town coin income, more per hour on short trips', () => {
+    const s = town();
+    const rate = s.buildings.filter((b) => b.defId === 'souq').length * 10; // one level-1 souq, no neighbours
+    expect(routeBaseCoin(s, c, 'date_gardens')).toBeCloseTo(20 + rate * 0.5);
+    expect(routeBaseCoin(s, c, 'bombay')).toBeCloseTo(1000 + rate * 14);
+  });
+
+  it('unloading a big cargo uses the room the treasury kept for it (bug found in P2-10)', () => {
+    // Cheap goals, so nothing else lifts the limit above the base: only the room kept for the cargo.
+    const cheap = loadContent({ ...c, ageGoals: { ...c.ageGoals, research: { trunk: [{ id: 'x', knowledge: 1, coin: 1, minutes: 1 }] }, landmark: { id: 'y', stages: [1] } } });
+    const s = createTown(cheap, T0);
+    s.buildings.push({ uid: 1, defId: 'jetty', level: 1, x: 0, y: 5, stored: 0 });
+    s.resources.coin = 0;
+    const sent = sendRoute(s, cheap, 'bombay', T0);
+    if (!sent.ok) throw new Error(sent.error);
+    const r = sent.route;
+    const res = collectRoute(s, cheap, r.uid, T0 + 20 * HOUR_MS); // after every default, including the slower wind
+    expect(res.ok).toBe(true);
+    expect(res.ok && res.coin).toBeGreaterThan(600); // more than the base limit, so the kept room matters
+    expect(res.ok && res.deposit.lost + res.deposit.toChest).toBe(0);
+    expect(s.resources.coin).toBe(res.ok ? res.coin : -1);
+  });
+
+  it('the treasury makes room for cargo that is on its way home', () => {
+    const s = town();
+    const r = send(s, 'bombay');
+    expect(treasuryLimit(s, c)).toBeGreaterThanOrEqual(Math.ceil(c.balance.treasury.minMultipleOfCoinStorage * routeCargo(c, r)));
   });
 });
 
@@ -219,7 +261,7 @@ describe('hull, daily limit and welcome-back bonus', () => {
     const { rngState: _a, routes: _b, nextRouteUid: _c, routesToday: _d, hull: _e, relations: _f, ...old } = createTown(c, T0);
     const v3 = { version: 3, savedAtReal: 0, clock: { game: T0, real: 0, scale: 1 }, town: { ...old, schema: 3 } };
     const f = deserialize(JSON.stringify(v3));
-    expect(f.version).toBe(4);
+    expect(f.version).toBe(SAVE_VERSION);
     expect(f.town.routes).toEqual([]);
     expect(f.town.hull).toEqual({ damaged: false, repairDoneAt: null });
   });

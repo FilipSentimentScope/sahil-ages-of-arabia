@@ -1,0 +1,519 @@
+{
+  "_note": "DRAFT routes for the Pearl Coast slice. Trip lengths, slots, daily limit, coast/open sea odds and hull repair are [GDD section 12]. Routes and decision points come from docs/story/STORY_SCRIPT.md section 2 (draft). Base coin per trip, the over-limit share, relation steps and 'requires' are [ASSUMPTION], to tune in P2-10. Leader fragments and Archive pages as route rewards come with P4-05.",
+  "status": "draft",
+  "slots": 3,
+  "dailyFullRewards": 12,
+  "overLimitShare": 0.25,
+  "hull": {
+    "damagedCargoMult": 0.8,
+    "repairCost": 200,
+    "repairHours": 1
+  },
+  "trips": [
+    {
+      "id": "errand",
+      "minutes": 8,
+      "baseCoin": 20
+    },
+    {
+      "id": "day",
+      "minutes": 120,
+      "baseCoin": 180
+    },
+    {
+      "id": "long",
+      "minutes": 360,
+      "baseCoin": 480
+    },
+    {
+      "id": "season",
+      "minutes": 840,
+      "baseCoin": 1000
+    }
+  ],
+  "routes": [
+    {
+      "id": "date_gardens",
+      "nameKey": "route.date_gardens",
+      "status": "draft",
+      "trip": "errand",
+      "sea": false,
+      "decisions": [
+        {
+          "id": "early_dates",
+          "textKey": "route.dp.early_dates",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.buy_now",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fine"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.wait_harvest",
+              "outcomes": [
+                {
+                  "weight": 7,
+                  "textKey": "route.out.bonus",
+                  "cargoMult": 1.2
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.spoiled",
+                  "cargoMult": 0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "salt_flat",
+          "textKey": "route.dp.salt_flat",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.go_around",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fine"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.shortcut",
+              "outcomes": [
+                {
+                  "weight": 5,
+                  "textKey": "route.out.faster",
+                  "timePct": -0.25
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.crust_broke",
+                  "timePct": -0.25,
+                  "cargoMult": 0.75
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oasis_market",
+      "nameKey": "route.oasis_market",
+      "status": "draft",
+      "trip": "day",
+      "sea": false,
+      "requires": "souq",
+      "decisions": [
+        {
+          "id": "heat",
+          "textKey": "route.dp.heat",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.rest",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fine"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.push_on",
+              "outcomes": [
+                {
+                  "weight": 7,
+                  "textKey": "route.out.bonus",
+                  "cargoMult": 1.18
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.lame_camel",
+                  "cargoMult": 0.6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "guide",
+          "textKey": "route.dp.guide",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.hire_guide",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fee_paid",
+                  "cargoMult": 0.9
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.old_tracks",
+              "outcomes": [
+                {
+                  "weight": 5,
+                  "textKey": "route.out.fine"
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.lost_day",
+                  "timePct": 0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "market",
+          "textKey": "route.dp.market",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.sell_morning",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fine"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.wait_traders",
+              "outcomes": [
+                {
+                  "weight": 2,
+                  "textKey": "route.out.traders_came",
+                  "cargoMult": 1.25
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.no_traders",
+                  "cargoMult": 0.85
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "island_harbour",
+      "nameKey": "route.island_harbour",
+      "status": "draft",
+      "trip": "day",
+      "sea": true,
+      "requires": "jetty",
+      "decisions": [
+        {
+          "id": "heading",
+          "textKey": "route.dp.heading",
+          "_source": "[GDD section 12] coast: reef 15%, hull damaged; open sea: +35% value, storm 30% loses half (later 45% at season end, waits for P4-02)",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.coast",
+              "outcomes": [
+                {
+                  "weight": 85,
+                  "textKey": "route.out.safe_passage"
+                },
+                {
+                  "weight": 15,
+                  "textKey": "route.out.reef",
+                  "hullDamage": true
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.open_sea",
+              "outcomes": [
+                {
+                  "weight": 70,
+                  "textKey": "route.out.fair_winds",
+                  "cargoMult": 1.35
+                },
+                {
+                  "weight": 30,
+                  "textKey": "route.out.storm",
+                  "cargoMult": 0.675
+                }
+              ]
+            }
+          ],
+          "defaultOption": "a"
+        },
+        {
+          "id": "reef_channel",
+          "textKey": "route.dp.reef_channel",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.wait_tide",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.slower",
+                  "timePct": 0.25
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.take_channel",
+              "outcomes": [
+                {
+                  "weight": 7,
+                  "textKey": "route.out.fine"
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.reef",
+                  "hullDamage": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "harbour_fee",
+          "textKey": "route.dp.harbour_fee",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.pay_fee",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fee_paid_friends",
+                  "cargoMult": 0.9,
+                  "relation": {
+                    "rival": "island_harbour",
+                    "delta": 2
+                  }
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.anchor_outside",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fee_kept",
+                  "relation": {
+                    "rival": "island_harbour",
+                    "delta": -2
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bombay",
+      "nameKey": "route.bombay",
+      "status": "draft",
+      "trip": "season",
+      "sea": true,
+      "requires": "jetty",
+      "decisions": [
+        {
+          "id": "wind",
+          "textKey": "route.dp.wind",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.wait_wind",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.slower",
+                  "timePct": 0.07
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.leave_now",
+              "outcomes": [
+                {
+                  "weight": 5,
+                  "textKey": "route.out.fine"
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.slow_passage",
+                  "timePct": 0.3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "heading",
+          "textKey": "route.dp.heading",
+          "_source": "[GDD section 12] coast: reef 15%, hull damaged; open sea: +35% value, storm 30% loses half (later 45% at season end, waits for P4-02)",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.coast",
+              "outcomes": [
+                {
+                  "weight": 85,
+                  "textKey": "route.out.safe_passage"
+                },
+                {
+                  "weight": 15,
+                  "textKey": "route.out.reef",
+                  "hullDamage": true
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.open_sea",
+              "outcomes": [
+                {
+                  "weight": 70,
+                  "textKey": "route.out.fair_winds",
+                  "cargoMult": 1.35
+                },
+                {
+                  "weight": 30,
+                  "textKey": "route.out.storm",
+                  "cargoMult": 0.675
+                }
+              ]
+            }
+          ],
+          "defaultOption": "a"
+        },
+        {
+          "id": "storm",
+          "textKey": "route.dp.storm",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.shelter",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.slower",
+                  "timePct": 0.25
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.run_wind",
+              "outcomes": [
+                {
+                  "weight": 4,
+                  "textKey": "route.out.fine"
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.cargo_overboard",
+                  "cargoMult": 0.667
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dealers",
+          "textKey": "route.dp.dealers",
+          "defaultOption": "a",
+          "options": [
+            {
+              "id": "a",
+              "kind": "safe",
+              "textKey": "route.opt.first_buyer",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.fine"
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "kind": "risky",
+              "textKey": "route.opt.visit_dealers",
+              "outcomes": [
+                {
+                  "weight": 1,
+                  "textKey": "route.out.price_low",
+                  "cargoMult": 0.8,
+                  "delayHours": 1
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.price_good",
+                  "cargoMult": 1.16,
+                  "delayHours": 1
+                },
+                {
+                  "weight": 1,
+                  "textKey": "route.out.price_high",
+                  "cargoMult": 1.4,
+                  "delayHours": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

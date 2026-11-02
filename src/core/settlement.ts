@@ -27,8 +27,23 @@ export interface PlotArea {
   size: number;
 }
 
+/** A route that is out: a caravan or a ship [GDD section 12]. See routes.ts. */
+export interface ActiveRoute {
+  uid: number;
+  routeId: string;
+  departedAt: number;
+  /** Game time it returns; decisions can move it. */
+  returnAt: number;
+  /** Product of all cargo effects from decisions so far. */
+  cargoMult: number;
+  /** Fixed at departure: welcome-back bonus, damaged hull, daily limit. */
+  sendMult: number;
+  /** One entry per decision point: null until answered, or answered for the player. */
+  choices: ({ option: 'a' | 'b'; outcome: number; auto: boolean } | null)[];
+}
+
 export interface TownState {
-  schema: 3;
+  schema: 4;
   /** Game time the town was founded; market days count from here. */
   foundedAt: number;
   mapId: string;
@@ -55,6 +70,16 @@ export interface TownState {
   lastVisit: number;
   /** Routes left that get the welcome-back bonus [GDD section 18]. */
   welcomeBackCharges: number;
+  /** State of the seeded random generator, so outcomes are repeatable and saved. */
+  rngState: number;
+  routes: ActiveRoute[];
+  nextRouteUid: number;
+  /** Routes sent on the current game day (for the daily limit of full rewards). */
+  routesToday: { day: number; count: number };
+  /** One hull state for the town's ships in the slice [ASSUMPTION]. */
+  hull: { damaged: boolean; repairDoneAt: number | null };
+  /** Relations with rival towns, by id. The full scale comes with P4-03. */
+  relations: Record<string, number>;
 }
 
 export type ActionError =
@@ -68,19 +93,32 @@ export type ActionError =
   | 'max_level'
   | 'nothing_to_collect'
   | 'too_little_to_sell'
-  | 'unknown_building';
+  | 'unknown_building'
+  | 'unknown_route'
+  | 'needs_building'
+  | 'no_free_route'
+  | 'ship_in_repair'
+  | 'route_not_back'
+  | 'no_decision'
+  | 'hull_fine';
 
 export type Result<T = object> = ({ ok: true } & T) | { ok: false; error: ActionError };
 
 // ---------------------------------------------------------------------------
 // Creation and lookup
 
-export function createTown(content: LoadedContent, gameNow: number): TownState {
+export function createTown(content: LoadedContent, gameNow: number, seed: number = gameNow): TownState {
   const { map, balance } = content;
   const terrain: TerrainId[] = [];
   for (const row of map.rows) for (const ch of row) terrain.push(map.terrainCodes[ch] as TerrainId);
   return {
-    schema: 3,
+    schema: 4,
+    rngState: seed >>> 0,
+    routes: [],
+    nextRouteUid: 1,
+    routesToday: { day: 0, count: 0 },
+    hull: { damaged: false, repairDoneAt: null },
+    relations: {},
     openStart: { ...map.openArea },
     openSize: map.openArea.size,
     openGrowthPerAge: map.openGrowthPerAge,

@@ -105,6 +105,27 @@ await page.waitForSelector('#panel:not([hidden])');
 await page.screenshot({ path: `${OUT}/04-building-panel.png` });
 await page.click('#btn-close');
 
+// Routes: send the errand, answer its first decision, unload it when it is home.
+// Showcase time runs 60x: the 8-minute errand takes 8 seconds, its first decision is due after about 3.
+await page.click('#btn-routes');
+await page.waitForSelector('[data-send="date_gardens"]');
+if (!(await page.locator('[data-send="island_harbour"]').isDisabled())) fail('sea route should need a jetty');
+await page.click('[data-send="date_gardens"]');
+await page.waitForSelector('[data-choose]', { timeout: 6000 });
+await page.screenshot({ path: `${OUT}/04b-route-decision.png` });
+await page.click('[data-choose$=":b"]');
+await page.waitForTimeout(300);
+const answered = await page.evaluate(() => window.__aoa.town.routes[0]?.choices[0]);
+if (!answered || answered.option !== 'b' || answered.auto) fail(`decision not recorded: ${JSON.stringify(answered)}`);
+await page.waitForSelector('[data-unload]', { timeout: 9000 });
+const coinBeforeRoute = await page.evaluate(() => window.__aoa.town.resources.coin);
+await page.click('[data-unload]');
+await page.waitForTimeout(300);
+const route = await page.evaluate(() => ({ out: window.__aoa.town.routes.length, coin: window.__aoa.town.resources.coin }));
+if (route.out !== 0 || !(route.coin > coinBeforeRoute)) fail(`unloading should pay coin and free the route: ${JSON.stringify(route)}`);
+await page.screenshot({ path: `${OUT}/04c-routes-panel.png` });
+await page.click('#btn-routes-close');
+
 // Arabic and right-to-left.
 await page.click('#btn-lang');
 await page.waitForTimeout(300);

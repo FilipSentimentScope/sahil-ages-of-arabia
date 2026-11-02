@@ -54,7 +54,7 @@ would, without drowning the human sound.
 | MUS-05 | Collapse preview (sorrowful, short) | Google Gemini (Lyria); final score by a human composer |
 | AMB-01..03 | Shore town day, on the pearl banks, souq | ElevenLabs Sound Effects (loop) |
 | SFX-01..30 | Interface, building, sea, fight, reward | ElevenLabs Sound Effects |
-| VO-01 | Rawi voice (designed) and first-session lines in English | ElevenLabs Voice Design + TTS |
+| VO-01 | Rawi voice (designed) and first-session lines in English | Google Gemini (speech); final by a native speaker or actor |
 
 ## 6. Theme brief for the composer (one page, for later)
 

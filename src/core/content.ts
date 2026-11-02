@@ -2,7 +2,7 @@
  * Loads and validates content. Bad content fails loudly at startup with a
  * message that names the file field, instead of misbehaving in play.
  */
-import type { BalanceConfig, BuildingDef, ContentPack, MapDef, ResourceId, TerrainId } from './types';
+import type { BalanceConfig, BuildingDef, ContentPack, MapDef, ResourceId, RoutesConfig, TerrainId } from './types';
 import { RESOURCE_IDS } from './types';
 
 const TERRAINS: readonly TerrainId[] = ['open', 'coast', 'creek', 'dune', 'sabkha', 'mountain', 'wadi', 'sea'];
@@ -84,12 +84,42 @@ function validateMap(m: MapDef): void {
   req(Number.isInteger(m.openGrowthPerAge) && m.openGrowthPerAge >= 0, `map "${m.id}": openGrowthPerAge must be a whole number`);
 }
 
+function validateRoutes(r: RoutesConfig, buildingIds: Set<string>): void {
+  req(r && Array.isArray(r.trips) && Array.isArray(r.routes), 'routes: trips and routes must be arrays');
+  req(Number.isInteger(r.slots) && r.slots >= 1, 'routes.slots must be a whole number >= 1');
+  req(Number.isInteger(r.dailyFullRewards) && r.dailyFullRewards >= 1, 'routes.dailyFullRewards must be >= 1');
+  req(isNum(r.overLimitShare) && r.overLimitShare >= 0 && r.overLimitShare <= 1, 'routes.overLimitShare must be 0 to 1');
+  req(isNum(r.hull?.damagedCargoMult) && isNum(r.hull?.repairCost) && isNum(r.hull?.repairHours), 'routes.hull incomplete');
+  const trips = new Set<string>();
+  for (const t of r.trips) {
+    req(typeof t.id === 'string' && isNum(t.minutes) && t.minutes > 0 && isNum(t.baseCoin), `routes trip "${String(t.id)}" incomplete`);
+    trips.add(t.id);
+  }
+  const ids = new Set<string>();
+  for (const route of r.routes) {
+    const at = `route "${String(route.id)}"`;
+    req(typeof route.id === 'string' && !ids.has(route.id), `${at}: id missing or duplicate`);
+    ids.add(route.id);
+    req(trips.has(route.trip), `${at}: unknown trip "${route.trip}"`);
+    req(route.requires === undefined || buildingIds.has(route.requires), `${at}: requires unknown building "${String(route.requires)}"`);
+    req(Array.isArray(route.decisions) && route.decisions.length >= 1, `${at}: needs decision points`);
+    for (const d of route.decisions) {
+      req(d.options?.length === 2 && d.options[0]?.id === 'a' && d.options[1]?.id === 'b', `${at} decision "${d.id}": needs options a and b`);
+      req(d.defaultOption === 'a' || d.defaultOption === 'b', `${at} decision "${d.id}": defaultOption must be a or b`);
+      for (const o of d.options) {
+        req(o.outcomes.length >= 1, `${at} decision "${d.id}" option ${o.id}: no outcomes`);
+        for (const out of o.outcomes) req(isNum(out.weight) && out.weight > 0, `${at} decision "${d.id}" option ${o.id}: weights must be > 0`);
+      }
+    }
+  }
+}
+
 export interface LoadedContent extends ContentPack {
   byId: Map<string, BuildingDef>;
   building(id: string): BuildingDef;
 }
 
-export function loadContent(raw: { buildings: BuildingDef[]; balance: BalanceConfig; map: MapDef }): LoadedContent {
+export function loadContent(raw: ContentPack): LoadedContent {
   req(Array.isArray(raw.buildings) && raw.buildings.length > 0, 'no buildings');
   raw.buildings.forEach(validateBuilding);
   validateBalance(raw.balance);
@@ -99,6 +129,7 @@ export function loadContent(raw: { buildings: BuildingDef[]; balance: BalanceCon
     req(!byId.has(b.id), `duplicate building id "${b.id}"`);
     byId.set(b.id, b);
   }
+  validateRoutes(raw.routes, new Set(byId.keys()));
   return {
     ...raw,
     byId,

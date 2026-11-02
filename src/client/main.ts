@@ -6,6 +6,7 @@
 import { Application, Assets, type Texture } from 'pixi.js';
 import {
   isOpen,
+  advanceRoutes,
   GameClock,
   canPlace,
   collect,
@@ -38,6 +39,7 @@ import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { browserStorage } from './storage';
 import { BUILDING_ART } from './art';
 import { TownView } from './town-view';
+import { RoutesPanel } from './routes-panel';
 
 const SAVE_KEY = 'aoa.slice.save.v1';
 const PREFS_KEY = 'aoa.slice.prefs.v1';
@@ -75,13 +77,25 @@ let town: TownState;
     town = loaded.file.town;
   } else {
     clock = new GameClock(() => Date.now(), scaleFor(prefs.mode));
-    town = createTown(content, clock.now());
+    town = createTown(content, clock.now(), Math.floor(Math.random() * 2 ** 32));
   }
 }
 
 let version = 0; // bumps whenever the grid changes, so the view rebuilds shapes
 let selected: string | null = null;
 let openUid: number | null = null;
+const routesPanel = new RoutesPanel($('panel'), {
+  town: () => town,
+  content,
+  now: () => clock.now(),
+  scale: () => clock.scale,
+  toast,
+  errorText,
+  changed: () => {
+    save();
+    renderHud();
+  },
+});
 
 function save(): void {
   browserStorage.set(SAVE_KEY, serialize(town, clock.snapshot()));
@@ -158,6 +172,13 @@ function renderBar(): void {
     toast(parts.length ? parts.join('  ') : t('err.nothing_to_collect'));
     save();
   }, 'btn-collect-all');
+  mk(t('ui.routes'), '', () => {
+    openUid = null;
+    if (routesPanel.open) {
+      routesPanel.hide();
+      $('panel').hidden = true;
+    } else routesPanel.show();
+  }, 'btn-routes');
   mk(t('ui.sell_food'), '', () => {
     const r = sellFood(town, content, town.resources.food, clock.now());
     if (!r.ok) return toast(errorText(r.error));
@@ -182,7 +203,7 @@ function renderBar(): void {
   mk(t('ui.reset'), '', () => {
     browserStorage.remove(SAVE_KEY);
     clock = new GameClock(() => Date.now(), scaleFor(prefs.mode));
-    town = createTown(content, clock.now());
+    town = createTown(content, clock.now(), Math.floor(Math.random() * 2 ** 32));
     selected = null;
     closePanel();
     version++;
@@ -192,6 +213,7 @@ function renderBar(): void {
 
 function closePanel(): void {
   openUid = null;
+  routesPanel.hide();
   $('panel').hidden = true;
 }
 
@@ -241,6 +263,7 @@ function renderAll(): void {
   renderPalette();
   renderBar();
   renderPanel();
+  if (routesPanel.open) routesPanel.show(); // re-render in the current language
   $('placeholder-notice').textContent = t('placeholder.notice');
 }
 
@@ -257,6 +280,7 @@ function onCellTap({ x, y }: { x: number; y: number }): void {
   }
   const b = town.buildings.find((bb) => bb.x === x && bb.y === y);
   if (b) {
+    routesPanel.hide();
     openUid = b.uid;
     renderPanel();
   } else {
@@ -288,6 +312,7 @@ async function start(): Promise<void> {
   let hudTimer = 0;
   app.ticker.add((tk) => {
     tick(town, content, clock.now());
+    advanceRoutes(town, content, clock.now());
     view.sync(town, version);
     view.frame(town, selected, (x, y) => (selected ? canPlace(town, content, selected, x, y).ok : false));
     hudTimer += tk.deltaMS;
@@ -295,6 +320,9 @@ async function start(): Promise<void> {
       hudTimer = 0;
       renderHud();
       if (openUid !== null) updatePanelNumbers();
+      routesPanel.update();
+      const rb = document.getElementById('btn-routes');
+      if (rb) rb.classList.toggle('attention', routesPanel.needsAttention());
     }
   });
 

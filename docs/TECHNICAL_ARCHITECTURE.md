@@ -36,9 +36,11 @@ Content     Buildings, leaders | Routes, decisions | Questions, Archive | Text e
 | `core/content.ts` | Content loading and validation | yes |
 | `core/content-pack.ts` | Bundles the default JSON files | via others |
 | `core/hex.ts` | Hex geometry: pointy-top, odd rows shifted right; neighbours, plot to pixel and tap to plot | yes |
+| `core/routes.ts` | Routes, decision points, outcomes from the seeded Rng, hull repair, daily limit | yes |
 | `core/settlement.ts` | Grid, placement, open and locked land, growth per age, water, production, storage, upgrades, treasury | yes |
 | `core/save.ts` | Versioned save files, storage adapter | yes |
 | `client/main.ts` | Boot, interface, input, autosave | e2e |
+| `client/routes-panel.ts` | Grey-box routes panel: send, decide, unload, repair | e2e |
 | `client/town-view.ts` | PixiJS hex board: ground rendered once to a texture, locked land greyed, town fence, buildings, storage bars, placement highlight, drag and pinch camera | e2e |
 | `client/i18n.ts` | English and Arabic text, right-to-left switch | e2e |
 

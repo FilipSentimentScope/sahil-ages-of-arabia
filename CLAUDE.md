@@ -150,8 +150,9 @@ Phase 2 to 3 (week 1 to 2). Done: balance pass P2-09, Art Bible v0.1, image and 
 sheets, research pack, first five Archive drafts, story script v0.1. Next, in order:
 1. All 12 buildings in game on the hex board (2 Nov). Next art: 1024 px versions of the buildings and the
    eight painted terrain tiles. Music round 2 and MUS-02 still to arrive.
-2. Routes and decision points in core, grey-box (P4-01), using docs/story/STORY_SCRIPT.md.
-3. Second balance pass (P2-10): slice sinks and a hoarding profile.
+2. Second balance pass (P2-10): routes in the simulator, slice sinks and a hoarding profile.
+   Routes and decision points (P4-01) are done in core with a grey-box panel.
+3. Diving season in core (P4-02), which also brings the sailing season for the Bombay voyage.
 4. Remaining 10 Archive pages and 25 questions (P3-07).
 
 Drafting arrangement: until funding, agents draft history, music direction and story; everything

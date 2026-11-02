@@ -122,4 +122,73 @@ export interface ContentPack {
   buildings: BuildingDef[];
   balance: BalanceConfig;
   map: MapDef;
+  routes: RoutesConfig;
+}
+
+// ---------------------------------------------------------------------------
+// Routes and decision points [GDD section 12]
+
+/** One possible result of a decision option. Weights within an option are relative. */
+export interface OutcomeDef {
+  weight: number;
+  /** Text key describing what happened. */
+  textKey: string;
+  /** Multiplies the route's cargo, e.g. 1.35 = +35%, 0.5 = half lost. */
+  cargoMult?: number;
+  /** Changes the trip time by this share of its base length, e.g. 0.25 = 25% longer. */
+  timePct?: number;
+  /** Delays the return by this many hours (coin that arrives later). */
+  delayHours?: number;
+  /** Damages the hull: later sea trips pay less until repaired [GDD section 12]. */
+  hullDamage?: boolean;
+  /** Changes relations with a rival town. */
+  relation?: { rival: string; delta: number };
+}
+
+export interface OptionDef {
+  id: 'a' | 'b';
+  /** 'safe' or 'risky', for the interface. The coast/open sea choice has risk on both sides. */
+  kind: 'safe' | 'risky';
+  textKey: string;
+  outcomes: OutcomeDef[];
+}
+
+export interface DecisionDef {
+  id: string;
+  textKey: string;
+  options: OptionDef[];
+  /** Chosen for the player when they do not answer in time [ASSUMPTION]. */
+  defaultOption: 'a' | 'b';
+}
+
+export interface TripDef {
+  id: string;
+  minutes: number;
+  /** Coin a route of this length brings home before decisions and bonuses [ASSUMPTION values]. */
+  baseCoin: number;
+}
+
+export interface RouteDef {
+  id: string;
+  nameKey: string;
+  status: ContentStatus;
+  trip: string;
+  sea: boolean;
+  /** Building the town needs before this route can be sent (jetty for the sea) [ASSUMPTION]. */
+  requires?: string;
+  decisions: DecisionDef[];
+}
+
+export interface RoutesConfig {
+  status: ContentStatus;
+  /** Routes out at the same time (GDD section 12: 3 for every player in Age V). */
+  slots: number;
+  /** Routes per game day that pay full rewards (GDD: 12). */
+  dailyFullRewards: number;
+  /** [ASSUMPTION] Share of the reward paid for routes past the daily limit. */
+  overLimitShare: number;
+  /** [GDD section 12] Damaged hull: later sea trips pay 20% less until 200 coin and one hour of repair. */
+  hull: { damagedCargoMult: number; repairCost: number; repairHours: number };
+  trips: TripDef[];
+  routes: RouteDef[];
 }

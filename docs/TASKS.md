@@ -15,7 +15,7 @@ Each task lists acceptance criteria. The Director keeps this file current.
 | P2-06 | Economy simulator skeleton | Designer, Developer | done | `npm run sim` plays heavy, engaged and casual profiles for N days with the current roster and prints coin, food, knowledge, reputation and treasury overflow per day. First findings in docs/SIMULATION_NOTES.md |
 | P2-09 | First balance pass: food sink, storage upgrades, welcome-back bonus, retune against GDD section 18 | Designer, Developer | done | Simulator shows casual within about 2x of engaged; overflow under 15% of treasury income for engaged players. Result: 1.74 to 1.85 after day 1 (2.17 at the first milestone); overflow 0%; food sold. See SIMULATION_NOTES run 2 |
 | P2-11 | Hex board: hex core, 12 by 12 map with locked land, growth per age, save v3, hex town view with camera | Developer | done (2 Nov) | 38 unit tests and phone play-through pass; locked tap refused; screenshots in tests/e2e/screenshots reviewed |
-| P2-10 | Second balance pass: slice sinks (landmark stages, research coin costs, repairs) and a hoarding profile in the simulator | Designer, Developer | todo | Growth no faster than the GDD's Age V length (about 5 days engaged) allows; hoarding profile shows treasury pressure |
+| P2-10 | Second balance pass: slice sinks (landmark stages, research coin costs, repairs), routes in the simulator (the GDD's main coin source; base coin per trip is a guess) and a hoarding profile | Designer, Developer | todo | Growth no faster than the GDD's Age V length (about 5 days engaged) allows; hoarding profile shows treasury pressure |
 | P2-07 | Asset requirement list review | Creative | todo | ASSET_INVENTORY rows checked against GAME_DESIGN contents; counts confirmed |
 | P2-08 | Connect GitHub repository | Filip, Director | blocked | Repository exists and is reachable; history pushed |
 
@@ -35,7 +35,7 @@ Each task lists acceptance criteria. The Director keeps this file current.
 
 | ID | Task | Owner | Status | Acceptance criteria |
 | --- | --- | --- | --- | --- |
-| P4-01 | Routes and decision points (core) | Developer | todo | Four trip lengths, decision points from content, coast or open sea odds per GDD section 12, seeded outcomes, tests |
+| P4-01 | Routes and decision points (core) | Developer | done (2 Nov): core, content, grey-box panel; 17 route tests; play-through sends, answers, unloads | Four trip lengths, decision points from content, coast or open sea odds per GDD section 12, seeded outcomes, tests |
 | P4-02 | Diving season (core) | Developer, Designer | todo | Four beats, dive-one-more-day choice, sale choice, tests |
 | P4-03 | Rival town (core) | Developer | todo | Relations scale, trade, raids both ways, daily relation cap, tests |
 | P4-04 | Fights (core) | Developer | todo | Counter triangle, enemy mix shown before commit, two ability taps, tests |

@@ -74,7 +74,7 @@ Four routes, 2 + 3 + 3 + 4 decision points. Rewards are relative to the route's 
    Benefits can ignore this storm once a day [GDD].
 4. **The dealers of Bombay.** "Sell to the first buyer who meets you at the quay, or visit the
    dealers in the market." Safe: base price now. Risky: price moves -20% to +40% (average +12%) and
-   the coin arrives one hour later.
+   the coin arrives one hour later. (In content: three equal chances of -20%, +16% and +40%.)
 
 Historical note for review: Bombay as the main market for Gulf pearls in the late nineteenth and
 early twentieth centuries is stated in the GDD (Age V); confirm with Heard-Bey or Hopper.

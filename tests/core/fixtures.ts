@@ -10,6 +10,7 @@ export function testContent(): LoadedContent {
   return loadContent({
     buildings: c.buildings,
     balance: c.balance,
+    routes: c.routes,
     map: {
       ...c.map,
       id: 'test-map',

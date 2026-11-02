@@ -33,7 +33,7 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | 8 | Age change V to VI | Restyle animation, collapse preview, end card | [ADJUSTED] | Not started |
 | 9 | Six leaders, abilities, resonance, tools in 3 qualities | Navigators (Ibn Majid, Maryam al-Ijliya), Merchants (Ibn Battuta, Ibn Khaldun), Guardians (Zenobia, Salah al-Din) | [GDD] leaders, grouping [RECOMMENDATION] | Not started |
 | 10 | Doctrine choice | Offered in the first session, between the three doctrines above | [ADJUSTED] | Not started |
-| 11 | Four routes, twelve decision points, coast or open sea | Odds per GDD section 12 | [GDD] | Not started |
+| 11 | Four routes, twelve decision points, coast or open sea | `content/routes.json`, `src/core/routes.ts`; odds per GDD section 12 | [GDD], routes and points from STORY_SCRIPT (draft) | Core done, grey-box panel done; season gating and fragments not yet |
 | 12 | One rival: trade, raid on the player, raid by the player | Island Harbour | [GDD] | Not started |
 | 13 | Diving season, one cycle, four beats | Fit out, dive, town alone, homecoming and sale | [GDD] | Not started |
 | 14 | Fights | Painted tableau, one pre-fight choice, up to two ability taps, counter triangle | [GDD] rules, presentation [RECOMMENDATION] | Not started |
@@ -72,6 +72,11 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | A15 | The slice's new town starts at 6 by 6 although the GDD's Age V town would be 10 by 10 (6 + one per age); a town founded in Age V starts small so the slice can teach from the beginning. The age change at the end opens a 7th row and column | [ASSUMPTION] | Designer, Filip |
 | A16 | The open block grows around its start, first new row and column above and to the left, never leaving the map | [ASSUMPTION] | Designer |
 | A17 | Open sea is a terrain no building can use; it is only lightly dimmed when locked | [ASSUMPTION] | Designer |
+| A18 | Decision points never stop a route. They come due at even steps, wait in order, and whatever is unanswered when the route comes home takes the safer default | [ASSUMPTION] | Designer |
+| A19 | Base coin per trip: errand 20, day 180, long 480, season 1,000 (the season value follows the GDD's 1,000-coin example) | [ASSUMPTION] | Designer (P2-10) |
+| A20 | Sea routes need a jetty, the oasis caravan needs a souq; one hull state for all ships; ships cannot sail during repair | [ASSUMPTION] | Designer |
+| A21 | Routes past the GDD's 12 a day pay 25% | [ASSUMPTION] | Designer |
+| A22 | Season voyage limited to the sailing season, and the late-season storm rise to 45%, wait for the season system (P4-02); relation steps of +/-2 wait for the rival scale (P4-03); route rewards are coin only until leaders (P4-05) | [OPEN] | Designer |
 | A8 | Population, garrison and water are kept in the background for comprehension (R3) | [RECOMMENDATION] | Designer |
 | A9 | Fight unit counts and garrison composition | [OPEN] | Designer |
 | A10 | Diving season: day count (KPI suggests 7), loss curve, pearl grades, prices | [OPEN] | Designer |

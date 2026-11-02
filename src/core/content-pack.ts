@@ -2,13 +2,15 @@
 import buildingsFile from '../../content/buildings.json';
 import balanceFile from '../../content/balance.json';
 import mapFile from '../../content/maps/pearl-coast.json';
+import routesFile from '../../content/routes.json';
 import { loadContent, type LoadedContent } from './content';
-import type { BalanceConfig, BuildingDef, MapDef } from './types';
+import type { BalanceConfig, BuildingDef, MapDef, RoutesConfig } from './types';
 
 export function loadDefaultContent(): LoadedContent {
   return loadContent({
     buildings: buildingsFile.buildings as BuildingDef[],
     balance: balanceFile as unknown as BalanceConfig,
     map: mapFile as unknown as MapDef,
+    routes: routesFile as unknown as RoutesConfig,
   });
 }

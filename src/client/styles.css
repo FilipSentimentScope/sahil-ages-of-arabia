@@ -90,7 +90,6 @@ body { -webkit-tap-highlight-color: transparent; user-select: none; }
   font: inherit;
 }
 #bar button { flex: 1 1 26%; }
-#bar #btn-collect-all, #bar #btn-sell-food { flex: 1 1 40%; }
 #bar .primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
 
 #panel {
@@ -146,3 +145,18 @@ body { -webkit-tap-highlight-color: transparent; user-select: none; }
   color: #b0307a;
   pointer-events: none;
 }
+
+#bar #btn-collect-all, #bar #btn-sell-food, #bar #btn-routes { flex: 1 1 30%; }
+#bar #btn-routes.attention::after { content: ''; display: inline-block; width: 8px; height: 8px; margin-inline-start: 6px; border-radius: 50%; background: var(--warn); vertical-align: middle; }
+#panel { max-height: calc(100% - 190px); overflow-y: auto; }
+#panel h2 small { font-weight: 400; color: var(--muted); font-size: 13px; margin-inline-start: 6px; }
+#panel ul.routes { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+#panel ul.routes li { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; }
+#panel ul.routes li.send { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+#panel ul.routes li.send button { flex: 0 0 auto; min-width: 72px; }
+#panel ul.routes small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+#panel ul.routes .dp { margin: 6px 0; }
+#panel ul.routes .muted, #panel .muted { margin: 4px 0 0; color: var(--muted); }
+#panel .warn { margin: 4px 0; color: var(--warn); }
+#panel ul.routes button small { margin-top: 2px; }
+#panel ul.routes .actions button { padding: 6px; }

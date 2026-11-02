@@ -25,5 +25,5 @@ Newest first. Each entry: date, decision, who decided, reason, where it is appli
 
 | Item | Needed by | Notes |
 | --- | --- | --- |
-| Image and audio tool subscriptions; allow their domains for agents? | Week 2 | Filip uses Google Gemini for images and music (2 Nov). Commercial terms to confirm before public release; see ASSET_INVENTORY licence note |
+| Image and audio tool subscriptions; allow their domains for agents? | Week 2 | Filip uses Google Gemini on a paid plan for images, music and the Rawi voice (2 Nov). Commercial terms to confirm before public release; see ASSET_INVENTORY licence note |
 | Historian, Arabic writer, composer | After funding | Agents draft until then (decision of 1 Nov 2026); human review still required before any public playtest |

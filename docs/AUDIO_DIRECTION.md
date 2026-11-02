@@ -38,6 +38,8 @@ would, without drowning the human sound.
 - Loudness: interface sounds quieter than music; nothing harsh at high frequencies on phone speakers.
   Target integrated loudness around -16 LUFS for music beds, peaks under -1 dBTP (to verify in the mix).
 - Files: OGG (Vorbis) for the web build, plus WAV masters kept in the repository's asset store.
+- Loops: cut from the steady middle of a generated track with `python3 tools/make-loop.py IN OUT.wav --bars-min 24`,
+  then two-pass loudnorm to -16 LUFS. Check the seam by ear before integrating.
 - Ramadan and other regional calendar moments: tone and pacing to be developed with the advisory board
   (GDD section 19); nothing in the slice depends on it.
 
@@ -45,11 +47,11 @@ would, without drowning the human sound.
 
 | ID | Item | Source |
 | --- | --- | --- |
-| MUS-01 | Main theme sketch (temp, brief for composer) | Eleven Music |
-| MUS-02 | Town bed (loop) | Eleven Music |
-| MUS-03 | The great dive (tension, loop) | Eleven Music |
-| MUS-04 | Homecoming (celebration) | Eleven Music |
-| MUS-05 | Collapse preview (sorrowful, short) | Eleven Music |
+| MUS-01 | Main theme sketch (temp, brief for composer) | Google Gemini (Lyria); final score by a human composer |
+| MUS-02 | Town bed (loop) | Google Gemini (Lyria); final score by a human composer |
+| MUS-03 | The great dive (tension, loop) | Google Gemini (Lyria); final score by a human composer |
+| MUS-04 | Homecoming (celebration) | Google Gemini (Lyria); final score by a human composer |
+| MUS-05 | Collapse preview (sorrowful, short) | Google Gemini (Lyria); final score by a human composer |
 | AMB-01..03 | Shore town day, on the pearl banks, souq | ElevenLabs Sound Effects (loop) |
 | SFX-01..30 | Interface, building, sea, fight, reward | ElevenLabs Sound Effects |
 | VO-01 | Rawi voice (designed) and first-session lines in English | ElevenLabs Voice Design + TTS |

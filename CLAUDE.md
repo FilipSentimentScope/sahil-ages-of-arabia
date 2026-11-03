@@ -60,6 +60,7 @@ npm run typecheck    # TypeScript check
 npm run build        # production build into dist/
 npm run e2e          # phone-size play-through (run after npm run build)
 npm run sim -- 21    # economy simulator; notes in docs/SIMULATION_NOTES.md
+bash tools/publish-pages.sh   # public tester link (GitHub Pages), after tests pass
 ```
 
 ## 5. Rules that are never broken
@@ -154,7 +155,8 @@ sheets, research pack, first five Archive drafts, story script v0.1. Next, in or
    Done: routes (P4-01), balance pass with routes and goals (P2-10), the age's goals in core (part of P4-06).
 3. Remaining Archive pages and questions (P3-07): 14 draft questions and 5 pages are in; 11 questions and 10 pages to go.
 4. Rival town (P4-03), then the age change and collapse preview (rest of P4-06).
-Playable preview: https://claude.ai/artifact/XnXbACadhsKDTdK7BFR13j (republish after each milestone).
+Playable preview: https://claude.ai/artifact/XnXbACadhsKDTdK7BFR13j (private) and the public tester link
+https://filipsentimentscope.github.io/sahil-ages-of-arabia/ (tools/publish-pages.sh). Update both after each milestone.
 
 Drafting arrangement: until funding, agents draft history, music direction and story; everything
 stays `draft` and needs human review before any public playtest (decision of 1 Nov 2026).

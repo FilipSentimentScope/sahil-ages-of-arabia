@@ -282,3 +282,26 @@ button:disabled { cursor: default; }
 /* Menu */
 .menu-list { display: grid; gap: 8px; }
 .menu-list .btn { justify-content: space-between; }
+
+/* Build card: what the building gives */
+.bcard .prov { display: flex; flex-wrap: wrap; gap: 3px; margin: 2px 0; }
+.bcard .prov i { font-style: normal; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 8px; background: #f3e6c8; color: var(--ink); white-space: normal; line-height: 1.3; }
+
+/* Encyclopedia */
+.search { width: 100%; height: 42px; border-radius: 21px; border: 1px solid var(--line); padding: 0 14px; font: inherit; background: #fff; margin-bottom: 8px; user-select: text; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.tabs.wrap { flex-wrap: wrap; overflow: visible; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--line); background: #fff; font-size: 13px; white-space: nowrap; }
+.tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.enc-list { display: grid; gap: 6px; margin-top: 4px; }
+.enc-item { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; text-align: start; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: #fff; }
+.enc-item img { width: 44px; height: 44px; object-fit: contain; }
+.enc-item .enc-ic { font-size: 24px; text-align: center; }
+.enc-item b { display: block; font-size: 14px; }
+.enc-item small { display: block; color: var(--muted); font-size: 12px; line-height: 1.3; }
+.enc-item.locked { opacity: 0.6; }
+.enc-hero { display: block; width: 160px; height: 160px; object-fit: contain; margin: 0 auto 8px; background: radial-gradient(#f3e3c0, #e7d3a8); border-radius: 14px; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 6px 0 0; font-size: 13px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }

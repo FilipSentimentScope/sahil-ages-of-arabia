@@ -2,6 +2,13 @@
 
 Playtest feedback and what changed in response. Newest first.
 
+## Filip, 3 Nov 2026 morning
+
+| Feedback | What we changed | Where |
+| --- | --- | --- |
+| Building cards show only cost and description, not what the building gives | Each build card lists what it gives as small tags, generated from the rules: output per hour, water given or used, neighbour bonuses, treasury or storage effect, routes it opens | `describe.ts` (provides), `main.ts` |
+| An encyclopedia with search, like the Civilopedia | 📚 Encyclopedia button: search across everything, sections (how to play, buildings, leaders, history, terms, places), entries with an "In the game" box, sources and see-also links. Buildings and Archive pages come live from game data; Archive pages stay locked until a right answer opens them, as the GDD makes them a reward. Six leader pages (Ibn Majid sourced; the other five are the GDD's one-line summaries and say so), 13 terms and 3 places from the research pack, 11 how-to entries. Building info has a "Read more" link | `content/encyclopedia/age5.json`, `src/client/encyclopedia.ts` |
+
 ## Filip's second look, 2 Nov 2026 night
 
 | Feedback | What we changed | Where |

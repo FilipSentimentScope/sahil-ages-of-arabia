@@ -43,6 +43,24 @@ export function buildingFacts(def: BuildingDef, c: LoadedContent): string[] {
   return out;
 }
 
+/** What a building gives, as short items with icons, for build cards and the encyclopedia. */
+export function provides(def: BuildingDef, c: LoadedContent): string[] {
+  const out: string[] = [];
+  if (def.produces) out.push(`+${def.outputPerLevelPerHour} ${ICON[def.produces]}/h`);
+  if (def.waterProvided > 0) out.push(`+${def.waterProvided} ${ICON.water}`);
+  for (const nb of def.neighbourBonuses) {
+    const names = c.buildings.filter((b) => b.tags.includes(nb.fromTag)).map((b) => t(b.nameKey));
+    if (names.length) out.push(tr('prov.bonus', { pct: nb.pct, name: names.length > 1 ? `${names[0]} +${names.length - 1}` : names[0]! }));
+  }
+  if (def.treasuryLimitPerLevel) out.push(tr('prov.treasury', { n: def.treasuryLimitPerLevel }));
+  if (def.neighbourStorageBonus) out.push(tr('prov.storage', { pct: Math.round(def.neighbourStorageBonus * 100) }));
+  for (const r of c.routes.routes) if (r.requires === def.id) out.push(`🔓 ${t(r.nameKey)}`);
+  if (def.tags.includes('home')) out.push(t('prov.home'));
+  if (def.tags.includes('defence')) out.push(t('prov.defence'));
+  if (def.waterUse > 0) out.push(`−${def.waterUse} ${ICON.water}`);
+  return out;
+}
+
 /** "+20% cargo, 25% faster" for one outcome. */
 export function effectText(o: OutcomeDef): string {
   const parts: string[] = [];

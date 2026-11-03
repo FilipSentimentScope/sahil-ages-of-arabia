@@ -48,7 +48,8 @@ import { loadDefaultContent } from '../core/content-pack';
 import { AgePanel } from './age-panel';
 import { BUILDING_ART } from './art';
 import { Sound } from './audio';
-import { ICON, buildingFacts, tr, waitText } from './describe';
+import { ICON, buildingFacts, provides, tr, waitText } from './describe';
+import { Encyclopedia } from './encyclopedia';
 import { suggest, type Suggestion } from './guide';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { RoutesPanel, routeIcon } from './routes-panel';
@@ -111,7 +112,7 @@ let town: TownState;
 let version = 0; // bumps whenever the board changes, so the view rebuilds shapes
 let placing: string | null = null;
 let openUid: number | null = null;
-let sheetKind: 'build' | 'building' | 'routes' | 'goals' | 'menu' | null = null;
+let sheetKind: 'build' | 'building' | 'routes' | 'goals' | 'menu' | 'encyclopedia' | null = null;
 let goalsSeen = false;
 let view: TownView;
 const wait = (gameMs: number) => waitText(gameMs, clock.scale);
@@ -207,6 +208,14 @@ const agePanel = new AgePanel(sheet, {
   openArchive: () => openArchive(questionsHost),
 });
 
+const encyclopedia = new Encyclopedia(sheet, content, () => town, () => closeSheet());
+
+function openEncyclopedia(entryId?: string): void {
+  closeSheet();
+  sheetKind = 'encyclopedia';
+  encyclopedia.show(entryId);
+}
+
 function closeSheet(): void {
   sheetKind = null;
   openUid = null;
@@ -254,6 +263,7 @@ function renderBuildSheet(): void {
         <img src="${BUILDING_ART[def.id] ?? ''}" alt="" />
         <b>${t(def.nameKey)}</b>
         <span class="cost">${fmt(def.placeCost)} ${ICON.coin}</span>
+        <span class="prov">${provides(def, content).map((x) => `<i>${x}</i>`).join('')}</span>
         <span class="what">${t(`desc.${def.id}`)}</span>
         ${why ? `<span class="why">${why}</span>` : ''}
       </button>`;
@@ -311,12 +321,14 @@ function renderBuildingSheet(): void {
       <div class="stat"><span>${t('ui.stored')}</span><b data-stored>${fmt(b.stored)} / ${fmt(cap)} ${icon}</b></div>
       <div class="meter"><i data-stored-bar style="width:${share * 100}%"></i></div>
       <p class="muted" data-full-in style="margin:0 0 10px">${fullIn}</p>` : ''}
+    <button type="button" class="btn block" id="btn-read-more" style="margin-bottom:8px">📚 ${t('ui.read_more')}</button>
     <div class="row">
       ${def.produces ? `<button type="button" class="btn primary" id="btn-collect">🧺 ${t('ui.collect')}</button>` : ''}
       ${cost !== undefined ? `<button type="button" class="btn" id="btn-upgrade" ${town.resources.coin < cost ? 'disabled' : ''}>⬆️ ${def.produces ? tr('ui.upgrade_gain', { cost: fmt(cost), gain: fmt(gain), icon }) : `${t('ui.upgrade')} · ${fmt(cost)} ${ICON.coin}`}</button>` : ''}
     </div>`;
   sheet.hidden = false;
   bindClose();
+  sheet.querySelector('#btn-read-more')?.addEventListener('click', () => openEncyclopedia(`bld_${def.id}`));
   sheet.querySelector('#btn-collect')?.addEventListener('click', () => {
     const r = collect(town, content, b.uid, clock.now());
     if (!r.ok) return toast(errorText(r.error));
@@ -499,6 +511,7 @@ function buildChrome(): void {
   mk('btn-build', '🔨', t('ui.build'), () => (sheetKind === 'build' ? closeSheet() : openSheet('build')));
   mk('btn-routes', '🐪', t('ui.routes'), () => (sheetKind === 'routes' ? closeSheet() : openSheet('routes')));
   mk('btn-collect-all', '🧺', t('ui.collect_all'), doCollectAll);
+  mk('btn-encyclopedia', '📚', t('ui.encyclopedia_short'), () => (sheetKind === 'encyclopedia' ? closeSheet() : openEncyclopedia()));
   $('placeholder-notice').textContent = t('placeholder.notice');
   lastTask = '';
   trackerSig = '';

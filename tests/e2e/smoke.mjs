@@ -78,6 +78,7 @@ await page.waitForSelector('[data-building="well"]');
 await page.waitForTimeout(300);
 await expectGlow('[data-building="well"]', 'well step');
 await shot('02-build-sheet');
+if ((await page.locator('[data-building="date_grove"] .prov i').count()) < 2) await fail('build cards should show what a building gives');
 await page.click('[data-building="well"]');
 await page.waitForSelector('#placebar:not([hidden])');
 await shot('03-placing');
@@ -187,6 +188,21 @@ await page.waitForTimeout(400);
 if (!(await page.locator('#rawi').isHidden())) await fail('tutorial should be over');
 if (await page.locator('#taskbar').isHidden()) await fail('next-step bar should show after the tutorial');
 await shot('11-after-tutorial');
+
+// 11b. Encyclopedia: search, open an entry, follow a "see also" link, then back.
+await page.click('#btn-encyclopedia');
+await page.waitForSelector('#enc-search');
+await shot('11b-encyclopedia');
+await page.fill('#enc-search', 'kamal');
+await page.waitForTimeout(200);
+if ((await page.locator('.enc-item').count()) < 1) await fail('search should find the kamal');
+await page.click('[data-entry="term_kamal"]');
+await page.waitForSelector('#btn-enc-back');
+await page.click('[data-entry="ldr_ibn_majid"]');
+await page.waitForTimeout(200);
+if (!(await page.locator('#sheet h2').textContent()).includes('ibn Majid')) await fail('see-also link should open Ibn Majid');
+await shot('11c-encyclopedia-leader');
+await page.click('#btn-enc-close');
 
 // 12. Arabic, right to left, from the menu.
 await page.click('#btn-menu');

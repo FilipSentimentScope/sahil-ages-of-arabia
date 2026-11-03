@@ -1,0 +1,492 @@
+{
+  "_note": "DRAFT encyclopedia for the slice (Civilopedia-style, Filip 3 Nov). History entries cite sources S1 to S8 from docs/research/AGE_V_RESEARCH_PACK.md; leader pages other than Ibn Majid are the GDD's one-line design summary and say so. Buildings and Archive pages are added by the client from content/buildings.json and content/archive/age5.json, so they never drift. All entries need a historian before any public playtest.",
+  "status": "draft",
+  "entries": [
+    {
+      "id": "ldr_ibn_majid",
+      "category": "leaders",
+      "title": "Ahmad ibn Majid",
+      "status": "draft",
+      "body": "Ahmad ibn Majid was born around 1432 in Julfar, in today's Ras al Khaimah, and became known as the \"Lion of the Sea\". He was a navigator and wrote about navigation, some of it in verse.\n\nHis best-known work is the Book of Benefits in the Principles of Navigation (Kitab al-fawa'id fi usul wa-l-qawa'id). It covers tides, monsoon winds, currents, the distances between ports, finding latitude by the pole star, and reefs.\n\nA story often told is that he piloted Vasco da Gama to India. Historians disagree; the source we use says he was probably not the pilot, so the game does not claim it.",
+      "sources": [
+        "S8",
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "term_kamal",
+        "term_fawaid",
+        "place_julfar",
+        "arc_ibn_majid"
+      ],
+      "inGame": {
+        "age": "IV",
+        "doctrine": "Navigators",
+        "passive": "+40% from sea voyages",
+        "active": "Book of Benefits: the fleet ignores the next storm, once a day"
+      },
+      "note": "He lived in the fifteenth century, before Age V; he joins the court as a leader from an earlier age. He has no invented dialogue."
+    },
+    {
+      "id": "ldr_maryam",
+      "category": "leaders",
+      "title": "Maryam al-Ijliya",
+      "status": "draft",
+      "body": "Maryam al-Ijliya made astrolabes, the instruments for reading the stars, for the court of Aleppo.\n\nVery little is recorded about her life. This page says only what our design summary says until a historian adds sourced detail.",
+      "sources": [
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "ldr_ibn_majid"
+      ],
+      "inGame": {
+        "age": "III",
+        "doctrine": "Navigators",
+        "passive": "+25% from crafts and instruments",
+        "active": "Astrolabe: lengthens the current sailing season"
+      },
+      "note": "Flag H3 for the historian: her page must say how little is known."
+    },
+    {
+      "id": "ldr_ibn_battuta",
+      "category": "leaders",
+      "title": "Ibn Battuta",
+      "status": "draft",
+      "body": "Ibn Battuta travelled further than almost anyone of his century, crossing three continents with trade caravans.",
+      "sources": [
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "ldr_ibn_khaldun"
+      ],
+      "inGame": {
+        "age": "IV",
+        "doctrine": "Merchants",
+        "passive": "A permanent third caravan slot",
+        "active": "Rihla: completes any route in progress"
+      },
+      "note": "Summary only; a historian will add a sourced page."
+    },
+    {
+      "id": "ldr_ibn_khaldun",
+      "category": "leaders",
+      "title": "Ibn Khaldun",
+      "status": "draft",
+      "body": "Ibn Khaldun wrote a history of civilizations that explained how economies rise and fall, with some of the earliest analysis of prices, taxes and labour.",
+      "sources": [
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "ldr_ibn_battuta"
+      ],
+      "inGame": {
+        "age": "IV",
+        "doctrine": "Merchants",
+        "passive": "+35% legacy when the age changes",
+        "active": "Muqaddimah: shows the next age's opening bonuses"
+      },
+      "note": "Summary only; a historian will add a sourced page."
+    },
+    {
+      "id": "ldr_zenobia",
+      "category": "leaders",
+      "title": "Zenobia of Palmyra",
+      "status": "draft",
+      "body": "Zenobia ruled the caravan city of Palmyra and led its armies against Rome.",
+      "sources": [
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "ldr_salah_al_din"
+      ],
+      "inGame": {
+        "age": "I",
+        "doctrine": "Guardians",
+        "passive": "+25% coin from caravans",
+        "active": "Desert column: the next route ignores all travel hazards, but not fights"
+      },
+      "note": "Summary only; a historian will add a sourced page."
+    },
+    {
+      "id": "ldr_salah_al_din",
+      "category": "leaders",
+      "title": "Salah al-Din",
+      "status": "draft",
+      "body": "Salah al-Din united Egypt and Syria and defended them.",
+      "sources": [
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "ldr_zenobia"
+      ],
+      "inGame": {
+        "age": "III",
+        "doctrine": "Guardians",
+        "passive": "+30% defence, rival raids 25% less likely",
+        "active": "Relief: restores half your garrison, once per fight"
+      },
+      "note": "Summary only; a historian will add a sourced page."
+    },
+    {
+      "id": "term_fatam",
+      "category": "terms",
+      "title": "Fatam (nose clip)",
+      "status": "draft",
+      "body": "A clip worn on the nose by pearl divers to keep water out and help with the pressure in the ears. Usually turtle shell or animal horn (one source says bone; a museum example is wood). A cord let it hang round the neck. A museum record says it was first mentioned about a thousand years ago in early Arabic descriptions of pearl diving.",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "related": [
+        "arc_diver_kit",
+        "term_deyeen"
+      ]
+    },
+    {
+      "id": "term_weight",
+      "category": "terms",
+      "title": "Diving weight (thuql, hijara)",
+      "status": "draft",
+      "body": "A stone or lead weight tied to the diver's leg so he sank quickly; a hauler on the boat pulled it back up. Weights were dense stone such as haematite (lasif); lead became common only near the end of the industry in the early twentieth century.",
+      "sources": [
+        "S2",
+        "S3"
+      ],
+      "related": [
+        "term_seeb",
+        "place_zubara"
+      ]
+    },
+    {
+      "id": "term_deyeen",
+      "category": "terms",
+      "title": "Deyeen",
+      "status": "draft",
+      "body": "A rope or thread net basket worn round the diver's neck to hold the oysters he gathered.",
+      "sources": [
+        "S3"
+      ],
+      "related": [
+        "term_fatam",
+        "term_khabt"
+      ]
+    },
+    {
+      "id": "term_khabt",
+      "category": "terms",
+      "title": "Khabt",
+      "status": "draft",
+      "body": "Leather finger guards that protected a diver's fingertips from sharp shells.",
+      "sources": [
+        "S3"
+      ],
+      "related": [
+        "term_deyeen"
+      ]
+    },
+    {
+      "id": "term_maflaqa",
+      "category": "terms",
+      "title": "Maflaqa",
+      "status": "draft",
+      "body": "A small curved knife used to open oysters.",
+      "sources": [
+        "S3"
+      ],
+      "related": [
+        "term_deyeen"
+      ]
+    },
+    {
+      "id": "term_seeb",
+      "category": "terms",
+      "title": "Seeb and yada",
+      "status": "draft",
+      "body": "The seeb was the hauler who stayed on deck. The yada was the rope linking him to the diver: a tug told the hauler to pull the diver up.",
+      "sources": [
+        "S3"
+      ],
+      "related": [
+        "term_weight",
+        "arc_diver_kit"
+      ]
+    },
+    {
+      "id": "term_fjiri",
+      "category": "terms",
+      "title": "Fjiri",
+      "status": "draft",
+      "body": "Songs performed by pearl divers and crews to express the hardships of the sea. They date to the late nineteenth century and began on Muharraq. Performers sit in a circle with drums, finger chimes and a clay pot (jahl) played as an instrument; a lead singer conducts. Inscribed by UNESCO in 2021.",
+      "sources": [
+        "S5"
+      ],
+      "related": [
+        "term_nahham",
+        "place_muharraq",
+        "arc_nahham"
+      ]
+    },
+    {
+      "id": "term_nahham",
+      "category": "terms",
+      "title": "Nahham",
+      "status": "draft",
+      "body": "The lead singer on a pearling boat, joined by a chorus who sang, clapped and drummed. The rhythms blend Bedouin, East African, Persian and Indian styles, reflecting where crews came from.",
+      "sources": [
+        "S6"
+      ],
+      "related": [
+        "term_fjiri",
+        "arc_nahham"
+      ]
+    },
+    {
+      "id": "term_arish",
+      "category": "terms",
+      "title": "Arish (palm-frond house)",
+      "status": "draft",
+      "body": "The most common house on the coast: panels of palm fronds, woven tighter in winter and looser in summer, facing the prevailing wind. Some had a wind tower.",
+      "sources": [
+        "S7"
+      ],
+      "related": [
+        "term_barjeel",
+        "bld_barasti_house",
+        "arc_coast_houses"
+      ]
+    },
+    {
+      "id": "term_barjeel",
+      "category": "terms",
+      "title": "Barjeel (wind tower)",
+      "status": "draft",
+      "body": "A tower that caught the wind and sent it down to cool the rooms. In a town of this period wind towers were few and belonged to wealthier houses; many surviving Dubai examples date from the early twentieth century.",
+      "sources": [
+        "S7"
+      ],
+      "related": [
+        "term_arish",
+        "arc_coast_houses"
+      ]
+    },
+    {
+      "id": "term_coral",
+      "category": "terms",
+      "title": "Coral stone",
+      "status": "draft",
+      "body": "Coastal masonry used coral rock set in gypsum-based mortar; inland, people built with mud brick and mud mortar. Permanent houses were built round a courtyard, rarely more than one storey.",
+      "sources": [
+        "S7"
+      ],
+      "related": [
+        "term_arish",
+        "arc_coast_houses"
+      ]
+    },
+    {
+      "id": "term_kamal",
+      "category": "terms",
+      "title": "Kamal",
+      "status": "draft",
+      "body": "A navigation tool: a piece of wood on a knotted cord, used to measure latitude by sighting the pole star.",
+      "sources": [
+        "S8"
+      ],
+      "related": [
+        "ldr_ibn_majid",
+        "term_fawaid"
+      ]
+    },
+    {
+      "id": "term_fawaid",
+      "category": "terms",
+      "title": "Book of Benefits",
+      "status": "draft",
+      "body": "Ahmad ibn Majid's best-known work, Kitab al-fawa'id fi usul wa-l-qawa'id: tides, monsoon winds, currents, distances between ports, latitude by the pole star, and reefs.",
+      "sources": [
+        "S8"
+      ],
+      "related": [
+        "ldr_ibn_majid",
+        "term_kamal"
+      ]
+    },
+    {
+      "id": "term_cultured",
+      "category": "terms",
+      "title": "Cultured pearls and the collapse",
+      "status": "draft",
+      "body": "Pearling dominated the Gulf economy from about the second century until the early twentieth, peaking around 1900. It declined suddenly in the 1930s when cultured pearls developed in Japan reached the market. Our design document also names the world depression; a historian will confirm how much each mattered.",
+      "sources": [
+        "S4",
+        "S6"
+      ],
+      "related": [
+        "arc_pearl_collapse"
+      ]
+    },
+    {
+      "id": "place_julfar",
+      "category": "places",
+      "title": "Julfar",
+      "status": "draft",
+      "body": "A town in today's Ras al Khaimah, birthplace of the navigator Ahmad ibn Majid around 1432.",
+      "sources": [
+        "S8",
+        "GDD v4.0, section 10 (design summary, to be verified by a historian)"
+      ],
+      "related": [
+        "ldr_ibn_majid"
+      ]
+    },
+    {
+      "id": "place_muharraq",
+      "category": "places",
+      "title": "Muharraq",
+      "status": "draft",
+      "body": "An island town in Bahrain where the fjiri songs of the pearling crews began. Bahrain's pearling sites are a UNESCO World Heritage Site, \"Pearling, Testimony of an Island Economy\".",
+      "sources": [
+        "S5",
+        "S4"
+      ],
+      "related": [
+        "term_fjiri"
+      ]
+    },
+    {
+      "id": "place_zubara",
+      "category": "places",
+      "title": "Al Zubara",
+      "status": "draft",
+      "body": "A site in Qatar where a pearl diver's stone weight now in the Qatar Museums collection was found.",
+      "sources": [
+        "S2"
+      ],
+      "related": [
+        "term_weight"
+      ]
+    },
+    {
+      "id": "how_water",
+      "category": "howto",
+      "title": "Water",
+      "status": "draft",
+      "body": "Water is not collected: it is room to build. Wells give water; almost every other building uses some. When the water counter is full, build another well or upgrade one.",
+      "sources": [],
+      "related": [
+        "bld_well",
+        "how_neighbours"
+      ]
+    },
+    {
+      "id": "how_neighbours",
+      "category": "howto",
+      "title": "Neighbours",
+      "status": "draft",
+      "body": "Buildings help the ones beside them. A date grove grows 25% more for each well touching it; a souq earns more beside farms, homes and the jetty. Each building counts up to four helpful neighbours, so placing is a small puzzle.",
+      "sources": [],
+      "related": [
+        "how_water"
+      ]
+    },
+    {
+      "id": "how_collect",
+      "category": "howto",
+      "title": "Collecting and storage",
+      "status": "draft",
+      "body": "Every building fills its own store, even while you are away, until it is full. Tap Collect to gather everything. The bar under a building shows how full it is; a yellow marker means it is full and has stopped.",
+      "sources": [],
+      "related": [
+        "how_market"
+      ]
+    },
+    {
+      "id": "how_market",
+      "category": "howto",
+      "title": "Selling food",
+      "status": "draft",
+      "body": "Tap your food in the top bar to sell it. The more you sell at once, the lower the price; it recovers over a day, and market day pays more.",
+      "sources": [],
+      "related": [
+        "how_collect",
+        "how_treasury"
+      ]
+    },
+    {
+      "id": "how_treasury",
+      "category": "howto",
+      "title": "Treasury and savings chest",
+      "status": "draft",
+      "body": "Your treasury holds coin up to a limit. Above it, part of the extra goes into the savings chest and the rest is lost, so spend before the bar fills. The limit always leaves room for what you can buy and for cargo on its way home.",
+      "sources": [],
+      "related": [
+        "bld_treasury"
+      ]
+    },
+    {
+      "id": "how_routes",
+      "category": "howto",
+      "title": "Routes and choices",
+      "status": "draft",
+      "body": "Send caravans and ships for 8 minutes to 14 hours. On the way they stop at choices: a safer and a riskier option. The riskier one pays more on average. A choice waits for you, even after the route is home; anything left open takes the safer option when you unload.",
+      "sources": [],
+      "related": [
+        "how_coast",
+        "how_hull"
+      ]
+    },
+    {
+      "id": "how_coast",
+      "category": "howto",
+      "title": "Coast or open sea",
+      "status": "draft",
+      "body": "Every sea voyage asks the same question. The coast never loses cargo, but one voyage in seven damages the hull. The open sea pays 35% more, but nearly one voyage in three loses half its cargo. The coast makes you pay later; the open sea makes you pay at once.",
+      "sources": [],
+      "related": [
+        "how_hull",
+        "ldr_ibn_majid"
+      ]
+    },
+    {
+      "id": "how_hull",
+      "category": "howto",
+      "title": "Hull damage",
+      "status": "draft",
+      "body": "A damaged hull makes every later sea voyage pay 20% less until you repair it for 200 coin and an hour in port.",
+      "sources": [],
+      "related": [
+        "how_coast"
+      ]
+    },
+    {
+      "id": "how_goals",
+      "category": "howto",
+      "title": "Ending the age",
+      "status": "draft",
+      "body": "An age ends when you have learned enough (the research trunk), built enough (the Great Fort, in three stages) and remembered enough (the Chronicle: history questions). The last research unlocks the fort.",
+      "sources": [],
+      "related": [
+        "how_questions"
+      ]
+    },
+    {
+      "id": "how_questions",
+      "category": "howto",
+      "title": "History questions",
+      "status": "draft",
+      "body": "Up to six a day. A right answer gives knowledge, counts for the Chronicle and opens an Archive page. A wrong answer costs nothing: you see the explanation, and the question comes back later.",
+      "sources": [],
+      "related": [
+        "how_goals"
+      ]
+    },
+    {
+      "id": "how_land",
+      "category": "howto",
+      "title": "Locked land",
+      "status": "draft",
+      "body": "The whole map is drawn, but only the land inside the gold border is yours. One more row and column opens at each age change.",
+      "sources": [],
+      "related": []
+    }
+  ]
+}

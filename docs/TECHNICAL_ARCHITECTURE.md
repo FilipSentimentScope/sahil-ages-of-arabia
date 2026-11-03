@@ -42,6 +42,7 @@ Content     Buildings, leaders | Routes, decisions | Questions, Archive | Text e
 | `core/save.ts` | Versioned save files, storage adapter | yes |
 | `client/main.ts` | Boot, interface, input, autosave | e2e |
 | `client/age-panel.ts` | Grey-box goals panel, opened from the goals line in the top bar | e2e |
+| `client/encyclopedia.ts` | Searchable encyclopedia (content/encyclopedia plus live buildings and Archive pages) | e2e |
 | `client/questions-ui.ts` | History question card and Archive reader | e2e |
 | `client/guide.ts` | Next-step bar: one suggestion read from the town's state | e2e |
 | `client/tutorial.ts` | Rawi tutorial steps; each finishes when its condition is met | e2e |

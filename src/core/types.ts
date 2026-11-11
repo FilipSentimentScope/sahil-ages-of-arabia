@@ -284,6 +284,8 @@ export interface TasksConfig {
   status: ContentStatus;
   /** Ranks in order; a rank is held once this many tasks are claimed. */
   ranks: { id: string; tasks: number }[];
+  /** Rows and columns of land opened by each new rank [RECOMMENDATION]. */
+  landPerRank: number;
   gifts: { everyMinutes: number; lastsMinutes: number; incomeMinutes: number; minCoin: number };
   tasks: TaskDef[];
 }

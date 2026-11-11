@@ -76,6 +76,10 @@ export function suggest(s: TownState, c: LoadedContent, now: number, waitText: (
     return { icon: '💧', text: t('guide.more_water'), action: { kind: 'build', defId: 'well' }, go };
   }
   // 4. Routes and goals.
+  const chron = ageProgress(s, c, now).chronicle;
+  if (chron.done < chron.of && nextQuestion(s, c) && questionsLeftToday(s, c, now) > 0 && has('souq')) {
+    return { icon: '📖', text: t('guide.question'), action: { kind: 'question' }, go };
+  }
   if (s.routes.length < c.routes.slots) return { icon: '🐪', text: t('guide.send'), action: { kind: 'routes' }, go };
   const p = ageProgress(s, c, now);
   const node = c.ageGoals.research.trunk[s.age.node];
@@ -85,9 +89,6 @@ export function suggest(s: TownState, c: LoadedContent, now: number, waitText: (
   const stage = c.ageGoals.landmark.stages[s.age.stage];
   if (p.landmark.unlocked && stage !== undefined && s.resources.coin >= stage) {
     return { icon: '🏰', text: t('guide.fort'), action: { kind: 'goals' }, go };
-  }
-  if (p.chronicle.done < p.chronicle.of && nextQuestion(s, c) && questionsLeftToday(s, c, now) > 0) {
-    return { icon: '📖', text: t('guide.question'), action: { kind: 'question' }, go };
   }
   // 5. The cheapest useful upgrade the player can afford.
   let best: { uid: number; name: string; cost: number } | null = null;

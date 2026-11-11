@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { HOUR_MS, SAVE_VERSION, advanceGifts, claimTask, claimableTasks, collectGift, createTown, deserialize, giftValue, place, taskProgress, townRank } from '../../src/core';
+import { loadDefaultContent } from '../../src/core/content-pack';
 import { testContent } from './fixtures';
 
 const c = testContent();
@@ -21,12 +22,15 @@ describe('town tasks and ranks [RECOMMENDATION]', () => {
   });
 
   it('claimed tasks raise the rank at the content thresholds', () => {
+    const c = loadDefaultContent(); // the real 12 by 12 map, so land can open
     const s = createTown(c, T0);
     expect(townRank(s, c)).toMatchObject({ index: 0, id: 'camp' });
     s.progress.claimed = ['a', 'b'];
     s.progress.stats.foodSold = 20;
     const r = claimTask(s, c, 'sell_food', T0);
     expect(r.ok && r.rankUp).toBe('hamlet');
+    expect(r.ok && r.landOpened).toBe(13); // 6 by 6 grows to 7 by 7
+    expect(s.openSize).toBe(7);
     expect(townRank(s, c).next).toEqual({ id: 'village', tasksLeft: 4 });
   });
 

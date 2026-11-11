@@ -57,3 +57,27 @@ export function installIconSwap(root: HTMLElement): void {
     }
   }).observe(root, { childList: true, subtree: true, characterData: true });
 }
+
+/** The Rawi, the storyteller who advises the player: a drawn portrait (a fictional character). */
+export function rawiAvatar(): string {
+  return `<svg class="rawi-svg" viewBox="0 0 96 96" aria-hidden="true"><defs><radialGradient id="rw-bg" cx="50%" cy="32%" r="75%"><stop offset="0" stop-color="#3a5aa6"/><stop offset="1" stop-color="#14213d"/></radialGradient><clipPath id="rw-c"><circle cx="48" cy="48" r="44"/></clipPath></defs>
+<circle cx="48" cy="48" r="47.5" fill="#c9962e"/><circle cx="48" cy="48" r="45.5" fill="#f6dc9a"/><circle cx="48" cy="48" r="44" fill="url(#rw-bg)"/>
+<g clip-path="url(#rw-c)">
+<path d="M6 100c2-22 18-31 42-31s40 9 42 31z" fill="#6b4a2b"/><path d="M39 68h18l-2 30H41z" fill="#f4efe2"/>
+<path d="M33 71l7-2 2 29h-5zM63 71l-7-2-2 29h5z" fill="#d9a441"/>
+<path d="M21 46c0-21 11-32 27-32s27 11 27 32c0 11 2 22 7 31H14c5-9 7-20 7-31z" fill="#f3eee2"/>
+<path d="M21 46c0 11-2 22-7 31h12c2-9 2-20 1-30z" fill="#dcd5c4"/>
+<ellipse cx="48" cy="47" rx="15.5" ry="18.5" fill="#c6946a"/><ellipse cx="38.5" cy="52" rx="3" ry="2" fill="#d98f6f" opacity=".45"/><ellipse cx="57.5" cy="52" rx="3" ry="2" fill="#d98f6f" opacity=".45"/>
+<path d="M30 42c1-13 8-21 18-21s17 8 18 21c-5-7-11-9-18-9s-13 2-18 9z" fill="#fbf8f0"/>
+<path d="M29.5 34.5c5-8 11-11.500 18.500-11.500s13.500 3.500 18.500 11.500" stroke="#1c1c1c" stroke-width="4.200" fill="none" stroke-linecap="round"/>
+<path d="M30.500 37c5-6.500 11-9.500 17.500-9.500s12.500 3 17.500 9.500" stroke="#1c1c1c" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/>
+<path d="M37 43.500q4.500-3 9-1M50 42.500q4.500-2 9 1" stroke="#f3efe6" stroke-width="2.400" fill="none" stroke-linecap="round"/>
+<ellipse cx="42" cy="47.500" rx="1.900" ry="1.600" fill="#2b1c0e"/><ellipse cx="54" cy="47.500" rx="1.900" ry="1.600" fill="#2b1c0e"/><circle cx="42.600" cy="47" r=".5" fill="#fff"/><circle cx="54.600" cy="47" r=".5" fill="#fff"/>
+<path d="M38 50.500q4 1.500 7.500 0M50.500 50.500q3.500 1.500 7.500 0" stroke="#a97850" stroke-width=".8" fill="none"/>
+<path d="M48 47v6.500q-2 2-3.500 1" stroke="#a37248" stroke-width="1.500" fill="none" stroke-linecap="round"/>
+<path d="M32.500 51c1 17 7.500 26 15.500 26s14.500-9 15.500-26c-3 5.500-7 7.500-10.500 6.500-2-2-8-2-10 0-3.500 1-7.500-1-10.500-6.500z" fill="#f4f1ea"/>
+<path d="M40 70q8 6 16 0M38 64q10 7 20 0" stroke="#d8d2c4" stroke-width="1" fill="none"/>
+<path d="M42.500 60.500q5.500 3.500 11 0" stroke="#a8684e" stroke-width="1.600" fill="none" stroke-linecap="round"/>
+<path d="M39 57.500q4.500-3.500 9-1 4.500-2.500 9 1-4.500 1.500-9 .2-4.500 1.300-9-.2z" fill="#fdfbf6"/>
+</g></svg>`;
+}

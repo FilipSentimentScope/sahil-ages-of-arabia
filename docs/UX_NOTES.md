@@ -2,6 +2,18 @@
 
 Playtest feedback and what changed in response. Newest first.
 
+## Filip, 11 Nov 2026 evening
+
+| Feedback | What we changed |
+| --- | --- |
+| History questions never came up, so they were forgotten | A book chip in the top bar shows questions left today and glows while the Chronicle is open; the Rawi offers a question every few minutes; the next-step bar suggests one earlier; the tutorial has a question step |
+| "Always 8/8, should it restart?" (the water counter) | Water now shows how much is free ("4 free"); tapping any resource brings the Rawi out to explain it |
+| An avatar for the Rawi that pops out when he explains | Drawn portrait (code-drawn placeholder for a painted one); pops in for every tutorial step and every tip |
+| Progress did not open more tiles | Each new rank opens one more row and column of land [RECOMMENDATION]; four ranks take the town from 6 by 6 to 10 by 10 |
+| Tutorial should go deeper | 18 steps: the map, each resource, each action button, selling food, tasks, questions, goals, the encyclopedia |
+| More people as the town grows | Up to 28 townspeople, scaling with buildings, levels and rank |
+| Rebalance tasks, ranks and gifts | In the simulator; results inside GDD targets with no number changes (SIMULATION_NOTES run 5) |
+
 ## Revamp, 11 Nov 2026 (interface v3)
 
 Filip asked for a full visual revamp for investors and more interaction.

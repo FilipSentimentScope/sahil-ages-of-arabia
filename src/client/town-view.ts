@@ -664,7 +664,7 @@ export class TownView {
   // Life: townspeople, gulls and cloud shadows. Made once; only moved each frame.
 
   private makeLife(): void {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 28; i++) {
       const g = new Graphics();
       const robe = [0xf7f1e3, 0xe9dcc0, 0xd9c7a0, 0x9c5a3c, 0x4f6f8a][i % 5]!;
       g.ellipse(0, 0, 3.4, 1.4).fill({ color: 0x2b2118, alpha: 0.25 });
@@ -826,7 +826,10 @@ export class TownView {
       gl.g.alpha = 1 - sky.night * 0.8;
     }
     // Townspeople stroll between buildings by day and go home at night.
-    const active = s.buildings.length >= 2 ? Math.min(this.walkers.length, s.buildings.length + 1) : 0;
+    // More people as the town grows: with its buildings, their levels and its rank.
+    const levels = s.buildings.reduce((a, b) => a + b.level, 0);
+    const crowd = 1 + s.buildings.length + Math.floor(levels / 8) + Math.floor(s.progress.claimed.length / 2);
+    const active = s.buildings.length >= 2 ? Math.min(this.walkers.length, crowd) : 0;
     this.walkers.forEach((w, i) => {
       const on = i < active && sky.night < 0.9;
       w.g.visible = on;

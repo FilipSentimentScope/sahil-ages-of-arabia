@@ -9,7 +9,7 @@
 import type { LoadedContent } from './content';
 import { Rng } from './rng';
 import { townCoinPerHour } from './routes';
-import { buildingAt, depositCoin, isOpen, terrainAt, tick, type Result, type TownState } from './settlement';
+import { buildingAt, depositCoin, growTown, isOpen, terrainAt, tick, type Result, type TownState } from './settlement';
 import type { TaskDef } from './types';
 
 const MINUTE_MS = 60_000;
@@ -46,7 +46,7 @@ export function townRank(s: TownState, c: LoadedContent): { index: number; id: s
   return { index, id: c.tasks.ranks[index]!.id, next: next ? { id: next.id, tasksLeft: next.tasks - n } : undefined };
 }
 
-export function claimTask(s: TownState, c: LoadedContent, id: string, now: number): Result<{ coin: number; knowledge: number; rankUp: string | null }> {
+export function claimTask(s: TownState, c: LoadedContent, id: string, now: number): Result<{ coin: number; knowledge: number; rankUp: string | null; landOpened: number }> {
   tick(s, c, now);
   const t = c.tasks.tasks.find((x) => x.id === id);
   if (!t) return { ok: false, error: 'unknown_task' };
@@ -59,7 +59,10 @@ export function claimTask(s: TownState, c: LoadedContent, id: string, now: numbe
   const knowledge = t.reward.knowledge ?? 0;
   s.resources.knowledge += knowledge;
   const after = townRank(s, c);
-  return { ok: true, coin, knowledge, rankUp: after.index > before ? after.id : null };
+  // A new rank opens more land around the town.
+  let landOpened = 0;
+  for (let i = before; i < after.index; i++) for (let k = 0; k < c.tasks.landPerRank; k++) landOpened += growTown(s).length;
+  return { ok: true, coin, knowledge, rankUp: after.index > before ? after.id : null, landOpened };
 }
 
 /** Bring the sea gift up to `now`: a new one washes ashore, an old one is taken back by the tide. */

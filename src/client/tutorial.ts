@@ -34,6 +34,9 @@ const has = (s: TownState, id: string) => s.buildings.some((b) => b.defId === id
 
 export const STEPS: Step[] = [
   { id: 'welcome', quote: 'tut.welcome.quote', text: 'tut.welcome.do', voice: '01', highlight: [] },
+  { id: 'tour_map', text: 'tut.tour_map', highlight: ['#btn-recenter'] },
+  { id: 'tour_resources', text: 'tut.tour_resources', highlight: ['#res'] },
+  { id: 'tour_actions', text: 'tut.tour_actions', highlight: ['#dock'] },
   {
     id: 'well', quote: 'tut.well.quote', text: 'tut.well.do', voice: '02',
     highlight: ['#btn-build', '[data-building="well"]'],
@@ -49,8 +52,9 @@ export const STEPS: Step[] = [
   },
   {
     id: 'collect', quote: 'tut.collect.quote', text: 'tut.collect.do', voice: '09', highlight: ['#btn-collect-all'],
-    done: ({ town }) => town.resources.food >= 1 || town.resources.coin > 260,
+    done: ({ town }) => town.resources.food >= 1 || town.resources.coin > 260 || town.progress.stats.foodSold > 0,
   },
+  { id: 'sell', text: 'tut.sell', highlight: ['#chip-food'] },
   {
     id: 'souq', text: 'tut.souq.do', highlight: ['#btn-build', '[data-building="souq"]'],
     done: ({ town }) => has(town, 'souq'),
@@ -72,10 +76,19 @@ export const STEPS: Step[] = [
     done: ({ town }) => town.buildings.some((b) => b.level >= 2),
   },
   {
+    id: 'tasks', text: 'tut.tasks', highlight: ['#btn-tasks', '[data-claim]'],
+    done: ({ town }) => town.progress.claimed.length >= 1,
+  },
+  {
+    id: 'question', text: 'tut.question', highlight: ['#chip-question'],
+    done: ({ town }) => town.age.answered.length + town.age.missed.length >= 1,
+  },
+  {
     id: 'goals', quote: 'tut.goals.quote', text: 'tut.goals.do', voice: '11', highlight: ['#btn-goals'],
     done: ({ goalsSeen }) => goalsSeen,
   },
-  { id: 'done', text: 'tut.done', highlight: [] },
+  { id: 'encyclopedia', text: 'tut.encyclopedia', highlight: ['#btn-encyclopedia'] },
+  { id: 'done', text: 'tut.done', highlight: ['#taskbar'] },
 ];
 
 /** The first step that is not finished yet, from `from` on (steps already done are passed by). */

@@ -76,7 +76,8 @@ First leader: Ahmad ibn Majid with the kamal and pilot's book [RECOMMENDATION].
 | A23 | Age V goal costs (content/age5-goals.json) and 40 knowledge per correct answer | [ASSUMPTION], tuned in SIMULATION_NOTES run 4 | Designer |
 | A24 | Route cargo adds hours of the town's coin income (errand 0.5, day 3, long 7.5, season 14) | [ASSUMPTION] | Designer |
 | A25 | Treasury keeps room for 2 full coin collections plus cargo that is out | [ASSUMPTION] | Designer |
-| A27 | Town tasks (20), ranks (5) and sea gifts are not in GDD v4.0; rewards total about 10,000 coin; gifts pay 5 minutes of coin income every 30; not yet in the simulator | [RECOMMENDATION] | Filip to accept or cut; Designer to simulate |
+| A28 | Each new rank opens one more row and column of land; by the top rank the town is 10 by 10, the GDD's Age V size. The age change then opens the 11th | [RECOMMENDATION], accepted in principle by Filip 11 Nov | Designer |
+| A27 | (accepted by Filip 11 Nov; simulated in run 5) | Town tasks (20), ranks (5) and sea gifts are not in GDD v4.0; rewards total about 10,000 coin; gifts pay 5 minutes of coin income every 30; not yet in the simulator | [RECOMMENDATION] | Filip to accept or cut; Designer to simulate |
 | A26 | Casual players finish Age V on day 8 because of the 8-question Chronicle at one question a day | [OPEN] | Designer, Filip |
 | A19 | Base coin per trip: errand 20, day 180, long 480, season 1,000 (the season value follows the GDD's 1,000-coin example) | [ASSUMPTION] | Designer (P2-10) |
 | A20 | Sea routes need a jetty, the oasis caravan needs a souq; one hull state for all ships; ships cannot sail during repair | [ASSUMPTION] | Designer |

@@ -262,5 +262,10 @@
   "err.task_claimed": "استُلمت من قبل.",
   "err.unknown_task": "لا توجد مهمة كهذه.",
   "err.no_gift": "لا شيء على الشاطئ الآن.",
-  "app.title_short": "سهيل"
+  "app.title_short": "سهيل",
+  "ui.answer": "أجب",
+  "ui.later": "لاحقاً",
+  "ui.free": "متاح",
+  "ui.land_opened": "فُتحت أرض جديدة حول بلدتك",
+  "ui.rawi_name": "الراوي"
 }

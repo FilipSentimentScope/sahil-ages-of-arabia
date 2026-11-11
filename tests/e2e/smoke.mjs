@@ -61,6 +61,11 @@ const expectGlow = async (sel, why) => {
   if (!(await page.locator(sel).first().evaluate((el) => el.classList.contains('tut-glow')))) await fail(`${why}: ${sel} should glow`);
 };
 
+/** Press Next on the Rawi's explanation steps until he asks for an action. */
+async function skipInfo() {
+  for (let i = 0; i < 6 && (await page.locator('#btn-tut-next:visible').count()) > 0; i++) { await page.click('#btn-tut-next'); await page.waitForTimeout(250); }
+}
+
 await page.goto(URL);
 await page.waitForFunction(() => Boolean(window.__aoa));
 await page.waitForTimeout(600);
@@ -69,6 +74,9 @@ await page.waitForTimeout(600);
 await page.waitForSelector('#rawi:not([hidden])');
 await shot('01-first-screen');
 await page.click('#btn-tut-next');
+await page.waitForTimeout(300);
+await shot('01b-tour');
+await skipInfo();
 
 // 2. Build a well: the Build button glows, then the Well card.
 await page.waitForTimeout(400);
@@ -103,6 +111,8 @@ await page.click('#btn-collect-all');
 await page.waitForTimeout(300);
 if (!((await town()).resources.food >= 1)) await fail('collect should add food');
 await shot('05-collected');
+await page.waitForTimeout(400);
+await skipInfo(); // how to sell food
 
 // 5. Souq.
 await page.waitForTimeout(400);
@@ -153,44 +163,9 @@ await page.waitForTimeout(300);
 if (!((await town()).buildings.some((b) => b.level >= 2))) await fail('upgrade did not happen');
 await page.click('#btn-close');
 
-// 10. Goals.
+// 10. Tasks: the Rawi asks for a claimed reward.
 await page.waitForTimeout(400);
-await expectGlow('#btn-goals', 'goals step');
-await page.click('#btn-goals');
-await page.waitForSelector('#btn-question');
-if (!(await page.locator('#btn-research').isDisabled())) await fail('research should need knowledge first');
-await shot('10-goals');
-// A real history question: first a wrong answer (nothing earned, explanation shown), then a right one.
-await page.click('#btn-question');
-await page.waitForSelector('#card:not([hidden]) [data-answer]');
-await shot('10b-question');
-const q0 = await state(() => window.__aoa.content.questions.questions[0]);
-await page.click(`[data-answer="${(q0.answer + 1) % q0.en.options.length}"]`);
-await page.waitForSelector('#btn-q-next');
-if ((await town()).age.questions !== 0) await fail('a wrong answer should not count');
-await shot('10c-question-wrong');
-await page.click('#btn-q-next');
-await page.waitForSelector('#card:not([hidden]) [data-answer]');
-const q1 = await state(() => window.__aoa.content.questions.questions[1]);
-await page.click(`[data-answer="${q1.answer}"]`);
-await page.waitForSelector('[data-read]');
-if ((await town()).age.questions !== 1) await fail('a right answer should count for the Chronicle');
-await shot('10d-question-right');
-await page.click('[data-read]');
-await page.waitForSelector('#btn-archive-back');
-await shot('10e-archive-page');
-await page.click('#btn-q-close');
-await page.click('#btn-age-close');
-
-// 11. The tutorial ends; the next-step bar takes over.
-await page.waitForSelector('#btn-tut-next');
-await page.click('#btn-tut-next');
-await page.waitForTimeout(400);
-if (!(await page.locator('#rawi').isHidden())) await fail('tutorial should be over');
-if (await page.locator('#taskbar').isHidden()) await fail('next-step bar should show after the tutorial');
-await shot('11-after-tutorial');
-
-// 11a. Tasks: claim a finished task; the reward arrives and the rank shows.
+await expectGlow('#btn-tasks', 'tasks step');
 await page.click('#btn-tasks');
 await page.waitForSelector('[data-claim="first_well"]');
 await shot('11a-tasks');
@@ -199,6 +174,61 @@ await page.click('[data-claim="first_well"]');
 await page.waitForTimeout(300);
 if ((await town()).resources.coin !== coinT + 30) await fail('claiming a task should pay its reward');
 await page.click('#btn-close');
+
+// 10b. A history question from the book in the top bar: first wrong (nothing earned), then right.
+await page.waitForTimeout(400);
+await expectGlow('#chip-question', 'question step');
+await page.click('#chip-question');
+await page.waitForSelector('#card:not([hidden]) [data-answer]');
+await shot('10b-question');
+const q0 = await state(() => window.__aoa.content.questions.questions[0]);
+await page.click(`[data-answer="${(q0.answer + 1) % q0.en.options.length}"]`);
+await page.waitForSelector('#btn-q-next');
+if ((await town()).age.questions !== 0) await fail('a wrong answer should not count');
+await page.click('#btn-q-next');
+await page.waitForSelector('#card:not([hidden]) [data-answer]');
+const q1 = await state(() => window.__aoa.content.questions.questions[1]);
+await page.click(`[data-answer="${q1.answer}"]`);
+await page.waitForSelector('[data-read]');
+if ((await town()).age.questions !== 1) await fail('a right answer should count for the Chronicle');
+await shot('10d-question-right');
+await page.click('#btn-q-close');
+
+// 10c. Goals.
+await page.waitForTimeout(400);
+await expectGlow('#btn-goals', 'goals step');
+await page.click('#btn-goals');
+await page.waitForSelector('#btn-research');
+if (!(await page.locator('#btn-research').isDisabled())) await fail('research should need knowledge first');
+await shot('10-goals');
+await page.click('#btn-age-close');
+
+// 11. The Rawi points to the encyclopedia and says goodbye; the next-step bar takes over.
+await page.waitForTimeout(400);
+await skipInfo();
+await page.waitForTimeout(400);
+if (!(await page.locator('#rawi').isHidden())) await fail('tutorial should be over');
+if (await page.locator('#taskbar').isHidden()) await fail('next-step bar should show after the tutorial');
+await shot('11-after-tutorial');
+
+// 11a. Tapping a resource brings the Rawi out to explain it.
+await page.click('#chip-water');
+await page.waitForSelector('#btn-rawi-ok');
+await shot('11a1-rawi-tip');
+await page.click('#btn-rawi-ok');
+
+// 11a3. Reaching a new rank opens land around the town.
+const sizeBefore = (await town()).openSize;
+await page.click('#btn-tasks');
+for (let i = 0; i < 4 && (await page.locator('[data-claim]').count()) > 0 && (await page.locator('#btn-rank-ok').count()) === 0; i++) { await page.locator('[data-claim]').first().click(); await page.waitForTimeout(300); }
+if ((await page.locator('#btn-rank-ok').count()) > 0) {
+  await shot('11a3-rank-up');
+  await page.click('#btn-rank-ok');
+  if ((await town()).openSize !== sizeBefore + 1) await fail('a new rank should open land');
+}
+await page.click('#btn-close');
+await page.waitForTimeout(300);
+await shot('11a4-more-land');
 
 // 11a2. A sea gift: appears on the map, a tap collects it.
 await state(() => { window.__aoa.town.progress.nextGiftAt = 0; });

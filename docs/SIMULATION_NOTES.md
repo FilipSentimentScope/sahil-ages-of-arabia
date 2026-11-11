@@ -126,3 +126,19 @@ upgrades). Overflow is measured up to the end of the age. `--seed=N` checks resu
 3. Buildings still reach high levels (600 to 700 in total by day 16); the goals absorb the coin,
    not the upgrade curve. Fine inside one age; the age change (P4-06) must restyle and reprice.
 4. Leaders, doctrines, rivals and the diving season are not in yet; each adds income or speed.
+
+## Run 5 (11 Nov 2026): tasks, ranks and sea gifts (P2-11)
+
+The simulator now claims tasks as they finish and picks up a sea gift at each visit if one is ashore.
+No numbers were changed: the results stay inside the GDD targets (three seeds).
+
+| Player | Age V done | Ratio | Overflow | Sea gifts over 16 days |
+| --- | --- | --- | --- | --- |
+| Heavy | 3.5 to 3.6 days | 1.39 to 1.42x faster than engaged (target about 1.5) | 0.5% to 2.4% | about 184,000 coin |
+| Engaged | 5.0 days (target about 5; was 5.3) | | 3.1% to 5.8% | about 46,000 coin |
+| Casual | 8.0 days | 1.61x engaged (target at most 1.8) | 10% to 12% | about 20,000 coin |
+| Hoarder | never | | 47% to 49% | under 1,000 coin |
+
+Every spending player reaches the top rank (pearl port, land 10 by 10) well inside the age. Sea gifts
+favour players who visit often, as intended; they are the first number to trim if heavy players
+pull too far ahead. Casual players still finish on day 8 because of the Chronicle (open point A26).

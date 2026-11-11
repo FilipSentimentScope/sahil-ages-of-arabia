@@ -73,5 +73,5 @@ with the human composer's score as AUDIO_DIRECTION already plans. Not legal advi
 | Interface | Medallion icons drawn as SVG in code (src/client/icons.ts); some emoji remain in texts | Painted icon set from the interface kit (ART-003) |
 | Interface | El Messiri typeface (SIL Open Font License, via @fontsource) | Keep, or the brand typeface when chosen |
 | Town view | Scenery drawn in code: oasis, palms, rocks, scrub, dune crests, dhows (drifting) on land outside the town and on the sea | Decor set DEC-01..08 (IMAGE_PROMPTS round 5) |
-| Tutorial | Rawi face: dashed magenta circle reading "Rawi (art to come)" | Rawi portrait (RAWI prompt) |
+| Tutorial | Rawi portrait drawn in code (src/client/icons.ts, rawiAvatar) since 11 Nov; replaces: |  dashed magenta circle reading "Rawi (art to come)" | Rawi portrait (RAWI prompt) |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

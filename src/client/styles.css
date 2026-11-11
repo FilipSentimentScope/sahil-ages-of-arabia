@@ -450,3 +450,26 @@ h1, h2, h3, .sheet-head h2, #card h3, .round .lbl, .btn, #taskbar, .rcard b, .bc
 #title .tag { margin: 14px 0 0; font-size: 14px; letter-spacing: 1px; opacity: 0.8; }
 #title .begin { position: absolute; bottom: 12%; left: 0; right: 0; text-align: center; font-family: var(--display); font-size: 20px; animation: breathe 1.8s ease-in-out infinite; }
 @keyframes breathe { 50% { opacity: 0.35; } }
+
+/* Rawi avatar and tips (11 Nov) */
+#rawi { grid-template-columns: 64px 1fr; align-items: start; }
+.rawi-face { width: 64px; height: 64px; border: 0; background: none; animation: rawi-in 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4)); }
+.rawi-svg { width: 100%; height: 100%; display: block; }
+@keyframes rawi-in { from { transform: scale(0.2) rotate(-20deg); opacity: 0; } }
+#rawi .who { margin: 0 0 2px; font-family: var(--display); font-weight: 700; color: var(--navy); font-size: 15px; }
+#rawi .who span { font-family: system-ui, sans-serif; font-weight: 400; font-size: 11px; color: var(--muted); margin-inline-start: 6px; }
+#rawi.tip { bottom: calc(74px + var(--safe-bottom)); }
+.chip.attn { border-color: #ffd75e; animation: nudge 1.2s ease-in-out infinite; }
+.chip small { font-size: 10px; opacity: 0.8; font-weight: 600; }
+@media (max-width: 440px) { .chip small { display: inline; } .chip .bar { display: none; } }
+/* With a sheet open the advisor shrinks to its instruction, so it never covers the sheet's own buttons. */
+#app.sheet-open #rawi { grid-template-columns: 44px 1fr; padding: 8px; top: calc(40px + var(--safe-top)); }
+#app.sheet-open #rawi .rawi-face { width: 44px; height: 44px; }
+#app.sheet-open #rawi .q, #app.sheet-open #rawi .who, #app.sheet-open #rawi .row { display: none; }
+#app.sheet-open #rawi .d { margin: 0; font-size: 12.5px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@media not ((min-width: 760px) and (min-aspect-ratio: 1/1)) { #sheet { max-height: 72%; } }
+
+/* The rank and goals pill sits under the resources in the flow, so a second row of resources never hides under it. */
+#res-col { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+#btn-goals.goals-pill { position: static; max-width: 100%; }
+@media (max-width: 520px) { #trackers, #placebar, #notice { top: calc(128px + var(--safe-top)); } #app.sheet-open #rawi { top: calc(4px + var(--safe-top)); } }

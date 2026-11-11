@@ -24,6 +24,7 @@
  */
 import { ageProgress, buildLandmarkStage, recordCorrectAnswer, startResearch, trunkLearned } from '../src/core/age';
 import { HOUR_MS } from '../src/core/clock';
+import { advanceGifts, claimTask, claimableTasks, collectGift, townRank } from '../src/core/tasks';
 import { loadDefaultContent } from '../src/core/content-pack';
 import { registerVisit, sellFood } from '../src/core/market';
 import {
@@ -123,6 +124,7 @@ interface Totals {
   lost: number;
   toChest: number;
   routesSent: number;
+  giftCoin: number;
 }
 
 function addDeposit(t: Totals, d: { lost: number; toChest: number }): void {
@@ -266,6 +268,11 @@ function visit(s: TownState, p: Profile, now: number, nextVisit: number, q: { ow
     q.owed -= 1;
     recordCorrectAnswer(s, content, now);
   }
+  // Tasks are claimed as they finish; a sea gift is picked up if one is on the shore [P2-11].
+  for (const task of claimableTasks(s, content)) claimTask(s, content, task.id, now);
+  advanceGifts(s, content, now);
+  const gift = collectGift(s, content, now);
+  if (gift.ok) t.giftCoin += gift.coin;
   spend(s, p, now);
 }
 
@@ -278,6 +285,7 @@ interface RunResult {
   routeShare: number;
   routesPerDay: number;
   levels: number;
+  extra: string;
   trunkDay: number | null;
 }
 
@@ -288,7 +296,7 @@ function visitHours(n: number): number[] {
 function run(p: Profile, days: number, daily: boolean): RunResult {
   const s = createTown(content, 0, SEED);
   let doneAt: number | null = null;
-  const t: Totals = { buildingCoin: 0, routeCoin: 0, marketCoin: 0, lost: 0, toChest: 0, routesSent: 0 };
+  const t: Totals = { buildingCoin: 0, routeCoin: 0, marketCoin: 0, lost: 0, toChest: 0, routesSent: 0, giftCoin: 0 };
   const q = { owed: 0 };
   let trunkAt: number | null = null;
   let atDone: Totals | null = null;
@@ -333,6 +341,7 @@ function run(p: Profile, days: number, daily: boolean): RunResult {
     routeShare: gross > 0 ? m.routeCoin / gross : 0,
     routesPerDay: t.routesSent / days,
     levels: s.buildings.reduce((a, b) => a + b.level, 0),
+    extra: `gifts ${Math.round(t.giftCoin)} coin, ${s.progress.claimed.length} tasks, rank ${townRank(s, content).id}`,
   };
 }
 
@@ -349,7 +358,7 @@ console.log('profile   trunk done  age done   overflow  coin from routes  routes
 for (const r of results) {
   const f = (x: number | null) => (x === null ? 'never' : x.toFixed(1)).padStart(10);
   console.log(
-    `${r.profile.padEnd(8)} ${f(r.trunkDay)} ${f(r.doneDay)}   ${(100 * r.overflowShare).toFixed(1).padStart(6)}%   ${(100 * r.routeShare).toFixed(0).padStart(14)}%   ${r.routesPerDay.toFixed(1).padStart(9)}   ${String(r.levels).padStart(5)}`,
+    `${r.profile.padEnd(8)} ${f(r.trunkDay)} ${f(r.doneDay)}   ${(100 * r.overflowShare).toFixed(1).padStart(6)}%   ${(100 * r.routeShare).toFixed(0).padStart(14)}%   ${r.routesPerDay.toFixed(1).padStart(9)}   ${String(r.levels).padStart(5)}   ${r.extra}`,
   );
 }
 const by = (n: string) => results.find((r) => r.profile === n)?.doneDay ?? null;

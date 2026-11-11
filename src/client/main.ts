@@ -16,6 +16,9 @@ import '@fontsource/el-messiri/700.css';
 import { Application, Assets, type Texture } from 'pixi.js';
 import {
   GameClock,
+  ageProgress,
+  nextQuestion,
+  questionsLeftToday,
   advanceGifts,
   advanceRoutes,
   claimTask,
@@ -58,7 +61,7 @@ import { BUILDING_ART } from './art';
 import { Sound } from './audio';
 import { ICON, buildingFacts, provides, tr, waitText } from './describe';
 import { Encyclopedia } from './encyclopedia';
-import { icon, installIconSwap } from './icons';
+import { icon, installIconSwap, rawiAvatar } from './icons';
 import { suggest, type Suggestion } from './guide';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { RoutesPanel, routeIcon } from './routes-panel';
@@ -480,6 +483,7 @@ interface Chips {
   food: HTMLElement;
   knowledge: HTMLElement;
   reputation: HTMLElement;
+  question: HTMLElement;
 }
 let chips: Chips;
 const dock: Record<string, HTMLButtonElement> = {};
@@ -499,11 +503,12 @@ function buildChrome(): void {
     return el;
   };
   chips = {
-    coin: chip('coin'),
-    water: chip('water'),
+    coin: chip('coin', () => rawiSay(t('rawi.coin'))),
+    water: chip('water', () => rawiSay(t('rawi.water'))),
     food: chip('food', openSellCard),
-    knowledge: chip('knowledge'),
-    reputation: chip('reputation'),
+    knowledge: chip('knowledge', () => rawiSay(t('rawi.knowledge'))),
+    reputation: chip('reputation', () => rawiSay(t('rawi.reputation'))),
+    question: chip('question', () => openQuestion(questionsHost)),
   };
   $('btn-menu').onclick = () => (sheetKind === 'menu' ? closeSheet() : openSheet('menu'));
   $('btn-goals').onclick = () => (sheetKind === 'goals' ? closeSheet() : openSheet('goals'));
@@ -591,16 +596,23 @@ function screenCentre(): { x: number; y: number } {
 }
 
 /** A full-screen moment for a new rank. */
-function celebrateRank(rankId: string): void {
+function celebrateRank(rankId: string, land: boolean): void {
   const bits = Array.from({ length: 28 }, (_, i) => `<i style="left:${(i * 37) % 100}%;animation-delay:${(i % 7) * 0.12}s;background:${['#e2b85c', '#1f7a83', '#b3402a', '#fff6dc'][i % 4]}"></i>`).join('');
   openCard(
-    `<div class="confetti">${bits}</div><div class="rank-up">${icon('tasks', 'ico huge')}<p class="muted">${t('ui.tasks')}</p><h3>${tr('ui.rank_up', { rank: t(`rank.${rankId}`) })}</h3>
+    `<div class="confetti">${bits}</div><div class="rank-up">${icon('tasks', 'ico huge')}<p class="muted">${t('ui.tasks')}</p><h3>${tr('ui.rank_up', { rank: t(`rank.${rankId}`) })}</h3>${land ? `<p>🗺 ${t('ui.land_opened')}</p>` : ''}
      <button type="button" class="btn primary block" id="btn-rank-ok">${t('ui.ok')}</button></div>`,
     (el) => el.querySelector('#btn-rank-ok')?.addEventListener('click', closeCard),
   );
 }
 
 function renderTasksSheet(): void {
+  const qLeft = nextQuestion(town, content) ? questionsLeftToday(town, content, clock.now()) : 0;
+  const chron = ageProgress(town, content, clock.now()).chronicle;
+  chips.question.hidden = qLeft <= 0;
+  chips.question.classList.toggle('attn', qLeft > 0 && chron.done < chron.of);
+  chips.question.title = t('ui.question_title');
+  setHTML(chips.question, `${icon('book')}${qLeft}`);
+  nudges();
   const rank = townRank(town, content);
   const rows = content.tasks.tasks
     .map((task) => ({ task, p: taskProgress(town, content, task) }))
@@ -630,7 +642,8 @@ function renderTasksSheet(): void {
       fly(r.knowledge ? 'knowledge' : 'coin', box.left + box.width / 2, box.top, 7);
       changed();
       renderTasksSheet();
-      if (r.rankUp) celebrateRank(r.rankUp);
+      if (r.landOpened > 0) view.layout(town);
+      if (r.rankUp) celebrateRank(r.rankUp, r.landOpened > 0);
     });
   }
 }
@@ -644,7 +657,7 @@ function renderChips(): void {
   chips.coin.title = `${t('resource.coin')} · ${fmt(r.coin)} / ${fmt(limit)}`;
   const wu = waterUsed(town, content);
   const wc = waterCapacity(town, content);
-  setHTML(chips.water, `${icon('water')}${wu}/${wc}`);
+  setHTML(chips.water, `${icon('water')}${wc - wu}<small>${t('ui.free')}</small>`);
   chips.water.classList.toggle('full', wc > 0 && wu >= wc);
   chips.water.title = t('resource.water');
   setHTML(chips.food, `${icon('food')}${fmt(r.food)}<small>@${foodPrice(town, content, clock.now()).toFixed(2)}</small>`);
@@ -760,7 +773,7 @@ function renderTutorial(): void {
   const box = $('rawi');
   $('app').classList.toggle('sheet-open', !sheet.hidden);
   if (prefs.tutorial < 0) {
-    box.hidden = true;
+    if (!box.classList.contains('tip')) box.hidden = true;
     clearGlow();
     return;
   }
@@ -774,6 +787,7 @@ function renderTutorial(): void {
     savePrefs();
     box.hidden = true;
     clearGlow();
+    lastQuestionNudge = Date.now();
     return;
   }
   const step = STEPS[idx]!;
@@ -783,7 +797,9 @@ function renderTutorial(): void {
   if (idx === shownStep) return;
   shownStep = idx;
   const info = !step.done;
-  box.innerHTML = `<div class="rawi-face">${t('ui.rawi_placeholder')}</div><div>
+  box.classList.remove('tip');
+  box.innerHTML = `<div class="rawi-face">${rawiAvatar()}</div><div>
+      <p class="who">${t('ui.rawi_name')} <span>${idx + 1}/${STEPS.length}</span></p>
       ${step.quote ? `<p class="q">“${t(step.quote)}”</p>` : ''}
       <p class="d">${t(step.text)}</p>
       <div class="row"><button type="button" class="btn" id="btn-tut-skip">${t('ui.skip_tutorial')}</button>
@@ -802,6 +818,41 @@ function renderTutorial(): void {
     savePrefs();
     renderTutorial();
   });
+}
+
+/** The Rawi pops out to explain something, outside the tutorial. */
+function rawiSay(text: string, action?: { label: string; run: () => void }): void {
+  if (prefs.tutorial >= 0) return; // the tutorial is speaking
+  const box = $('rawi');
+  box.classList.add('tip');
+  box.innerHTML = `<div class="rawi-face">${rawiAvatar()}</div><div><p class="who">${t('ui.rawi_name')}</p><p class="d">${text}</p>
+    <div class="row"><button type="button" class="btn" id="btn-rawi-ok">${action ? t('ui.later') : t('ui.got_it')}</button>
+    ${action ? `<button type="button" class="btn primary" id="btn-rawi-do">${action.label}</button>` : ''}</div></div>`;
+  box.hidden = false;
+  box.querySelector('#btn-rawi-ok')?.addEventListener('click', () => (box.hidden = true));
+  box.querySelector('#btn-rawi-do')?.addEventListener('click', () => {
+    box.hidden = true;
+    action?.run();
+  });
+}
+
+let lastQuestionNudge = Date.now();
+let treasuryNudged = false;
+/** Gentle reminders: a history question now and then, and a warning when the treasury is nearly full. */
+function nudges(): void {
+  if (prefs.tutorial >= 0 || !sheet.hidden || !$('card').hidden || !$('rawi').hidden) return;
+  const nearlyFull = treasuryNearlyFull(town, content);
+  if (nearlyFull && !treasuryNudged) {
+    treasuryNudged = true;
+    return rawiSay(t('rawi.treasury'));
+  }
+  if (!nearlyFull) treasuryNudged = false;
+  const chron = ageProgress(town, content, clock.now()).chronicle;
+  const canAsk = chron.done < chron.of && nextQuestion(town, content) && questionsLeftToday(town, content, clock.now()) > 0;
+  if (canAsk && Date.now() - lastQuestionNudge > 150_000) {
+    lastQuestionNudge = Date.now();
+    rawiSay(t('rawi.question'), { label: t('ui.answer'), run: () => openQuestion(questionsHost) });
+  }
 }
 
 function clearGlow(): void {

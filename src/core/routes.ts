@@ -222,6 +222,7 @@ export function collectRoute(
   // Deposit while the route is still listed, so the room the treasury kept for it counts.
   const deposit = depositCoin(s, c, coin);
   s.routes = s.routes.filter((x) => x.uid !== uid);
+  s.progress.stats.routesDone += 1;
   return { ok: true, coin, deposit };
 }
 

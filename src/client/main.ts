@@ -11,10 +11,18 @@
  *
  * No game rule lives here: every change goes through src/core.
  */
+import '@fontsource/el-messiri/500.css';
+import '@fontsource/el-messiri/700.css';
 import { Application, Assets, type Texture } from 'pixi.js';
 import {
   GameClock,
+  advanceGifts,
   advanceRoutes,
+  claimTask,
+  claimableTasks,
+  collectGift,
+  taskProgress,
+  townRank,
   canPlace,
   collect,
   collectAll,
@@ -50,6 +58,7 @@ import { BUILDING_ART } from './art';
 import { Sound } from './audio';
 import { ICON, buildingFacts, provides, tr, waitText } from './describe';
 import { Encyclopedia } from './encyclopedia';
+import { icon, installIconSwap } from './icons';
 import { suggest, type Suggestion } from './guide';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { RoutesPanel, routeIcon } from './routes-panel';
@@ -112,7 +121,7 @@ let town: TownState;
 let version = 0; // bumps whenever the board changes, so the view rebuilds shapes
 let placing: string | null = null;
 let openUid: number | null = null;
-let sheetKind: 'build' | 'building' | 'routes' | 'goals' | 'menu' | 'encyclopedia' | null = null;
+let sheetKind: 'build' | 'building' | 'routes' | 'goals' | 'menu' | 'encyclopedia' | 'tasks' | null = null;
 let goalsSeen = false;
 let view: TownView;
 const wait = (gameMs: number) => waitText(gameMs, clock.scale);
@@ -235,6 +244,7 @@ function openSheet(kind: NonNullable<typeof sheetKind>): void {
   }
   if (kind === 'build') return renderBuildSheet();
   if (kind === 'menu') return renderMenu();
+  if (kind === 'tasks') return renderTasksSheet();
 }
 
 function sheetHead(title: string): string {
@@ -333,6 +343,8 @@ function renderBuildingSheet(): void {
     const r = collect(town, content, b.uid, clock.now());
     if (!r.ok) return toast(errorText(r.error));
     view.float(b.x, b.y, `+${fmt(r.deposit ? r.deposit.added : r.amount)} ${ICON[r.resource]}`);
+    const at = plotOnScreen(b.x, b.y);
+    fly(r.resource, at.x, at.y - 30, 4);
     save();
     renderBuildingSheet();
   });
@@ -340,6 +352,7 @@ function renderBuildingSheet(): void {
     const r = upgrade(town, content, b.uid, clock.now());
     if (!r.ok) return toast(errorText(r.error));
     view.float(b.x, b.y, `⬆️ ${tr('ui.level_n', { n: r.building.level })}`);
+    view.pop(b.uid);
     changed();
     renderBuildingSheet();
   });
@@ -498,20 +511,23 @@ function buildChrome(): void {
   $('btn-recenter').title = t('ui.recenter');
   const d = $('dock');
   d.innerHTML = '';
-  const mk = (id: string, icon: string, label: string, onClick: () => void) => {
+  const mk = (id: string, glyph: string, label: string, onClick: () => void) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'round';
     b.id = id;
-    b.innerHTML = `${icon}<span class="lbl">${label}</span>`;
+    b.innerHTML = `${glyph}<span class="lbl">${label}</span>`;
     b.addEventListener('click', onClick);
     d.appendChild(b);
     dock[id] = b;
   };
-  mk('btn-build', '🔨', t('ui.build'), () => (sheetKind === 'build' ? closeSheet() : openSheet('build')));
-  mk('btn-routes', '🐪', t('ui.routes'), () => (sheetKind === 'routes' ? closeSheet() : openSheet('routes')));
-  mk('btn-collect-all', '🧺', t('ui.collect_all'), doCollectAll);
-  mk('btn-encyclopedia', '📚', t('ui.encyclopedia_short'), () => (sheetKind === 'encyclopedia' ? closeSheet() : openEncyclopedia()));
+  mk('btn-build', icon('build', 'ico dock'), t('ui.build'), () => (sheetKind === 'build' ? closeSheet() : openSheet('build')));
+  mk('btn-routes', icon('routes', 'ico dock'), t('ui.routes'), () => (sheetKind === 'routes' ? closeSheet() : openSheet('routes')));
+  mk('btn-collect-all', icon('collect', 'ico dock'), t('ui.collect_all'), doCollectAll);
+  mk('btn-tasks', icon('tasks', 'ico dock'), t('ui.tasks'), () => (sheetKind === 'tasks' ? closeSheet() : openSheet('tasks')));
+  mk('btn-encyclopedia', icon('book', 'ico dock'), t('ui.encyclopedia_short'), () => (sheetKind === 'encyclopedia' ? closeSheet() : openEncyclopedia()));
+  $('btn-menu').innerHTML = icon('menu', 'ico dock');
+  $('btn-recenter').innerHTML = icon('target', 'ico dock');
   $('placeholder-notice').textContent = t('placeholder.notice');
   lastTask = '';
   trackerSig = '';
@@ -530,27 +546,116 @@ function setBadge(btn: HTMLButtonElement | undefined, n: number): void {
   badge.textContent = String(n);
 }
 
+/** Set HTML only when it changed, so the page is not rebuilt four times a second. */
+function setHTML(el: HTMLElement, html: string): void {
+  if (el.dataset.h === html) return;
+  el.dataset.h = html;
+  el.innerHTML = html;
+}
+
+/** Icons fly from a point on screen to a target (a resource chip): the reward is seen arriving. */
+function fly(name: 'coin' | 'food' | 'knowledge' | 'reputation', fromX: number, fromY: number, n = 5): void {
+  const target = document.getElementById(`chip-${name}`)?.getBoundingClientRect();
+  if (!target) return;
+  for (let i = 0; i < n; i++) {
+    const el = document.createElement('div');
+    el.className = 'fly';
+    el.innerHTML = icon(name);
+    el.style.left = `${fromX + (Math.random() - 0.5) * 30}px`;
+    el.style.top = `${fromY + (Math.random() - 0.5) * 30}px`;
+    document.body.appendChild(el);
+    window.setTimeout(() => {
+      el.style.left = `${target.left + 6}px`;
+      el.style.top = `${target.top + 3}px`;
+      el.style.opacity = '0.2';
+      el.style.transform = 'scale(0.6)';
+    }, 30 + i * 70);
+    window.setTimeout(() => {
+      el.remove();
+      const chip = document.getElementById(`chip-${name}`);
+      chip?.classList.remove('bump');
+      void chip?.offsetWidth;
+      chip?.classList.add('bump');
+    }, 700 + i * 70);
+  }
+}
+
+function plotOnScreen(x: number, y: number): { x: number; y: number } {
+  const r = $('stage').getBoundingClientRect();
+  const p = view.screenPointOf(x, y);
+  return { x: r.left + p.x, y: r.top + p.y };
+}
+
+function screenCentre(): { x: number; y: number } {
+  return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+}
+
+/** A full-screen moment for a new rank. */
+function celebrateRank(rankId: string): void {
+  const bits = Array.from({ length: 28 }, (_, i) => `<i style="left:${(i * 37) % 100}%;animation-delay:${(i % 7) * 0.12}s;background:${['#e2b85c', '#1f7a83', '#b3402a', '#fff6dc'][i % 4]}"></i>`).join('');
+  openCard(
+    `<div class="confetti">${bits}</div><div class="rank-up">${icon('tasks', 'ico huge')}<p class="muted">${t('ui.tasks')}</p><h3>${tr('ui.rank_up', { rank: t(`rank.${rankId}`) })}</h3>
+     <button type="button" class="btn primary block" id="btn-rank-ok">${t('ui.ok')}</button></div>`,
+    (el) => el.querySelector('#btn-rank-ok')?.addEventListener('click', closeCard),
+  );
+}
+
+function renderTasksSheet(): void {
+  const rank = townRank(town, content);
+  const rows = content.tasks.tasks
+    .map((task) => ({ task, p: taskProgress(town, content, task) }))
+    .sort((a, b) => Number(a.p.claimed) - Number(b.p.claimed) || Number(b.p.done) - Number(a.p.done))
+    .map(({ task, p }) => {
+      const reward = `${task.reward.coin ? `+${fmt(task.reward.coin)} ${ICON.coin}` : ''}${task.reward.knowledge ? `+${fmt(task.reward.knowledge)} ${ICON.knowledge}` : ''}`;
+      const action = p.claimed
+        ? `<span class="done">✓ ${t('ui.claimed')}</span>`
+        : p.done
+          ? `<button type="button" class="btn primary claim" data-claim="${task.id}">${t('ui.claim')} ${reward}</button>`
+          : `<span class="reward">${reward}</span>`;
+      return `<div class="task ${p.claimed ? 'claimed' : p.done ? 'ready' : ''}"><div><b>${t(`task.${task.id}`)}</b>
+        <div class="meter"><i style="width:${(100 * p.have) / p.need}%"></i></div><small>${fmt(p.have)} / ${fmt(p.need)}</small></div>${action}</div>`;
+    })
+    .join('');
+  sheet.innerHTML = `${sheetHead(`${icon('tasks')} ${t('ui.tasks')}`)}
+    <div class="rank-card">${icon('tasks', 'ico big')}<div><b>${t(`rank.${rank.id}`)}</b>
+      <small>${rank.next ? tr('ui.rank_next', { n: rank.next.tasksLeft, rank: t(`rank.${rank.next.id}`) }) : t('ui.rank_top')}</small></div></div>
+    <div class="tasks">${rows}</div>`;
+  sheet.hidden = false;
+  bindClose();
+  for (const b of sheet.querySelectorAll<HTMLButtonElement>('[data-claim]')) {
+    b.addEventListener('click', () => {
+      const r = claimTask(town, content, b.dataset.claim!, clock.now());
+      if (!r.ok) return toast(errorText(r.error));
+      const box = b.getBoundingClientRect();
+      fly(r.knowledge ? 'knowledge' : 'coin', box.left + box.width / 2, box.top, 7);
+      changed();
+      renderTasksSheet();
+      if (r.rankUp) celebrateRank(r.rankUp);
+    });
+  }
+}
+
 function renderChips(): void {
   const r = town.resources;
   const limit = treasuryLimit(town, content);
   const fill = Math.min(1, r.coin / Math.max(1, limit));
-  chips.coin.innerHTML = `<span class="ic">${ICON.coin}</span>${fmt(r.coin)}<span class="bar"><i style="width:${fill * 100}%"></i></span>`;
+  setHTML(chips.coin, `${icon('coin')}${fmt(r.coin)}<span class="bar"><i style="width:${fill * 100}%"></i></span>`);
   chips.coin.classList.toggle('full', treasuryNearlyFull(town, content));
   chips.coin.title = `${t('resource.coin')} · ${fmt(r.coin)} / ${fmt(limit)}`;
   const wu = waterUsed(town, content);
   const wc = waterCapacity(town, content);
-  chips.water.innerHTML = `<span class="ic">${ICON.water}</span>${wu}/${wc}`;
+  setHTML(chips.water, `${icon('water')}${wu}/${wc}`);
   chips.water.classList.toggle('full', wc > 0 && wu >= wc);
   chips.water.title = t('resource.water');
-  chips.food.innerHTML = `<span class="ic">${ICON.food}</span>${fmt(r.food)}<small>@${foodPrice(town, content, clock.now()).toFixed(2)}</small>`;
+  setHTML(chips.food, `${icon('food')}${fmt(r.food)}<small>@${foodPrice(town, content, clock.now()).toFixed(2)}</small>`);
   chips.food.title = `${t('resource.food')} · ${t('ui.sell_food')}`;
-  chips.knowledge.innerHTML = `<span class="ic">${ICON.knowledge}</span>${fmt(r.knowledge)}`;
+  setHTML(chips.knowledge, `${icon('knowledge')}${fmt(r.knowledge)}`);
   chips.knowledge.title = t('resource.knowledge');
-  chips.reputation.innerHTML = `<span class="ic">${ICON.reputation}</span>${fmt(r.reputation)}`;
+  setHTML(chips.reputation, `${icon('reputation')}${fmt(r.reputation)}`);
   chips.reputation.title = t('resource.reputation');
-  const goals = $('btn-goals');
-  const text = agePanel.summary();
-  if (goals.textContent !== text) goals.textContent = text;
+  const rank = townRank(town, content);
+  setHTML($('btn-goals'), `<span class="rank">${icon('tasks')}<b>${t(`rank.${rank.id}`)}</b></span><span class="g">${agePanel.summary()}</span>`);
+  setBadge(dock['btn-tasks'], claimableTasks(town, content).length);
   const warn = $('warn');
   warn.hidden = !treasuryNearlyFull(town, content);
   if (!warn.hidden) warn.textContent = t('ui.treasury_warn');
@@ -636,6 +741,7 @@ function runSuggestion(s: Suggestion): void {
   if (a.kind === 'unload') return routesPanel.unload(a.uid);
   if (a.kind === 'routes') return openSheet('routes');
   if (a.kind === 'goals') return openSheet('goals');
+  if (a.kind === 'tasks') return openSheet('tasks');
   if (a.kind === 'question') return openQuestion(questionsHost);
   if (a.kind === 'open') return openBuilding(a.uid);
 }
@@ -733,10 +839,36 @@ function onCellTap({ x, y }: { x: number; y: number }): void {
     const facts = buildingFacts(def, content).slice(0, 2).join(' · ');
     notice('🔨', tr('ui.built_title', { name: t(def.nameKey) }), facts);
     view.float(x, y, '✨');
+    view.pop(r.building.uid);
     changed();
     return;
   }
+  const gift = town.progress.gift;
+  if (gift && gift.x === x && gift.y === y) {
+    const r = collectGift(town, content, clock.now());
+    if (r.ok) {
+      const at = plotOnScreen(x, y);
+      fly('coin', at.x, at.y, 8);
+      view.float(x, y, `+${fmt(r.coin)} 🪙`);
+      notice('🐚', t('ui.gift_title'), `+${fmt(r.coin)} ${ICON.coin}`);
+      changed();
+      return;
+    }
+  }
   const b = town.buildings.find((bb) => bb.x === x && bb.y === y);
+  if (b && view.isReady(town, b)) {
+    // One tap on a building with a ready bubble collects it.
+    const r = collect(town, content, b.uid, clock.now());
+    if (r.ok) {
+      const at = plotOnScreen(x, y);
+      fly(r.resource, at.x, at.y - 30, 4);
+      view.float(x, y, `+${fmt(r.deposit ? r.deposit.added : r.amount)} ${ICON[r.resource]}`);
+      view.pop(b.uid);
+      save();
+      refreshNow();
+      return;
+    }
+  }
   if (b) return openBuilding(b.uid);
   closeSheet();
   if (!isOpen(town, x, y)) toast(errorText('tile_locked'));
@@ -770,10 +902,33 @@ function updateBuildingNumbers(): void {
   if (fi) fi.textContent = rate > 0 && b.stored < cap ? tr('ui.full_in', { time: wait(((cap - b.stored) / rate) * 3_600_000) }) : t('ui.is_full');
 }
 
+/** Where the day stands, 0 to 1 from dawn: a game day by the game clock (24 minutes in Showcase time). Looks only. */
+function dayPhase(): number {
+  const day = 24 * 3_600_000;
+  return (((clock.now() - town.foundedAt) / day + 0.22) % 1 + 1) % 1;
+}
+
+/** Title screen: sets the tone, and its tap lets the browser start the music. */
+function showTitle(): void {
+  const el = $('title');
+  // Automated tests skip it unless they ask for it with ?title.
+  if (navigator.webdriver && !location.search.includes('title')) return el.remove();
+  el.innerHTML = `<div class="sky"></div><div class="star"></div>
+    <div class="logo"><h1>${t('app.title_short')}</h1><p class="sub">${t('ui.subtitle')}</p><p class="tag">${t('ui.tagline')}</p></div>
+    <p class="begin">${t('ui.tap_to_begin')}</p>`;
+  el.hidden = false;
+  el.addEventListener('pointerdown', () => {
+    el.classList.add('out');
+    window.setTimeout(() => el.remove(), 900);
+  }, { once: true });
+}
+
 const app = new Application();
 
 async function start(): Promise<void> {
   const stage = $('stage');
+  showTitle();
+  installIconSwap($('app'));
   buildChrome();
   await app.init({ resizeTo: stage, background: 0xa8916a, antialias: true, resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true });
   stage.appendChild(app.canvas);
@@ -795,8 +950,9 @@ async function start(): Promise<void> {
     const now = clock.now();
     tick(town, content, now);
     advanceRoutes(town, content, now);
+    advanceGifts(town, content, now);
     view.sync(town, version);
-    view.frame(town, placing, (x, y) => (placing ? canPlace(town, content, placing, x, y).ok : false), tk.deltaMS);
+    view.frame(town, placing, (x, y) => (placing ? canPlace(town, content, placing, x, y).ok : false), tk.deltaMS, dayPhase());
     uiTimer += tk.deltaMS;
     if (uiTimer > 250) {
       uiTimer = 0;

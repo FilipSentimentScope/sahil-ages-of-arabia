@@ -70,7 +70,8 @@ with the human composer's score as AUDIO_DIRECTION already plans. Not legal advi
 | --- | --- | --- |
 | Town view | Ground drawn from map data (soft colour per terrain, blurred, simple marks) | Painted terrain tiles (IMAGE_PROMPTS.md, terrain tiles) |
 | Town view | Magenta-bordered hexes for any building without art (none on 2 Nov) | Building art |
-| Interface | Emoji icons for resources and actions (🪙 💧 🍞 📜 ⭐ 🔨 🐪 🧺) | Painted icon set from the interface kit (ART-003) |
+| Interface | Medallion icons drawn as SVG in code (src/client/icons.ts); some emoji remain in texts | Painted icon set from the interface kit (ART-003) |
+| Interface | El Messiri typeface (SIL Open Font License, via @fontsource) | Keep, or the brand typeface when chosen |
 | Town view | Scenery drawn in code: oasis, palms, rocks, scrub, dune crests, dhows (drifting) on land outside the town and on the sea | Decor set DEC-01..08 (IMAGE_PROMPTS round 5) |
 | Tutorial | Rawi face: dashed magenta circle reading "Rawi (art to come)" | Rawi portrait (RAWI prompt) |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

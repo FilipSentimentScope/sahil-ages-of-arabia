@@ -35,6 +35,7 @@ Each task lists acceptance criteria. The Director keeps this file current.
 
 | ID | Task | Owner | Status | Acceptance criteria |
 | --- | --- | --- | --- | --- |
+| UX-03 | Interface v3, living world, tasks, ranks, sea gifts | Developer, Creative, Designer | done (11 Nov): 79 unit tests; play-through covers tasks, gift, title, night; screenshots reviewed |
 | UX-02 | Encyclopedia with search; build cards show what each building gives | Developer, Historian | done (3 Nov): content tests and play-through pass; leader pages beyond Ibn Majid need sourced research |
 | UX-01 | Interface v2 from Filip's playtest (docs/UX_NOTES.md) | Developer, Creative | done (2 Nov): phone and 16:9 play-through follows the whole tutorial; screenshots reviewed |
 | P4-01 | Routes and decision points (core) | Developer | done (2 Nov): core, content, grey-box panel; 17 route tests; play-through sends, answers, unloads | Four trip lengths, decision points from content, coast or open sea odds per GDD section 12, seeded outcomes, tests |

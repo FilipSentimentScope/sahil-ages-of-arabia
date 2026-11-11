@@ -163,6 +163,12 @@ export function loadContent(raw: ContentPack): LoadedContent {
   validateRoutes(raw.routes, new Set(byId.keys()));
   validateAgeGoals(raw.ageGoals);
   validateQuestions(raw.questions, raw.archive);
+  req(Array.isArray(raw.tasks?.tasks) && Array.isArray(raw.tasks?.ranks) && raw.tasks.ranks[0]?.tasks === 0, 'tasks: tasks and ranks needed, first rank at 0');
+  for (const t of raw.tasks.tasks) {
+    req(typeof t.id === 'string' && isNum(t.count) && t.count >= 1 && Boolean(t.reward), `task "${String(t.id)}" incomplete`);
+    req(t.defId === undefined || byId.has(t.defId), `task "${t.id}": unknown building "${String(t.defId)}"`);
+  }
+  req(isNum(raw.tasks.gifts?.everyMinutes) && isNum(raw.tasks.gifts?.lastsMinutes) && isNum(raw.tasks.gifts?.incomeMinutes) && isNum(raw.tasks.gifts?.minCoin), 'tasks.gifts incomplete');
   return {
     ...raw,
     byId,

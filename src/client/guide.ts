@@ -7,6 +7,7 @@ import type { LoadedContent, TownState } from '../core';
 import {
   ageProgress,
   canPlace,
+  claimableTasks,
   nextQuestion,
   outputPerHour,
   questionsLeftToday,
@@ -28,6 +29,7 @@ export type GuideAction =
   | { kind: 'unload'; uid: number }
   | { kind: 'routes' }
   | { kind: 'goals' }
+  | { kind: 'tasks' }
   | { kind: 'question' }
   | { kind: 'open'; uid: number }
   | { kind: 'none' };
@@ -55,6 +57,8 @@ export function suggest(s: TownState, c: LoadedContent, now: number, waitText: (
   for (const r of s.routes) {
     if (r.returnAt <= now) return { icon: TRIP_ICON_OF(c, r.routeId), text: t('guide.unload'), action: { kind: 'unload', uid: r.uid }, go };
   }
+  if (claimableTasks(s, c).length) return { icon: '🏆', text: t('guide.claim'), action: { kind: 'tasks' }, go };
+  if (s.progress.gift) return { icon: '🐚', text: t('guide.gift'), action: { kind: 'none' }, go: '' };
   // 2. The basics of a new town.
   if (!has('well')) return { icon: '💧', text: t('guide.build_well'), action: { kind: 'build', defId: 'well' }, go };
   if (!has('date_grove')) return { icon: '🌴', text: t('guide.build_grove'), action: { kind: 'build', defId: 'date_grove' }, go };

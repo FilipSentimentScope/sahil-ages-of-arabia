@@ -14,6 +14,7 @@ export function testContent(): LoadedContent {
     ageGoals: c.ageGoals,
     questions: c.questions,
     archive: c.archive,
+    tasks: c.tasks,
     map: {
       ...c.map,
       id: 'test-map',

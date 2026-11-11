@@ -68,6 +68,7 @@ export function sellFood(
   if (coin < 1) return { ok: false, error: 'too_little_to_sell' };
   s.resources.food -= sold;
   s.market.foodSoldRecent += sold;
+  s.progress.stats.foodSold += sold;
   const deposit = depositCoin(s, c, coin);
   return { ok: true, sold, coin, deposit };
 }

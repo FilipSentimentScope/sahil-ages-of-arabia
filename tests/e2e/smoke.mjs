@@ -144,7 +144,8 @@ if (afterUnload.routes.length !== 0 || !(afterUnload.resources.coin > coinBefore
 
 // 9. Upgrade the grove from its info sheet.
 await page.waitForTimeout(400);
-await tapCell(5, 5);
+// A tap on a building with a ready bubble collects; the next tap opens its sheet.
+for (let i = 0; i < 3 && (await page.locator('#btn-upgrade').count()) === 0; i++) { await tapCell(5, 5); await page.waitForTimeout(300); }
 await page.waitForSelector('#btn-upgrade');
 await shot('09-building-sheet');
 await page.click('#btn-upgrade');
@@ -188,6 +189,25 @@ await page.waitForTimeout(400);
 if (!(await page.locator('#rawi').isHidden())) await fail('tutorial should be over');
 if (await page.locator('#taskbar').isHidden()) await fail('next-step bar should show after the tutorial');
 await shot('11-after-tutorial');
+
+// 11a. Tasks: claim a finished task; the reward arrives and the rank shows.
+await page.click('#btn-tasks');
+await page.waitForSelector('[data-claim="first_well"]');
+await shot('11a-tasks');
+const coinT = (await town()).resources.coin;
+await page.click('[data-claim="first_well"]');
+await page.waitForTimeout(300);
+if ((await town()).resources.coin !== coinT + 30) await fail('claiming a task should pay its reward');
+await page.click('#btn-close');
+
+// 11a2. A sea gift: appears on the map, a tap collects it.
+await state(() => { window.__aoa.town.progress.nextGiftAt = 0; });
+await page.waitForFunction(() => window.__aoa.town.progress.gift !== null, null, { timeout: 5000 });
+const gift = (await town()).progress.gift;
+await page.waitForTimeout(300);
+await shot('11a2-gift');
+await tapCell(gift.x, gift.y);
+if ((await town()).progress.stats.gifts !== 1) await fail('tapping the sea gift should collect it');
 
 // 11b. Encyclopedia: search, open an entry, follow a "see also" link, then back.
 await page.click('#btn-encyclopedia');
@@ -252,6 +272,19 @@ await wpage.screenshot({ path: `${OUT}/14-wide-hover.png` });
 await wpage.click('#btn-routes');
 await wpage.waitForTimeout(400);
 await wpage.screenshot({ path: `${OUT}/15-wide-routes.png` });
+
+// 16. Title screen (tests skip it unless asked) and a night view.
+const tpage = await wide.newPage();
+await tpage.goto(`${URL}?title`);
+await tpage.waitForSelector('#title h1');
+await tpage.waitForTimeout(700);
+await tpage.screenshot({ path: `${OUT}/16-title.png` });
+await tpage.click('#title');
+await tpage.waitForTimeout(1200);
+if ((await tpage.locator('#title').count()) !== 0) await fail('title screen should go away on tap');
+await tpage.evaluate(() => { const t = window.__aoa.town; t.foundedAt = window.__aoa.clock().now() - 0.66 * 24 * 3600000; });
+await tpage.waitForTimeout(600);
+await tpage.screenshot({ path: `${OUT}/17-night.png` });
 
 await browser.close();
 server.kill();

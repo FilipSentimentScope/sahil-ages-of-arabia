@@ -15,7 +15,7 @@
  *
  * Presentation only: the view reads TownState and reports taps; rules stay in src/core.
  */
-import { Application, BlurFilter, Container, Graphics, Rectangle, Sprite, Text, type Texture } from 'pixi.js';
+import { Application, BlurFilter, Container, Graphics, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
 import type { LoadedContent, PlacedBuilding, TerrainId, TownState } from '../core';
 import { hexAtPoint, hexCentre, hexCorners, hexNeighbours, isOpen, openArea, outputPerHour, storageCap } from '../core';
 import { t } from './i18n';
@@ -66,6 +66,49 @@ interface Float {
   age: number;
 }
 
+interface BuildingNode {
+  c: Container;
+  bubble: Container;
+  glow: Sprite;
+  x: number;
+  y: number;
+}
+
+interface Walker {
+  g: Graphics;
+  fx: number;
+  fy: number;
+  tx: number;
+  ty: number;
+  t: number;
+  speed: number;
+  phase: number;
+}
+
+const BUBBLE_ICON: Record<string, string> = { coin: '🪙', food: '🍞', knowledge: '📜', reputation: '⭐' };
+
+function mix(a: number, b: number, t: number): number {
+  const ch = (sh: number) => Math.round(((a >> sh) & 255) + (((b >> sh) & 255) - ((a >> sh) & 255)) * t);
+  return (ch(16) << 16) | (ch(8) << 8) | ch(0);
+}
+
+/** Sun colour and how dark it is (0 day, 1 night) for a phase of the day in [0, 1), 0 = dawn. */
+export function skyAt(p: number): { tint: number; night: number } {
+  const keys: [number, number, number][] = [
+    [0, 0xffd2a8, 0.25], [0.1, 0xffffff, 0], [0.64, 0xffffff, 0], [0.75, 0xffc08c, 0.2],
+    [0.83, 0x8f9cd4, 1], [0.94, 0x8f9cd4, 1], [1, 0xffd2a8, 0.25],
+  ];
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, c1, n1] = keys[i]!;
+    const [t0, c0, n0] = keys[i - 1]!;
+    if (p <= t1) {
+      const k = (p - t0) / (t1 - t0);
+      return { tint: mix(c0, c1, k), night: n0 + (n1 - n0) * k };
+    }
+  }
+  return { tint: 0xffffff, night: 0 };
+}
+
 /** Cheap repeatable hash in [0, 1) for scattering ground details (looks only, not rules). */
 function hash(x: number, y: number, k: number): number {
   const v = Math.sin(x * 127.1 + y * 311.7 + k * 74.7) * 43758.5453;
@@ -74,6 +117,20 @@ function hash(x: number, y: number, k: number): number {
 
 export class TownView {
   private readonly world = new Container();
+  /** Everything lit by the sun: tinted by the time of day. Lights and labels sit outside it. */
+  private readonly scene = new Container();
+  private readonly waterLayer = new Container();
+  private readonly cloudLayer = new Container();
+  private readonly lightLayer = new Container();
+  private readonly nodes = new Map<number, BuildingNode>();
+  private readonly pops = new Map<number, number>();
+  private readonly walkers: Walker[] = [];
+  private readonly gulls: { g: Graphics; x: number; y: number; v: number; phase: number }[] = [];
+  private readonly clouds: { g: Graphics; v: number }[] = [];
+  private shimmer: TilingSprite[] = [];
+  private giftNode: Container | null = null;
+  private causticTex: Texture | null = null;
+  private glowTex: Texture | null = null;
   /** Ground layers, squashed vertically by FLAT. */
   private readonly ground = new Container();
   private readonly terrainLayer = new Container();
@@ -107,10 +164,13 @@ export class TownView {
     private readonly content: LoadedContent,
     private readonly onTap: (cell: CellTap) => void,
   ) {
-    this.ground.addChild(this.terrainLayer, this.gridLayer, this.highlight);
+    this.ground.addChild(this.terrainLayer, this.waterLayer, this.gridLayer, this.highlight);
     this.ground.scale.y = FLAT;
     this.gridLayer.visible = false;
-    this.world.addChild(this.ground, this.decorLayer, this.buildingLayer, this.fillLayer, this.floatLayer);
+    this.buildingLayer.sortableChildren = true;
+    this.scene.addChild(this.ground, this.decorLayer, this.buildingLayer, this.cloudLayer);
+    this.world.addChild(this.scene, this.lightLayer, this.fillLayer, this.floatLayer);
+    this.makeLife();
     app.stage.addChild(this.world);
     this.bindInput(app.canvas);
   }
@@ -420,6 +480,7 @@ export class TownView {
     const bakedSprite = new Sprite(baked);
     bakedSprite.position.set(bb.x, bb.y);
     this.terrainLayer.addChild(bakedSprite);
+    this.buildWater(s, terrainOf);
     this.drawScenery(s, terrainOf);
   }
 
@@ -565,6 +626,81 @@ export class TownView {
   }
 
   // -------------------------------------------------------------------------
+  // Water: two layers of drifting light on the sea and the creek, masked softly to the water.
+
+  private buildWater(s: TownState, terrainOf: (x: number, y: number) => TerrainId): void {
+    this.waterLayer.removeChildren().forEach((c) => c.destroy({ children: true }));
+    this.shimmer = [];
+    if (!this.causticTex) this.causticTex = causticTexture();
+    const shape = new Graphics();
+    for (let y = -RING; y < s.height + RING; y++) {
+      for (let x = -RING; x < s.width + RING; x++) {
+        const t = terrainOf(x, y);
+        if (t !== 'sea' && t !== 'creek') continue;
+        const { px, py } = hexCentre(x, y, S);
+        shape.poly(hexCorners(px, py, S * 0.96)).fill(0xffffff);
+      }
+    }
+    const far = hexCentre(0, s.height + RING - 1, S).py;
+    shape.rect(-3000, far, 8000, 3000).fill(0xffffff);
+    // A plain cut-out mask: a soft (filtered) mask would flatten the additive light to black.
+    const b = shape.getLocalBounds();
+    const mask = shape;
+    const light = new Container();
+    for (const [scale, alpha] of [[1.6, 0.5], [2.7, 0.35]] as const) {
+      const ts = new TilingSprite({ texture: this.causticTex, width: b.width, height: b.height });
+      ts.position.set(b.x, b.y);
+      ts.tileScale.set(scale, scale * 0.8);
+      ts.alpha = alpha;
+      ts.blendMode = 'add';
+      light.addChild(ts);
+      this.shimmer.push(ts);
+    }
+    light.mask = mask;
+    this.waterLayer.addChild(mask, light);
+  }
+
+  // -------------------------------------------------------------------------
+  // Life: townspeople, gulls and cloud shadows. Made once; only moved each frame.
+
+  private makeLife(): void {
+    for (let i = 0; i < 10; i++) {
+      const g = new Graphics();
+      const robe = [0xf7f1e3, 0xe9dcc0, 0xd9c7a0, 0x9c5a3c, 0x4f6f8a][i % 5]!;
+      g.ellipse(0, 0, 3.4, 1.4).fill({ color: 0x2b2118, alpha: 0.25 });
+      g.roundRect(-2, -9, 4, 8.5, 1.6).fill(robe);
+      g.circle(0, -10.6, 2).fill(0xc99a72);
+      g.rect(-2.2, -12.6, 4.4, 1.6).fill(i % 2 ? 0xffffff : 0xb3312a);
+      g.visible = false;
+      this.buildingLayer.addChild(g);
+      this.walkers.push({ g, fx: 0, fy: 0, tx: 0, ty: 0, t: 1, speed: 0.00006 + (i % 4) * 0.00002, phase: i * 1.7 });
+    }
+    for (let i = 0; i < 3; i++) {
+      const g = new Graphics().ellipse(0, 0, 150 + i * 60, 46 + i * 14).fill({ color: 0x1d2a44, alpha: 0.07 });
+      g.position.set(-400 + i * 520, 120 + i * 190);
+      this.cloudLayer.addChild(g);
+      this.clouds.push({ g, v: 0.004 + i * 0.0015 });
+    }
+    for (let i = 0; i < 4; i++) {
+      const g = new Graphics();
+      g.moveTo(-5, -2).quadraticCurveTo(-2.5, -4.5, 0, 0).quadraticCurveTo(2.5, -4.5, 5, -2).stroke({ width: 1.4, color: 0xffffff, cap: 'round' });
+      this.cloudLayer.addChild(g);
+      this.gulls.push({ g, x: -200 + i * 330, y: 430 + (i % 2) * 90 - i * 22, v: 0.018 + i * 0.004, phase: i * 2.1 });
+    }
+  }
+
+  private retarget(w: Walker, s: TownState): void {
+    const n = s.buildings.length;
+    const pick = s.buildings[Math.floor(Math.random() * n)]!;
+    const { px, py } = hexCentre(pick.x, pick.y, S);
+    w.fx = w.tx;
+    w.fy = w.ty;
+    w.tx = px + (Math.random() - 0.5) * S * 0.9;
+    w.ty = py * FLAT + S * 0.34 + Math.random() * 6;
+    w.t = 0;
+  }
+
+  // -------------------------------------------------------------------------
   // Buildings
 
   /** Rebuild building shapes when the layout changes (placement, upgrade, language). */
@@ -573,48 +709,83 @@ export class TownView {
     if (version === this.builtVersion) return;
     this.builtVersion = version;
     this.drawTerrain(s); // no-op unless the open block or map changed
-    this.buildingLayer.removeChildren().forEach((c) => c.destroy({ children: true }));
-    // Back rows first so buildings lower on the board overlap the ones behind them.
-    const ordered = [...s.buildings].sort((a, b) => a.y - b.y || a.x - b.x);
-    for (const b of ordered) this.buildingLayer.addChild(this.drawBuilding(b));
+    for (const n of this.nodes.values()) {
+      n.c.destroy({ children: true });
+      n.glow.destroy();
+    }
+    this.nodes.clear();
+    if (!this.glowTex) this.glowTex = glowTexture();
+    for (const b of s.buildings) {
+      const node = this.drawBuilding(b);
+      this.nodes.set(b.uid, node);
+      this.buildingLayer.addChild(node.c);
+      this.lightLayer.addChild(node.glow);
+    }
+    if (!this.giftNode) {
+      this.giftNode = giftShape();
+      this.lightLayer.addChild(this.giftNode);
+    }
   }
 
-  private drawBuilding(b: PlacedBuilding): Container {
+  /** Bounce a building (just placed or upgraded). */
+  pop(uid: number): void {
+    this.pops.set(uid, performance.now());
+  }
+
+  /** True when a building's store is at least half full: one tap on it collects. */
+  isReady(s: TownState, b: PlacedBuilding): boolean {
+    const cap = storageCap(s, this.content, b);
+    return cap > 0 && b.stored >= Math.max(1, cap * 0.5);
+  }
+
+  private drawBuilding(b: PlacedBuilding): BuildingNode {
     const def = this.content.building(b.defId);
     const { px, py: rawY } = hexCentre(b.x, b.y, S);
     const py = rawY * FLAT;
     const c = new Container();
+    c.position.set(px, py + S * 0.42);
+    c.zIndex = py + S * 0.42;
     const art = this.buildingArt[b.defId];
-    // A soft contact shadow on the tilted ground.
-    c.addChild(new Graphics().ellipse(px, py + S * 0.2, HEX_W * 0.38, S * 0.2).fill({ color: 0x3a2a18, alpha: 0.2 }));
+    // Contact shadow, then a longer soft shadow thrown to the side.
+    c.addChild(new Graphics().ellipse(S * 0.2, -S * 0.2, HEX_W * 0.42, S * 0.2).fill({ color: 0x2b1c0e, alpha: 0.16 }));
+    c.addChild(new Graphics().ellipse(0, -S * 0.22, HEX_W * 0.36, S * 0.17).fill({ color: 0x2b1c0e, alpha: 0.22 }));
     if (art) {
-      // Centred on its plot at 88% of the hex width; the base sits just below the centre.
       const sprite = new Sprite(art);
-      const drawn = HEX_W * 0.88;
+      const drawn = HEX_W * 0.9;
       sprite.anchor.set(0.5, 0.94);
       sprite.width = drawn;
       sprite.height = drawn;
-      sprite.position.set(px, py + S * 0.42);
       c.addChild(sprite);
     } else {
-      const corners = hexCorners(px, rawY, S * 0.72).map((v, i) => (i % 2 ? v * FLAT : v));
-      const body = new Graphics()
-        .poly(corners)
-        .fill(def.tags.includes('water') ? RESOURCE_COLOUR.water! : (RESOURCE_COLOUR[def.produces ?? 'none'] ?? 0x888888))
-        // Magenta border marks a placeholder asset, per the asset rules in CLAUDE.md.
-        .stroke({ width: 2, color: 0xb0307a, alpha: 0.8 });
-      c.addChild(body);
-      const name = new Text({
-        text: t(def.nameKey),
-        resolution: 3,
-        style: { fontSize: 10, fill: 0xffffff, wordWrap: true, wordWrapWidth: S * 1.2, align: 'center', breakWords: true },
-      });
-      name.anchor.set(0.5);
-      name.position.set(px, py);
-      c.addChild(name);
+      const corners = hexCorners(0, 0, S * 0.72).map((v, i) => (i % 2 ? v * FLAT - S * 0.42 : v));
+      c.addChild(
+        new Graphics()
+          .poly(corners)
+          .fill(def.tags.includes('water') ? RESOURCE_COLOUR.water! : (RESOURCE_COLOUR[def.produces ?? 'none'] ?? 0x888888))
+          // Magenta border marks a placeholder asset, per the asset rules in CLAUDE.md.
+          .stroke({ width: 2, color: 0xb0307a, alpha: 0.8 }),
+      );
     }
-    if (def.firstUpgradeCost > 0 || def.produces) c.addChild(this.levelBadge(b.level, px - HEX_W * 0.36, py + S * 0.3));
-    return c;
+    if (def.firstUpgradeCost > 0 || def.produces) c.addChild(this.levelBadge(b.level, -HEX_W * 0.36, -S * 0.12));
+    // "Ready" bubble: shown when the store is half full; a tap on the building collects.
+    const bubble = new Container();
+    bubble.addChild(new Graphics().circle(0, 0, 11).fill(0xfff6dc).stroke({ width: 2, color: 0xe2b85c }).poly([-4, 9, 4, 9, 0, 15]).fill(0xfff6dc));
+    if (def.produces) {
+      const ic = new Text({ text: BUBBLE_ICON[def.produces] ?? '', resolution: 3, style: { fontSize: 12 } });
+      ic.anchor.set(0.5);
+      bubble.addChild(ic);
+    }
+    bubble.position.set(0, -HEX_W * 0.86);
+    bubble.visible = false;
+    c.addChild(bubble);
+    // Warm window light for the night.
+    const glow = new Sprite(this.glowTex!);
+    glow.anchor.set(0.5);
+    glow.position.set(px, py - S * 0.1);
+    glow.scale.set(def.produces || def.tags.includes('home') ? 1 : 0.7);
+    glow.blendMode = 'add';
+    glow.alpha = 0;
+    return { c, bubble, glow, x: px, y: py };
   }
 
   /** Small level number in a dark disc, readable on both painted art and placeholders. */
@@ -629,36 +800,98 @@ export class TownView {
     return badge;
   }
 
-  /** Per-frame: storage bars, "full" markers, the selection ring, placement glow and floating text. */
-  frame(s: TownState, selectedDef: string | null, canPlaceAt: (x: number, y: number) => boolean, dtMs = 16): void {
+  /**
+   * Per-frame: time-of-day light, water, townspeople, storage bars, ready bubbles, the gift,
+   * placement glow and floating text. Moves existing objects only.
+   */
+  frame(s: TownState, selectedDef: string | null, canPlaceAt: (x: number, y: number) => boolean, dtMs = 16, dayPhase = 0.3): void {
     this.hoverTown = s;
+    const nowMs = performance.now();
+    const sec = nowMs / 1000;
+    const sky = skyAt(dayPhase);
+    this.scene.tint = sky.tint;
+    this.shimmer.forEach((ts, i) => {
+      ts.tilePosition.x += dtMs * (i ? -0.006 : 0.009);
+      ts.tilePosition.y += dtMs * (i ? 0.004 : 0.003);
+    });
+    for (const cl of this.clouds) {
+      cl.g.x += dtMs * cl.v;
+      if (cl.g.x > this.bounds.x1 + 500) cl.g.x = this.bounds.x0 - 500;
+    }
+    for (const gl of this.gulls) {
+      gl.x += dtMs * gl.v;
+      if (gl.x > this.bounds.x1 + 300) gl.x = this.bounds.x0 - 300;
+      gl.g.position.set(gl.x, gl.y + Math.sin(sec * 0.6 + gl.phase) * 14);
+      gl.g.scale.y = 0.55 + 0.45 * Math.sin(sec * 7 + gl.phase);
+      gl.g.alpha = 1 - sky.night * 0.8;
+    }
+    // Townspeople stroll between buildings by day and go home at night.
+    const active = s.buildings.length >= 2 ? Math.min(this.walkers.length, s.buildings.length + 1) : 0;
+    this.walkers.forEach((w, i) => {
+      const on = i < active && sky.night < 0.9;
+      w.g.visible = on;
+      if (!on) return;
+      if (w.t >= 1) this.retarget(w, s);
+      if (w.fx === 0 && w.fy === 0) {
+        w.fx = w.tx;
+        w.fy = w.ty;
+      }
+      const dist = Math.max(20, Math.hypot(w.tx - w.fx, w.ty - w.fy));
+      w.t = Math.min(1, w.t + (dtMs * w.speed * 300) / dist);
+      const x = w.fx + (w.tx - w.fx) * w.t;
+      const y = w.fy + (w.ty - w.fy) * w.t;
+      w.g.position.set(x, y - Math.abs(Math.sin(sec * 7 + w.phase)) * 1.2);
+      w.g.zIndex = y;
+    });
+
     this.fillLayer.clear();
     for (const b of s.buildings) {
-      const { px, py: rawY } = hexCentre(b.x, b.y, S);
-      const py = rawY * FLAT;
+      const node = this.nodes.get(b.uid);
+      if (!node) continue;
+      const { x: px, y: py } = node;
+      const start = this.pops.get(b.uid);
+      if (start !== undefined) {
+        const t = (nowMs - start) / 520;
+        if (t >= 1) {
+          this.pops.delete(b.uid);
+          node.c.scale.set(1);
+        } else {
+          const k = 1 + Math.sin(t * Math.PI * 2.5) * 0.22 * (1 - t);
+          node.c.scale.set(2 - k, k); // squash and stretch
+        }
+      }
+      node.glow.alpha = sky.night * (0.5 + 0.08 * Math.sin(sec * 5 + b.uid));
       if (b.uid === this.selectedUid) {
         this.fillLayer.ellipse(px, py + S * 0.2, HEX_W * 0.48, S * 0.32).stroke({ width: 3, color: 0xffe08a, alpha: 0.95 });
       }
       const rate = outputPerHour(s, this.content, b);
-      if (rate <= 0) continue;
+      if (rate <= 0) {
+        node.bubble.visible = false;
+        continue;
+      }
       const cap = storageCap(s, this.content, b);
       const share = cap > 0 ? Math.min(1, b.stored / cap) : 0;
+      const ready = this.isReady(s, b);
+      node.bubble.visible = ready;
+      if (ready) {
+        node.bubble.y = -HEX_W * 0.86 + Math.sin(sec * 3 + b.uid) * 2.5;
+        node.bubble.scale.set(share >= 1 ? 1.15 + 0.08 * Math.sin(sec * 6) : 1);
+      }
       const w = HEX_W * 0.5;
       const x = px - w / 2 + 6;
       const y = py + S * 0.5;
       this.fillLayer.roundRect(x, y, w, 5, 2.5).fill({ color: 0x000000, alpha: 0.35 });
       this.fillLayer.roundRect(x, y, Math.max(1, w * share), 5, 2.5).fill(share >= 1 ? 0xffd75e : 0xffffff);
-      if (share >= 1) {
-        // A bobbing "ready" marker above a full building.
-        const bob = Math.sin(performance.now() / 300 + b.uid) * 2;
-        this.fillLayer.circle(px + HEX_W * 0.3, py - S * 0.95 + bob, 7).fill(0xffd75e).stroke({ width: 1.5, color: 0x8a5a2b });
-      }
     }
-    const now = performance.now() / 1000;
-    for (const b of this.boats) {
-      // Slow drift along the coast and a gentle bob: existing objects only, nothing created.
-      b.c.x = b.x + Math.sin(now * 0.08 + b.phase) * b.range;
-      b.c.y = b.y + Math.sin(now * 1.3 + b.phase) * 1.2;
+    if (this.giftNode) {
+      const gift = s.progress.gift;
+      this.giftNode.visible = !!gift;
+      if (gift) {
+        const { px, py } = hexCentre(gift.x, gift.y, S);
+        this.giftNode.position.set(px, py * FLAT + Math.sin(sec * 2.4) * 2);
+        this.giftNode.children[0]!.alpha = 0.55 + 0.35 * Math.sin(sec * 4);
+        this.giftNode.children[0]!.rotation = sec * 0.6;
+      }
     }
     for (let i = this.floats.length - 1; i >= 0; i--) {
       const f = this.floats[i]!;
@@ -670,10 +903,14 @@ export class TownView {
         this.floats.splice(i, 1);
       }
     }
+    for (const b of this.boats) {
+      b.c.x = b.x + Math.sin(sec * 0.08 + b.phase) * b.range;
+      b.c.y = b.y + Math.sin(sec * 1.3 + b.phase) * 1.2;
+    }
     this.highlight.clear();
     this.setPlacing(!!selectedDef);
     if (!selectedDef) return;
-    const pulse = 0.25 + 0.15 * Math.sin(performance.now() / 250);
+    const pulse = 0.25 + 0.15 * Math.sin(nowMs / 250);
     for (let y = 0; y < s.height; y++) {
       for (let x = 0; x < s.width; x++) {
         if (!canPlaceAt(x, y)) continue;
@@ -682,6 +919,68 @@ export class TownView {
       }
     }
   }
+}
+
+/** A tileable texture of soft wave glints, drawn once on a canvas. */
+function causticTexture(): Texture {
+  const n = 256;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = n;
+  const g = cv.getContext('2d')!;
+  g.lineCap = 'round';
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 46; i++) {
+    const x = rnd() * n;
+    const y = rnd() * n;
+    const w = 14 + rnd() * 30;
+    g.strokeStyle = `rgba(255,255,255,${0.1 + rnd() * 0.22})`;
+    g.lineWidth = 1 + rnd() * 1.6;
+    for (const ox of [-n, 0, n]) {
+      for (const oy of [-n, 0, n]) {
+        g.beginPath();
+        g.moveTo(x + ox - w / 2, y + oy);
+        g.quadraticCurveTo(x + ox - w / 4, y + oy - 3, x + ox, y + oy);
+        g.quadraticCurveTo(x + ox + w / 4, y + oy + 3, x + ox + w / 2, y + oy);
+        g.stroke();
+      }
+    }
+  }
+  return Texture.from(cv);
+}
+
+/** A soft warm disc for window light. */
+function glowTexture(): Texture {
+  const n = 128;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = n;
+  const g = cv.getContext('2d')!;
+  const grad = g.createRadialGradient(n / 2, n / 2, 2, n / 2, n / 2, n / 2);
+  grad.addColorStop(0, 'rgba(255,196,110,0.85)');
+  grad.addColorStop(0.4, 'rgba(255,170,80,0.3)');
+  grad.addColorStop(1, 'rgba(255,150,60,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, n, n);
+  return Texture.from(cv);
+}
+
+/** The sea gift: a pearl shell with turning rays behind it. */
+function giftShape(): Container {
+  const c = new Container();
+  const rays = new Graphics();
+  for (let i = 0; i < 8; i++) {
+    const a = (Math.PI * 2 * i) / 8;
+    rays.poly([0, 0, Math.cos(a - 0.14) * 26, Math.sin(a - 0.14) * 26, Math.cos(a + 0.14) * 26, Math.sin(a + 0.14) * 26]).fill({ color: 0xfff1b8, alpha: 0.9 });
+  }
+  const shell = new Graphics();
+  shell.ellipse(0, 6, 12, 4).fill({ color: 0x2b1c0e, alpha: 0.25 });
+  shell.poly([-12, 0, -8, -9, 0, -12, 8, -9, 12, 0, 0, 7]).fill(0xf3e2c4).stroke({ width: 1.5, color: 0xa8875a });
+  for (const dx of [-6, -3, 0, 3, 6]) shell.moveTo(0, 6).lineTo(dx * 1.6, -9 + Math.abs(dx) * 0.5).stroke({ width: 1, color: 0xc9a877, alpha: 0.8 });
+  shell.circle(0, -1, 4).fill(0xffffff).stroke({ width: 1, color: 0xd8d2e8 });
+  shell.circle(-1.3, -2.3, 1.2).fill({ color: 0xffffff, alpha: 0.9 });
+  c.addChild(rays, shell);
+  c.visible = false;
+  return c;
 }
 
 // ---------------------------------------------------------------------------

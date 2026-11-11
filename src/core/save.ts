@@ -6,7 +6,7 @@
 import type { ClockSnapshot } from './clock';
 import type { TownState } from './settlement';
 
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;
 
 export interface SaveFile {
   version: number;
@@ -42,11 +42,12 @@ export function deserialize(text: string): SaveFile {
   if (f.version === 3) migrateV3(f);
   if (f.version === 4) migrateV4(f);
   if (f.version === 5) migrateV5(f);
+  if (f.version === 6) migrateV6(f);
   if (f.version !== SAVE_VERSION) throw new SaveError(`Unsupported save version ${String(f.version)}`);
   if (!f.clock || typeof f.clock.game !== 'number' || typeof f.clock.real !== 'number' || !(f.clock.scale > 0)) {
     throw new SaveError('Save file clock is invalid');
   }
-  if (!f.town || f.town.schema !== 6 || !Array.isArray(f.town.buildings)) {
+  if (!f.town || f.town.schema !== 7 || !Array.isArray(f.town.buildings)) {
     throw new SaveError('Save file town is invalid');
   }
   return f as SaveFile;
@@ -110,6 +111,17 @@ function migrateV4(f: Partial<SaveFile>): void {
 }
 
 /** Version 5 saves predate real questions: placeholder answers keep counting, nothing is marked answered. */
+/** Version 6 saves predate tasks and gifts: nothing claimed, counters at zero. */
+function migrateV6(f: Partial<SaveFile>): void {
+  const town = f.town as unknown as Record<string, unknown> | undefined;
+  if (town && town.schema === 6) {
+    town.schema = 7;
+    const now = typeof town.lastTick === 'number' ? town.lastTick : 0;
+    town.progress = { claimed: [], stats: { routesDone: 0, foodSold: 0, gifts: 0 }, gift: null, nextGiftAt: now + 10 * 60_000 };
+  }
+  f.version = 7;
+}
+
 function migrateV5(f: Partial<SaveFile>): void {
   const town = f.town as unknown as Record<string, unknown> | undefined;
   if (town && town.schema === 5) {

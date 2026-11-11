@@ -45,7 +45,7 @@ export interface ActiveRoute {
 }
 
 export interface TownState {
-  schema: 6;
+  schema: 7;
   /** Game time the town was founded; market days count from here. */
   foundedAt: number;
   mapId: string;
@@ -82,6 +82,13 @@ export interface TownState {
   hull: { damaged: boolean; repairDoneAt: number | null };
   /** Relations with rival towns, by id. The full scale comes with P4-03. */
   relations: Record<string, number>;
+  /** Town tasks, counters they read, and the sea gift [RECOMMENDATION]. See tasks.ts. */
+  progress: {
+    claimed: string[];
+    stats: { routesDone: number; foodSold: number; gifts: number };
+    gift: { x: number; y: number; until: number } | null;
+    nextGiftAt: number;
+  };
   /** Progress on the age's three goals [GDD section 4]. See age.ts. */
   age: {
     /** Trunk nodes started (a node counts as learned once its research time has passed). */
@@ -125,7 +132,11 @@ export type ActionError =
   | 'landmark_locked'
   | 'unknown_question'
   | 'already_answered'
-  | 'question_cap';
+  | 'question_cap'
+  | 'unknown_task'
+  | 'task_not_done'
+  | 'task_claimed'
+  | 'no_gift';
 
 export type Result<T = object> = ({ ok: true } & T) | { ok: false; error: ActionError };
 
@@ -137,7 +148,8 @@ export function createTown(content: LoadedContent, gameNow: number, seed: number
   const terrain: TerrainId[] = [];
   for (const row of map.rows) for (const ch of row) terrain.push(map.terrainCodes[ch] as TerrainId);
   return {
-    schema: 6,
+    schema: 7,
+    progress: { claimed: [], stats: { routesDone: 0, foodSold: 0, gifts: 0 }, gift: null, nextGiftAt: gameNow + 10 * 60_000 },
     age: { node: 0, researchDoneAt: gameNow, stage: 0, questions: 0, answered: [], missed: [], questionsToday: { day: 0, count: 0 } },
     rngState: seed >>> 0,
     routes: [],

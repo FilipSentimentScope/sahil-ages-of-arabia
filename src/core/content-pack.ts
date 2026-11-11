@@ -6,6 +6,7 @@ import routesFile from '../../content/routes.json';
 import ageGoalsFile from '../../content/age5-goals.json';
 import questionsFile from '../../content/questions/age5.json';
 import archiveFile from '../../content/archive/age5.json';
+import tasksFile from '../../content/tasks.json';
 import { loadContent, type LoadedContent } from './content';
 import type { AgeGoalsConfig, ArchiveConfig, BalanceConfig, BuildingDef, MapDef, QuestionsConfig, RoutesConfig } from './types';
 
@@ -18,5 +19,6 @@ export function loadDefaultContent(): LoadedContent {
     ageGoals: ageGoalsFile as unknown as AgeGoalsConfig,
     questions: questionsFile as unknown as QuestionsConfig,
     archive: archiveFile as unknown as ArchiveConfig,
+    tasks: tasksFile as unknown as import('./types').TasksConfig,
   });
 }

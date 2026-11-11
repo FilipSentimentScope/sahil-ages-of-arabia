@@ -33,7 +33,7 @@ export class AgePanel {
   summary(): string {
     const p = ageProgress(this.host.town(), this.host.content, this.host.now());
     if (p.complete) return t('ui.age_complete');
-    return `🏰 ${t('ui.age_goals')} · 📜 ${p.research.done}/${p.research.of} · 🏯 ${p.landmark.done}/${p.landmark.of} · 📖 ${p.chronicle.done}/${p.chronicle.of}`;
+    return `📜 ${p.research.done}/${p.research.of} · 🏯 ${p.landmark.done}/${p.landmark.of} · 📖 ${p.chronicle.done}/${p.chronicle.of}`;
   }
 
   show(): void {

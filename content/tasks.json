@@ -1,0 +1,201 @@
+{
+  "_note": "DRAFT town tasks, ranks and sea gifts [RECOMMENDATION, 11 Nov 2026: not in GDD v4.0; added to give players short goals with rewards and a reason to look at the map]. Rewards are small beside the age's goal costs (total about 10,000 coin against 470,000). Sea gift: every everyMinutes of game time a gift washes ashore for lastsMinutes; it pays incomeMinutes of the town's coin income, at least minCoin. Not yet in the economy simulator.",
+  "status": "draft",
+  "ranks": [
+    {
+      "id": "camp",
+      "tasks": 0
+    },
+    {
+      "id": "hamlet",
+      "tasks": 3
+    },
+    {
+      "id": "village",
+      "tasks": 7
+    },
+    {
+      "id": "town",
+      "tasks": 12
+    },
+    {
+      "id": "port",
+      "tasks": 17
+    }
+  ],
+  "gifts": {
+    "everyMinutes": 30,
+    "lastsMinutes": 45,
+    "incomeMinutes": 5,
+    "minCoin": 15
+  },
+  "tasks": [
+    {
+      "id": "first_well",
+      "kind": "buildings",
+      "defId": "well",
+      "count": 1,
+      "reward": {
+        "coin": 30
+      }
+    },
+    {
+      "id": "first_grove",
+      "kind": "buildings",
+      "defId": "date_grove",
+      "count": 1,
+      "reward": {
+        "coin": 30
+      }
+    },
+    {
+      "id": "sell_food",
+      "kind": "food_sold",
+      "count": 20,
+      "reward": {
+        "coin": 40
+      }
+    },
+    {
+      "id": "souq",
+      "kind": "buildings",
+      "defId": "souq",
+      "count": 1,
+      "reward": {
+        "coin": 50
+      }
+    },
+    {
+      "id": "first_route",
+      "kind": "routes_done",
+      "count": 1,
+      "reward": {
+        "coin": 60
+      }
+    },
+    {
+      "id": "homes",
+      "kind": "buildings",
+      "defId": "barasti_house",
+      "count": 2,
+      "reward": {
+        "coin": 60
+      }
+    },
+    {
+      "id": "level3",
+      "kind": "building_level",
+      "count": 3,
+      "reward": {
+        "coin": 80
+      }
+    },
+    {
+      "id": "scribe",
+      "kind": "buildings",
+      "defId": "scribe_house",
+      "count": 1,
+      "reward": {
+        "knowledge": 60
+      }
+    },
+    {
+      "id": "questions3",
+      "kind": "questions",
+      "count": 3,
+      "reward": {
+        "knowledge": 80
+      }
+    },
+    {
+      "id": "jetty",
+      "kind": "buildings",
+      "defId": "jetty",
+      "count": 1,
+      "reward": {
+        "coin": 120
+      }
+    },
+    {
+      "id": "gifts3",
+      "kind": "gifts",
+      "count": 3,
+      "reward": {
+        "coin": 100
+      }
+    },
+    {
+      "id": "routes5",
+      "kind": "routes_done",
+      "count": 5,
+      "reward": {
+        "coin": 200
+      }
+    },
+    {
+      "id": "ten_buildings",
+      "kind": "buildings",
+      "count": 10,
+      "reward": {
+        "coin": 250
+      }
+    },
+    {
+      "id": "merchant",
+      "kind": "buildings",
+      "defId": "pearl_merchant",
+      "count": 1,
+      "reward": {
+        "coin": 300
+      }
+    },
+    {
+      "id": "research1",
+      "kind": "research",
+      "count": 1,
+      "reward": {
+        "coin": 400
+      }
+    },
+    {
+      "id": "level8",
+      "kind": "building_level",
+      "count": 8,
+      "reward": {
+        "coin": 500
+      }
+    },
+    {
+      "id": "routes15",
+      "kind": "routes_done",
+      "count": 15,
+      "reward": {
+        "coin": 800
+      }
+    },
+    {
+      "id": "chronicle",
+      "kind": "questions",
+      "count": 8,
+      "reward": {
+        "knowledge": 300
+      }
+    },
+    {
+      "id": "research3",
+      "kind": "research",
+      "count": 3,
+      "reward": {
+        "coin": 2000
+      }
+    },
+    {
+      "id": "fort1",
+      "kind": "fort",
+      "count": 1,
+      "reward": {
+        "coin": 3000
+      }
+    }
+  ]
+}

@@ -2,6 +2,20 @@
 
 Playtest feedback and what changed in response. Newest first.
 
+## Revamp, 11 Nov 2026 (interface v3)
+
+Filip asked for a full visual revamp for investors and more interaction.
+
+| Area | What changed | Where |
+| --- | --- | --- |
+| World | Animated light on the sea and creek; day and night by the game clock with warm window light at night; townspeople walking between buildings; gulls and cloud shadows; buildings bounce when placed or upgraded; soft thrown shadows | `town-view.ts` |
+| Interface | Title screen; El Messiri display typeface (Latin and Arabic); painted medallion icons replace emoji for resources and actions; navy and gold panels with a geometric pattern; pressed-button feel; vignette | `styles.css`, `icons.ts`, `main.ts` |
+| Interaction | Ready bubbles over buildings: one tap collects; rewards fly to the top bar; sea gifts wash ashore to tap; tasks with rewards and five town ranks (camp to pearl port) with a celebration | `src/core/tasks.ts`, `content/tasks.json`, `main.ts` |
+
+Limits: buildings, ground, Rawi and scenery are still Gemini images or code drawings. Truly
+high-fidelity art needs the painted sets in IMAGE_PROMPTS (terrain tiles, decor, Rawi) or an artist.
+Tasks, ranks and gifts are a [RECOMMENDATION], not GDD design, and are not in the simulator yet.
+
 ## Filip, 3 Nov 2026 morning
 
 | Feedback | What we changed | Where |

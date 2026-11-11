@@ -8,3 +8,4 @@ export * from './save';
 export * from './market';
 export * from './routes';
 export * from './age';
+export * from './tasks';

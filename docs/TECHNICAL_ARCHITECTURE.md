@@ -37,6 +37,7 @@ Content     Buildings, leaders | Routes, decisions | Questions, Archive | Text e
 | `core/content-pack.ts` | Bundles the default JSON files | via others |
 | `core/hex.ts` | Hex geometry: pointy-top, odd rows shifted right; neighbours, plot to pixel and tap to plot | yes |
 | `core/age.ts` | The age's three goals: research trunk, landmark stages, Chronicle count | yes |
+| `core/tasks.ts` | Town tasks, ranks and sea gifts | yes |
 | `core/routes.ts` | Routes, decision points, outcomes from the seeded Rng, hull repair, daily limit | yes |
 | `core/settlement.ts` | Grid, placement, open and locked land, growth per age, water, production, storage, upgrades, treasury | yes |
 | `core/save.ts` | Versioned save files, storage adapter | yes |

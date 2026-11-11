@@ -126,6 +126,7 @@ export interface ContentPack {
   ageGoals: AgeGoalsConfig;
   questions: QuestionsConfig;
   archive: ArchiveConfig;
+  tasks: TasksConfig;
 }
 
 // ---------------------------------------------------------------------------
@@ -263,4 +264,26 @@ export interface ArchivePage {
 export interface ArchiveConfig {
   pages: ArchivePage[];
   sourceList: Record<string, string> | { id: string; [k: string]: unknown }[];
+}
+
+// ---------------------------------------------------------------------------
+// Town tasks, ranks and sea gifts [RECOMMENDATION, 11 Nov 2026; not in GDD v4.0]
+
+export type TaskKind = 'buildings' | 'building_level' | 'routes_done' | 'food_sold' | 'gifts' | 'questions' | 'research' | 'fort';
+
+export interface TaskDef {
+  id: string;
+  kind: TaskKind;
+  /** For 'buildings': count only this building; absent means any building. */
+  defId?: string;
+  count: number;
+  reward: { coin?: number; knowledge?: number };
+}
+
+export interface TasksConfig {
+  status: ContentStatus;
+  /** Ranks in order; a rank is held once this many tasks are claimed. */
+  ranks: { id: string; tasks: number }[];
+  gifts: { everyMinutes: number; lastsMinutes: number; incomeMinutes: number; minCoin: number };
+  tasks: TaskDef[];
 }

@@ -7,6 +7,7 @@ import {
   createTown,
   deserialize,
   nextQuestion,
+  questionDay,
   questionsLeftToday,
   unlockedArchive,
 } from '../../src/core';
@@ -74,5 +75,16 @@ describe('history questions for the Chronicle [GDD section 18]', () => {
     const f = deserialize(JSON.stringify(v5));
     expect(f.version).toBe(SAVE_VERSION);
     expect(f.town.age.answered).toEqual([]);
+  });
+
+  it('counts questions per town day, so a new day brings a new allowance (the daily offer hangs on this)', () => {
+    const s = createTown(c, T0);
+    expect(questionDay(s, T0)).toBe(0);
+    expect(questionDay(s, T0 + 23 * HOUR_MS)).toBe(0);
+    expect(questionDay(s, T0 + 25 * HOUR_MS)).toBe(1);
+    const q = nextQuestion(s, c)!;
+    answerQuestion(s, c, q.id, q.answer, T0);
+    expect(questionsLeftToday(s, c, T0)).toBe(c.questions.dailyCap - 1);
+    expect(questionsLeftToday(s, c, T0 + 25 * HOUR_MS)).toBe(c.questions.dailyCap);
   });
 });

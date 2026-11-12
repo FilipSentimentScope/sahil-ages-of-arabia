@@ -86,3 +86,20 @@ text scrolls a little.
 
 Still open: painted pages to replace the code drawings; a native Arabic writer; historian review;
 the GDD's Age VII line ("seven emirates signed") should be corrected to six plus Ras Al Khaimah in 1972.
+
+## 12 Nov 2026, later: lore retold, daily questions
+
+Filip: the lore read "like a robot"; he wants fantasy language and one flowing story across all
+periods, with the player as a traveller through time. Also: questions should pop up once a day as an
+option to earn knowledge. And Gemini prompts for the lore pictures.
+
+Done: the nine pages are rewritten in the second person. Suhail opens a road through time, Rawi walks
+with the player, each page ends by leading into the next, and the last hands over an empty shore.
+Facts and sources are unchanged; only Rawi speaks. Painted pages dropped into assets/lore/ now replace
+the code drawings automatically. Prompts: assets/prompts/LORE_GEMINI_PROMPTS.md.
+
+Daily questions: once a town day (24 minutes in Showcase time, a real day in Playtest time) a card
+from Rawi offers the day's questions and names the reward. The 150-second reminder bubble stays for
+players who chose "Later" while the Chronicle is unfinished.
+
+Still open (A26): how many questions a day, and how many the Chronicle needs.

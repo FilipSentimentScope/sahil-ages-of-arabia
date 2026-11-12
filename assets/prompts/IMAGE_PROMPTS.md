@@ -150,6 +150,8 @@ a plain background, no ground tile or water block under it, three-quarter top-do
 
 ## Round 6 (12 Nov): painted pages for The Book of Suhail
 
+**Superseded the same day by [LORE_GEMINI_PROMPTS.md](LORE_GEMINI_PROMPTS.md)** (full copy-ready Gemini prompts for the retold book, with the traveller and Rawi on every page). The table below is the first sketch, kept for the record.
+
 Nine illustrations, 4:3, 2048 px wide, same painted-canvas style block as the style frames. Each must
 show one bright star low in the sky (Suhail) and leave no text in the image. No recognisable real
 person in any of them; Age II shows buildings only, no human figures at all.

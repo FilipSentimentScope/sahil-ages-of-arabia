@@ -74,5 +74,5 @@ with the human composer's score as AUDIO_DIRECTION already plans. Not legal advi
 | Interface | El Messiri typeface (SIL Open Font License, via @fontsource) | Keep, or the brand typeface when chosen |
 | Town view | Scenery drawn in code: oasis, palms, rocks, scrub, dune crests, dhows (drifting) on land outside the town and on the sea | Decor set DEC-01..08 (IMAGE_PROMPTS round 5) |
 | Tutorial | Rawi portrait drawn in code (src/client/icons.ts, rawiAvatar) since 11 Nov; replaces: |  dashed magenta circle reading "Rawi (art to come)" | Rawi portrait (RAWI prompt) |
-| Lore book | Nine page illustrations drawn in code as SVG (src/client/lore.ts), with a paper grain; not marked magenta because they are finished stand-ins shown full-size, listed here instead | Painted pages LORE-01..09 (IMAGE_PROMPTS round 6) |
+| Lore book | Nine page illustrations drawn in code as SVG (src/client/lore.ts), with a paper grain; not marked magenta because they are finished stand-ins shown full-size, listed here instead | Painted pages from assets/prompts/LORE_GEMINI_PROMPTS.md; a file named lore_<page id>_v<NN> in assets/lore/ replaces a drawing automatically |
 | Interface | System font, plain panels | Interface kit (Phase 5) |

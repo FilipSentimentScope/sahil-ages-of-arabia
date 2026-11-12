@@ -1,99 +1,186 @@
 {
-  "_about": "The Book of Suhail: the lore book shown to first-time players and in presentations (Filip, 11 Nov 2026). English text with Arabic subtitles. Every page is DRAFT: agents wrote it, a historian and a native Arabic writer must review it before any public playtest (decision of 1 Nov 2026). Age II also needs the religious scholar's review the GDD asks for. No Group C figure appears; no real person is given words.",
+  "_about": "The Book of Suhail: the lore book shown to first-time players and in presentations. Version 2 (Filip, 12 Nov 2026): one flowing story in the second person. The player is a traveller whom the star Suhail and the storyteller Rawi lead through time; the frame is fiction, every historical statement inside it is sourced. English with Arabic subtitles. Every page is DRAFT: a historian and a native Arabic writer must review it before any public playtest (decision of 1 Nov 2026). The Faith and Law page also needs the religious scholar's review the GDD asks for. No Group C figure appears; no real person is given words (only Rawi, who is fictional, speaks).",
   "status": "draft",
-  "title": { "en": "The Book of Suhail", "ar": "كتاب سهيل" },
+  "title": {
+    "en": "The Book of Suhail",
+    "ar": "كتاب سهيل"
+  },
   "pages": [
     {
       "id": "prologue",
       "scene": "star",
-      "kicker": { "en": "Before the first page", "ar": "قبل الصفحة الأولى" },
-      "title": { "en": "The Star Called Suhail", "ar": "نجم سهيل" },
-      "body": "Every year, at the end of August, a star climbs over the southern edge of Arabia just before dawn. Its name is Suhail. People here have always watched for it. When Suhail rises, the worst of the summer is over, the nights turn kind, and the pearl divers come home. Pilgrims and sailors found their way by it. Farmers counted their year from it. This book follows that one star across twenty-five centuries, and the people who kept looking up.",
-      "subtitle": "في أواخر أغسطس يطلع سهيل قبيل الفجر، فيعرف أهل الجزيرة أن القيظ قد انكسر. هذه حكاية نجم واحد، وأناسٍ لم يكفّوا عن النظر إلى السماء.",
-      "game": "You are the founder of one small town. You will lead it through seven ages. Rawi, the storyteller, walks beside you.",
-      "sources": ["L1", "L2"]
+      "kicker": {
+        "en": "The night it begins",
+        "ar": "الليلة التي يبدأ فيها كل شيء"
+      },
+      "title": {
+        "en": "The Star That Remembers",
+        "ar": "النجم الذي لا ينسى"
+      },
+      "body": "The desert forgets everything. Footprints, campfires, whole caravans: gone by morning. But one star remembers. Its name is Suhail, and when it rises at summer’s end the heat breaks and the night turns kind. Tonight you stand on a dune as it clears the horizon, brighter than you have ever seen it. An old storyteller waits beside you. “That star has watched this land longer than anyone can count,” he says. “Walk with me. It will show you what it saw.”",
+      "subtitle": "الصحراء تنسى كل شيء، إلا نجماً واحداً. الليلة يطلع سهيل، وإلى جانبك راوٍ عجوز يقول: «سِر معي، وسيُريك ما رأى».",
+      "game": "I am Rawi, keeper of stories. You will be the keeper of a town. First, come and see what was built before you.",
+      "sources": [
+        "L1",
+        "L2"
+      ]
     },
     {
       "id": "age1",
       "scene": "oasis",
-      "kicker": { "en": "Age I · about 500 BCE to 630 CE", "ar": "العصر الأول" },
-      "title": { "en": "The Age of Oases", "ar": "عصر الواحات" },
-      "body": "Water first. Around three thousand years ago, people in the oases of Al Ain cut gently sloping tunnels underground to lead water to their fields, with nothing but gravity to move it. They called the channel a falaj. Where it surfaced, palms grew, and under the palms, everything else. Some of those channels still feed the same gardens today. At Mleiha, in today's Sharjah, a trading town struck its own silver coins. The desert was never empty. It was engineered.",
-      "subtitle": "قبل نحو ثلاثة آلاف عام شقّ أهل العين الأفلاج، فجرى الماء تحت الأرض إلى النخيل. وفي مليحة ضُربت نقود من فضة. لم تكن الصحراء خالية قط.",
-      "game": "In the game: every building needs water. Where you dig, and what you place beside the channel, comes first.",
-      "sources": ["L3", "L4", "G"]
+      "kicker": {
+        "en": "Three thousand years ago",
+        "ar": "قبل ثلاثة آلاف عام"
+      },
+      "title": {
+        "en": "Water Under the Sand",
+        "ar": "ماء تحت الرمل"
+      },
+      "body": "The star tilts, and the dunes fold away like a turned page. You stand among dry hills, and beneath your feet the earth is whispering. Kneel. Put your ear to the ground. Water, running in the dark. The people here have cut a tunnel through the earth, a falaj, sloped so gently that the water walks to their gardens by itself. Where it surfaces, palms stand green against the stone. Centuries on, at Mleiha to the north, traders will stamp their own coins in bright silver. The desert was never empty. It was waiting for clever hands.",
+      "subtitle": "تميل النجمة فتنطوي الكثبان كصفحة تُقلب. تحت قدميك ماء يجري في العتمة: فلج شقّه الناس ليمشي الماء وحده إلى بساتينهم. لم تكن الصحراء خالية قط.",
+      "game": "In your town, water comes first too. Every building drinks, so choose well where you dig.",
+      "sources": [
+        "L3",
+        "L4",
+        "G"
+      ]
     },
     {
       "id": "age2",
       "scene": "faith",
-      "kicker": { "en": "Age II · about 630 to 800", "ar": "العصر الثاني" },
-      "title": { "en": "The Age of Faith and Law", "ar": "عصر الإيمان والقانون" },
-      "body": "Around the year 630, Islam reached the towns of south-eastern Arabia. With it came a shared faith, a shared law, and Arabic as the common language of government and learning. A merchant could now make a contract in one city and rely on it in another. The mosque became the centre of town life. Charitable endowments paid for wells, schools and guest houses, so a traveller on the road could expect water and a roof.",
-      "subtitle": "نحو سنة ٦٣٠ للميلاد بلغ الإسلام جنوب شرق الجزيرة، فاجتمع الناس على إيمان واحد وقانون واحد ولسان عربي واحد، وصار المسجد قلب المدينة.",
-      "game": "In the game: this age is told through what it built, the mosque, the judge's court, the endowed well. No prophet, companion or caliph ever appears as a character.",
-      "sources": ["G"],
+      "kicker": {
+        "en": "Around the year 630",
+        "ar": "نحو سنة ٦٣٠ للميلاد"
+      },
+      "title": {
+        "en": "One Tongue Under the Lamps",
+        "ar": "لسان واحد تحت القناديل"
+      },
+      "body": "The star leads you on, to a town at dusk. Lamps wake one by one in the arches of its mosque, and the lanes run toward it like streams toward a river. Something new is in the air. A merchant from a distant city seals a bargain here, and his word will still hold when he is home, because the law is now the same in both places. The language is the same too. Arabic has become a thread, and it is stitching a thousand towns into one cloth. By the road, a well endowed for strangers waits for whoever comes thirsty.",
+      "subtitle": "مدينة عند الغروب، وقناديل تُضاء في أروقة مسجدها. صار العهد يُحفظ من مدينة إلى أخرى، وصارت العربية خيطاً يجمع ألف بلدة في نسيج واحد.",
+      "game": "I tell this age through what it built: the mosque, the court, the endowed well. Out of respect, no prophet, companion or caliph appears in my telling.",
+      "sources": [
+        "G"
+      ],
       "_check": "Text follows GDD v4.0 Age II only; no independent source attached yet. Needs the historical advisor and a qualified religious scholar before it ships (GDD requirement)."
     },
     {
       "id": "age3",
       "scene": "wisdom",
-      "kicker": { "en": "Age III · about 800 to 1250", "ar": "العصر الثالث" },
-      "title": { "en": "The Age of Wisdom", "ar": "عصر الحكمة" },
-      "body": "In Baghdad, a scholar named al-Khwarizmi wrote a book on solving equations. Its title gave the world the word algebra. His own name became the word algorithm. Every phone, including the one in your hand, runs on an idea with an Arabic name. In the libraries of that age, scholars gathered the learning of Greece, Persia and India, translated it, tested it, and carried it further. None of it was free. Someone chose to pay for knowledge.",
-      "subtitle": "في بغداد كتب الخوارزمي كتابه في الجبر، فأعطى العالم كلمتين: الجبر والخوارزمية. كل هاتف اليوم يعمل بفكرة تحمل اسماً عربياً.",
-      "game": "In the game: research now gives bonuses that last for ever. Invest early and your town speeds up for the rest of the story.",
-      "sources": ["L5", "G"]
+      "kicker": {
+        "en": "Baghdad, twelve centuries ago",
+        "ar": "بغداد، قبل اثني عشر قرناً"
+      },
+      "title": {
+        "en": "The House Where Ink Never Dries",
+        "ar": "بيت لا يجفّ فيه الحبر"
+      },
+      "body": "A carved door swings open, and behind it are more books than you knew the world could hold. This is Baghdad, and the lamps here burn until dawn. Scholars lean over pages from Greece, Persia and India, turning them into Arabic, arguing, testing, adding discoveries of their own. One of them, al-Khwarizmi, is writing a book on how to find the unknown. Its title will give the world the word algebra. His name will become the word algorithm. The device in your hand still carries it. It all began with ink, a lamp, and someone willing to pay for both.",
+      "subtitle": "في بغداد قناديل لا تنطفئ، وعلماء ينقلون علوم الأمم إلى العربية ويزيدون عليها. هنا يكتب الخوارزمي كتاباً سيهب العالم كلمتَي الجبر والخوارزمية.",
+      "game": "What your town learns, it never forgets. Spend on knowledge early and every later age grows faster.",
+      "sources": [
+        "L5",
+        "G"
+      ]
     },
     {
       "id": "age4",
       "scene": "sails",
-      "kicker": { "en": "Age IV · about 1250 to 1650", "ar": "العصر الرابع" },
-      "title": { "en": "The Age of Sails", "ar": "عصر الأشرعة" },
-      "body": "The Indian Ocean was the busiest long-distance trade road in the world, and it ran on the monsoon. Out with one wind, home with the next. Miss the season and you waited months. From Julfar, in today's Ras Al Khaimah, came Ahmad ibn Majid, a navigator who wrote down what the sea had taught him, stars, winds, coasts and harbours, in sailing guides that pilots used for generations. He is remembered as the Lion of the Sea.",
-      "subtitle": "كان المحيط الهندي طريق التجارة الأكبر، ورياح الموسم دليله. ومن جلفار خرج أحمد بن ماجد، أسد البحار، فدوّن علم البحر للربابنة من بعده.",
-      "game": "In the game: ports, ships and sailing seasons. Timing a voyage is worth as much as choosing it.",
-      "sources": ["L6", "G"]
+      "kicker": {
+        "en": "The open sea, five centuries ago",
+        "ar": "عُرض البحر، قبل خمسة قرون"
+      },
+      "title": {
+        "en": "The Wind That Keeps Its Promise",
+        "ar": "ريح تفي بوعدها"
+      },
+      "body": "Salt on your lips. The deck tilts, the great sail fills, and the shore slips under the horizon. Out here the wind is a promise. It carries you east in one season and brings you home in the next, and the captain who misses it waits months on a foreign shore. The crew speak of a navigator from Julfar, Ahmad ibn Majid, who wrote the whole ocean down, its stars, its winds, its harbours, so that no pilot after him need sail blind. They call him the Lion of the Sea. High above the mast, Suhail keeps pace with the ship.",
+      "subtitle": "الريح هنا وعد: تحملك شرقاً في موسم وتعيدك في موسم. ويتحدث البحّارة عن ابن ماجد، أسد البحار، الذي دوّن البحر كله كي لا يُبحر ربّان بعده أعمى.",
+      "game": "Your ships will sail by the seasons too. Choose the day as carefully as you choose the route.",
+      "sources": [
+        "L6",
+        "G"
+      ]
     },
     {
       "id": "age5",
       "scene": "pearls",
-      "kicker": { "en": "Age V · about 1650 to 1929", "ar": "العصر الخامس" },
-      "title": { "en": "The Age of Pearls", "ar": "عصر اللؤلؤ" },
-      "body": "Each summer, for about four months, the boats left for the pearl banks in what was called the great dive. A diver went down on a weighted rope with a clip on his nose, and came up on the strength of the hauler above him. On deck the nahham sang to keep the crew pulling as one. It was hard and dangerous work, and debt followed many men home. Then, at the end of August, Suhail rose. The season was over. The fleet turned for shore.",
-      "subtitle": "كل صيف يخرج الغاصة إلى المغاصات في الغوص الكبير، والنهّام يغنّي ليشدّ عزم البحّارة. فإذا طلع سهيل انتهى الموسم وعادت السفن إلى الديار.",
-      "game": "This is where your story begins. You found a pearling town on this coast, send out its boats, and decide what the catch is for.",
-      "sources": ["L1", "L7", "L8", "G"]
+      "kicker": {
+        "en": "The Gulf, in the summers of the great dive",
+        "ar": "الخليج، في مواسم الغوص الكبير"
+      },
+      "title": {
+        "en": "The Song Above the Deep",
+        "ar": "أغنية فوق الأعماق"
+      },
+      "body": "Now the water lies warm and green, and the boat is still. A diver fills his chest, grips the rope, and drops into the dark with a clip on his nose and a stone to pull him down. Above him a hauler waits, rope in both hands. On deck the nahham sings, and the whole crew pulls to his song. When the diver breaks the surface there is an oyster in his basket and, once in a long while, a small cold moon inside it. The work is cruel and the debts are long. But when Suhail rises, the season ends, and every sail turns for home.",
+      "subtitle": "يغوص الغوّاص في العتمة والنهّام يغنّي فوقه. وفي المحارة أحياناً قمر صغير بارد. فإذا طلع سهيل انتهى الموسم وعادت الأشرعة إلى الديار.",
+      "game": "This is the age where your own town begins. The boats are waiting for you.",
+      "sources": [
+        "L1",
+        "L7",
+        "L8",
+        "G"
+      ]
     },
     {
       "id": "age6",
       "scene": "oil",
-      "kicker": { "en": "Age VI · about 1930 to 1966", "ar": "العصر السادس" },
-      "title": { "en": "The Age of Oil", "ar": "عصر النفط" },
-      "body": "Then the pearls stopped paying. A world depression and cultured pearls from Japan broke the market, and the coast fell on hard years. People held on. In 1958 a drilling rig working over an old pearl bank near Das Island struck oil. In July 1962 the first tanker sailed from Abu Dhabi. The sea that had fed this coast with pearls for thousands of years had one more thing to give.",
-      "subtitle": "كسدت تجارة اللؤلؤ بالكساد العالمي واللؤلؤ الياباني المستزرع، فصبر أهل الساحل. وفي يوليو ١٩٦٢ أبحرت أول ناقلة نفط من أبوظبي.",
-      "game": "In the game: your main income disappears overnight. You rebuild with very little, and so do your rivals.",
-      "sources": ["L9", "L10", "G"]
+      "kicker": {
+        "en": "The same shore, 1930 to 1962",
+        "ar": "الساحل نفسه، ١٩٣٠ – ١٩٦٢"
+      },
+      "title": {
+        "en": "The Quiet Years, and the Fire",
+        "ar": "سنوات الصمت، ثم النار"
+      },
+      "body": "Then one summer the buyers do not come. Far away the world has grown poor, and pearls raised on farms in Japan are selling cheap. The boats are hauled up the beach and left to the sun. You walk among their ribs for what feels like thirty years. The people stay. They fish, tend their palms, and wait. Then, out over an old pearl bank near Das Island, a tower of steel finds something sleeping under the seabed. In July 1962 the first tanker sails from Abu Dhabi. The sea had kept one more gift, deeper than any diver could reach.",
+      "subtitle": "ذات صيف لم يأتِ التجّار، وتُركت السفن للشمس. ثم وجد برج من فولاذ شيئاً نائماً تحت قاع البحر. كان البحر يخبّئ هدية أخرى، أعمق من أن يبلغها غوّاص.",
+      "game": "In the game this is your hardest night. What you built before it decides how you come through.",
+      "sources": [
+        "L9",
+        "L10",
+        "G"
+      ]
     },
     {
       "id": "age7",
       "scene": "union",
-      "kicker": { "en": "Age VII · 1968 to 1971", "ar": "العصر السابع" },
-      "title": { "en": "The Age of Union", "ar": "عصر الاتحاد" },
-      "body": "In January 1968 Britain announced it would leave the Gulf by the end of 1971. The small states of the coast had under four years to decide who they would be. They talked, disagreed, and talked again. On 2 December 1971 six emirates raised one flag as the United Arab Emirates. Ras Al Khaimah joined in February 1972, and six became seven. A coast of pearling towns had become a country.",
-      "subtitle": "في الثاني من ديسمبر ١٩٧١ رفعت ستّ إمارات علماً واحداً، ثم انضمّت رأس الخيمة في فبراير ١٩٧٢، فاكتمل الاتحاد سبعاً.",
-      "game": "In the game: everything you built across six ages is tested. You choose how your town's story ends.",
-      "sources": ["L10", "L11", "G"],
+      "kicker": {
+        "en": "2 December 1971",
+        "ar": "٢ ديسمبر ١٩٧١"
+      },
+      "title": {
+        "en": "Seven Hands, One Flag",
+        "ar": "سبع أيادٍ وعلم واحد"
+      },
+      "body": "The star brings you to a morning. A crowd stands around a bare flagpole, waiting. For three years the rulers of this coast have talked, disagreed, and talked again, because the old protector is leaving and every small state must choose: stand alone, or stand together. Today six of them raise one flag, red, green, white and black. Before the winter is out, a seventh joins. You watch the cloth open in the wind and understand what you have been walking toward. The wells, the books, the sails, the pearls: it was one story all along. Now it has a name.",
+      "subtitle": "في الثاني من ديسمبر ١٩٧١ رفعت ستّ إمارات علماً واحداً، ولحقت بها السابعة قبل أن ينقضي الشتاء. كانت الآبار والكتب والأشرعة واللآلئ حكاية واحدة، وها قد صار لها اسم.",
+      "game": "Everything you build is tested here. How your town’s story ends is your choice.",
+      "sources": [
+        "L10",
+        "L11",
+        "G"
+      ],
       "_check": "GDD v4.0 says 'seven emirates signed' on 2 December 1971. UAE Ministry of Foreign Affairs: six on that day, Ras Al Khaimah on 10 February 1972. The page follows the Ministry; the GDD line should be corrected."
     },
     {
       "id": "yours",
       "scene": "town",
-      "kicker": { "en": "The next page", "ar": "الصفحة التالية" },
-      "title": { "en": "Your Turn", "ar": "دورك الآن" },
-      "body": "Channel diggers. Judges and teachers. Scholars, navigators, divers, and the ones who signed. None of them knew how their age would end. They built anyway. Suhail still rises every August over the same coast. Tonight it rises over a small camp with one well and no name yet. That part is yours.",
-      "subtitle": "حفّارو الأفلاج، والقضاة والمعلّمون، والعلماء والربابنة والغاصة... كلّهم بنوا ولم يعرفوا كيف ينتهي عصرهم. وسهيل ما زال يطلع كل عام. الآن دورك.",
-      "game": "How to play: build, collect what your buildings make, send boats out, and answer Rawi's questions. He will show you each step.",
-      "sources": ["L1"]
+      "kicker": {
+        "en": "Tonight",
+        "ar": "الليلة"
+      },
+      "title": {
+        "en": "The Shore That Waits",
+        "ar": "الشاطئ الذي ينتظر"
+      },
+      "body": "The road of light ends where it began: an empty shore, one well, a few palms, and Suhail hanging low over the water. Rawi lowers himself onto the sand. “I have shown you what others built,” he says. “Diggers and judges, scholars and pilots, divers and founders. Not one of them knew how the story would end. They built anyway.” He looks at the bare ground, then at you. “This page is empty. I think the star has been saving it for you.”",
+      "subtitle": "ينتهي درب النور حيث بدأ: شاطئ خالٍ وبئر واحدة وسهيل فوق الماء. يقول الراوي: «هذه الصفحة فارغة. أظن أن النجم كان يحفظها لك».",
+      "game": "Build, gather, trade, and answer my questions when I ask. I will be beside you.",
+      "sources": [
+        "L1"
+      ]
     }
   ],
   "sources": {

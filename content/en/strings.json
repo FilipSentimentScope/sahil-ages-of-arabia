@@ -385,5 +385,9 @@
   "ui.lore_back": "Back",
   "ui.lore_skip": "Skip",
   "ui.lore_begin": "Begin",
-  "ui.lore_draft": "Draft text · sources"
+  "ui.lore_draft": "Draft text · sources",
+  "ui.daily_q_title": "Today's questions",
+  "ui.daily_q_body": "A new day. I have {n} questions about our history for you. Each right answer earns {k} 📖 knowledge and a line in the Chronicle. There is no timer and no penalty.",
+  "ui.daily_q_go": "Answer now",
+  "ui.daily_q_hint": "Later is fine: the book at the top of the screen holds today's questions until the day ends."
 }

@@ -291,6 +291,16 @@ await wpage.evaluate(() => {
 await wpage.waitForTimeout(5600);
 await wpage.reload();
 await wpage.waitForFunction(() => Boolean(window.__aoa) && window.__aoa.town.buildings.length > 5);
+// 13a. Once a day Rawi offers the day's questions in a card; "Later" puts it away until tomorrow.
+await wpage.waitForSelector('#card .daily-q', { timeout: 8000 }).catch(() => fail('the daily questions offer should appear once the tutorial is over'));
+await wpage.waitForTimeout(400);
+await wpage.screenshot({ path: `${OUT}/13a-daily-questions.png` });
+await wpage.click('#btn-dq-go');
+await wpage.waitForSelector('#card [data-answer]', { timeout: 3000 }).catch(() => fail('"Answer now" should open a question'));
+await wpage.reload();
+await wpage.waitForFunction(() => Boolean(window.__aoa) && window.__aoa.town.buildings.length > 5);
+await wpage.waitForTimeout(2500);
+if (await wpage.locator('#card .daily-q').isVisible()) await fail('the daily questions offer should appear only once a day');
 await wpage.waitForTimeout(800);
 await wpage.screenshot({ path: `${OUT}/13-wide.png` });
 const wbox = await wpage.locator('#stage canvas').boundingBox();

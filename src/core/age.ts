@@ -89,7 +89,8 @@ export function recordCorrectAnswer(s: TownState, c: LoadedContent, now: number)
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-function questionDay(s: TownState, now: number): number {
+/** The town's own day number: day 0 is the day it was founded. Questions are counted per day. */
+export function questionDay(s: TownState, now: number): number {
   return Math.floor(Math.max(0, now - s.foundedAt) / DAY_MS);
 }
 

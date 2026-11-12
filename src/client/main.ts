@@ -18,6 +18,7 @@ import {
   GameClock,
   ageProgress,
   nextQuestion,
+  questionDay,
   questionsLeftToday,
   advanceGifts,
   advanceRoutes,
@@ -81,6 +82,8 @@ interface Prefs {
   music: boolean;
   /** Tutorial step reached, or -1 when finished or skipped. */
   tutorial: number;
+  /** The town day on which Rawi last offered the day's questions, so he offers once a day. */
+  questionDay: number;
 }
 
 const content = loadDefaultContent();
@@ -95,9 +98,10 @@ function loadPrefs(): Prefs {
       voice: p.voice !== false,
       music: p.music !== false,
       tutorial: typeof p.tutorial === 'number' ? p.tutorial : 0,
+      questionDay: typeof p.questionDay === 'number' ? p.questionDay : -1,
     };
   } catch {
-    return { lang: 'en', mode: 'showcase', voice: true, music: true, tutorial: 0 };
+    return { lang: 'en', mode: 'showcase', voice: true, music: true, tutorial: 0, questionDay: -1 };
   }
 }
 
@@ -427,6 +431,7 @@ function renderMenu(): void {
     clock = new GameClock(() => Date.now(), scaleFor(prefs.mode));
     town = createTown(content, clock.now(), Math.floor(Math.random() * 2 ** 32));
     prefs.tutorial = 0;
+    prefs.questionDay = -1;
     shownStep = -1;
     savePrefs();
     stopPlacing();
@@ -612,13 +617,6 @@ function celebrateRank(rankId: string, land: boolean): void {
 }
 
 function renderTasksSheet(): void {
-  const qLeft = nextQuestion(town, content) ? questionsLeftToday(town, content, clock.now()) : 0;
-  const chron = ageProgress(town, content, clock.now()).chronicle;
-  chips.question.hidden = qLeft <= 0;
-  chips.question.classList.toggle('attn', qLeft > 0 && chron.done < chron.of);
-  chips.question.title = t('ui.question_title');
-  setHTML(chips.question, `${icon('book')}${qLeft}`);
-  nudges();
   const rank = townRank(town, content);
   const rows = content.tasks.tasks
     .map((task) => ({ task, p: taskProgress(town, content, task) }))
@@ -685,6 +683,15 @@ function renderChips(): void {
     return cap > 0 && b.stored >= cap;
   }).length;
   setBadge(dock['btn-collect-all'], full);
+  // The question chip and Rawi's reminders belong to the regular refresh. Until 12 Nov they sat in the
+  // Tasks panel by mistake and only updated when that panel was opened.
+  const qLeft = nextQuestion(town, content) ? questionsLeftToday(town, content, clock.now()) : 0;
+  const chron = ageProgress(town, content, clock.now()).chronicle;
+  chips.question.hidden = qLeft <= 0;
+  chips.question.classList.toggle('attn', qLeft > 0 && chron.done < chron.of);
+  chips.question.title = t('ui.question_title');
+  setHTML(chips.question, `${icon('book')}${qLeft}`);
+  nudges();
 }
 
 // --- Route timers on the left ------------------------------------------------------
@@ -842,17 +849,47 @@ function rawiSay(text: string, action?: { label: string; run: () => void }): voi
   });
 }
 
+/**
+ * Once a town day Rawi offers the day's history questions in a card (Filip, 12 Nov): how many he has
+ * and what a right answer earns. The numbers are core's (dailyCap, question.knowledge); this only
+ * decides when to show the offer. A day on which the player already answered is not offered again.
+ */
+function dailyQuestions(): boolean {
+  const now = clock.now();
+  const day = questionDay(town, now);
+  if (prefs.questionDay === day) return false;
+  const left = nextQuestion(town, content) ? questionsLeftToday(town, content, now) : 0;
+  if (left <= 0) return false;
+  prefs.questionDay = day;
+  savePrefs();
+  if (town.age.questionsToday.day === day && town.age.questionsToday.count > 0) return false;
+  lastQuestionNudge = Date.now();
+  openCard(
+    `<div class="daily-q"><div class="rawi-face">${rawiAvatar()}</div><p class="muted">${t('ui.rawi_name')}</p><h3>${t('ui.daily_q_title')}</h3>
+     <p>${tr('ui.daily_q_body', { n: left, k: content.ageGoals.question.knowledge })}</p>
+     <div class="row"><button type="button" class="btn" id="btn-dq-later">${t('ui.later')}</button><button type="button" class="btn primary" id="btn-dq-go">${t('ui.daily_q_go')}</button></div>
+     <p class="muted" style="font-size:11px">${t('ui.daily_q_hint')}</p></div>`,
+    (el) => {
+      el.querySelector('#btn-dq-later')?.addEventListener('click', closeCard);
+      el.querySelector('#btn-dq-go')?.addEventListener('click', () => openQuestion(questionsHost));
+    },
+  );
+  return true;
+}
+
 let lastQuestionNudge = Date.now();
 let treasuryNudged = false;
 /** Gentle reminders: a history question now and then, and a warning when the treasury is nearly full. */
 function nudges(): void {
   if (prefs.tutorial >= 0 || !sheet.hidden || !$('card').hidden || !$('rawi').hidden) return;
+  if (!$('placebar').hidden || document.getElementById('lore') || document.getElementById('title')) return; // busy placing, or still reading
   const nearlyFull = treasuryNearlyFull(town, content);
   if (nearlyFull && !treasuryNudged) {
     treasuryNudged = true;
     return rawiSay(t('rawi.treasury'));
   }
   if (!nearlyFull) treasuryNudged = false;
+  if (dailyQuestions()) return;
   const chron = ageProgress(town, content, clock.now()).chronicle;
   const canAsk = chron.done < chron.of && nextQuestion(town, content) && questionsLeftToday(town, content, clock.now()) > 0;
   if (canAsk && Date.now() - lastQuestionNudge > 150_000) {

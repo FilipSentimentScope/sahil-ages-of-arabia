@@ -1,10 +1,12 @@
 /**
- * The Book of Suhail: an illustrated lore book (Filip, 11 Nov). Nine pages, one star: an opening,
- * one page per age, and a closing page that hands the story to the player. English text with Arabic
+ * The Book of Suhail: an illustrated lore book (Filip, 11 Nov; retold as one journey on 12 Nov).
+ * Nine pages, one star: the player walks through time behind Suhail with Rawi the storyteller,
+ * and the last page hands the story over. English text with Arabic
  * subtitles. Shown once to a first-time player between the title screen and Rawi's tutorial, and
  * always available from the menu. Presentation only: no game rules here.
  *
- * The illustrations are drawn in code (SVG) so the book ships without waiting for painted art.
+ * The illustrations are drawn in code (SVG) so the book ships without waiting for painted art;
+ * a painted image in assets/lore/ takes a page over as soon as it is added.
  * They are listed in docs/ASSET_INVENTORY.md as code-drawn stand-ins for painted pages.
  * All text is draft and carries its sources (content/lore/book.json).
  */
@@ -24,6 +26,17 @@ interface Page {
 }
 
 const PAGES = book.pages as Page[];
+
+/**
+ * Painted pages, when they exist. Any image dropped into assets/lore/ and named lore_<page id>_v<NN>
+ * (for example lore_age5_v01.jpg) replaces that page's code drawing; the highest version wins.
+ */
+const PAINTED = import.meta.glob('../../assets/lore/*.{png,jpg,jpeg,webp}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+function painted(id: string): string | undefined {
+  const hits = Object.keys(PAINTED).filter((k) => (k.split('/').pop() ?? '').startsWith(`lore_${id}_`)).sort();
+  const last = hits[hits.length - 1];
+  return last ? PAINTED[last] : undefined;
+}
 const SOURCES = book.sources as Record<string, string>;
 
 /* ---------- drawing helpers (viewBox 400 x 300) ---------- */
@@ -317,7 +330,7 @@ export function openLore(onClose?: () => void, startAt = 0): void {
       <header><span class="lore-name">${esc(book.title.en)} · <span lang="ar" dir="rtl">${book.title.ar}</span></span>
         <button type="button" class="lore-skip" id="lore-skip">${last ? '✕' : `${t('ui.lore_skip')} ✕`}</button></header>
       <div class="lore-spread">
-        <figure class="lore-art">${illustration(p.scene)}<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></figure>
+        <figure class="lore-art">${painted(p.id) ? `<img src="${painted(p.id)}" alt="">` : illustration(p.scene)}<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></figure>
         <article class="lore-text">
           <p class="kicker">${esc(p.kicker.en)}</p>
           <h2>${esc(p.title.en)}</h2>

@@ -147,7 +147,7 @@ is met (mirrors the brief's section 12).
 
 ## 11. Current priorities (update when they change)
 
-Phase 2 to 3 (week 1 to 2). Done: balance pass P2-09, Art Bible v0.1, image and ElevenLabs prompt
+Phase 2 to 3 (week 1 to 2). Done: lore book 'The Book of Suhail' (12 Nov, draft text, code-drawn pages); balance pass P2-09, Art Bible v0.1, image and ElevenLabs prompt
 sheets, research pack, first five Archive drafts, story script v0.1. Next, in order:
 1. All 12 buildings in game on the hex board (2 Nov). Next art: 1024 px versions of the buildings and the
    eight painted terrain tiles. Music round 2 and MUS-02 still to arrive.

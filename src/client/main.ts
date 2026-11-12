@@ -64,6 +64,7 @@ import { Encyclopedia } from './encyclopedia';
 import { icon, installIconSwap, rawiAvatar } from './icons';
 import { suggest, type Suggestion } from './guide';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
+import { openLore } from './lore';
 import { RoutesPanel, routeIcon } from './routes-panel';
 import { openArchive, openQuestion, type QuestionsHost } from './questions-ui';
 import { browserStorage } from './storage';
@@ -369,6 +370,7 @@ function renderMenu(): void {
       <button type="button" class="btn" id="btn-mode"><span>⏱ ${t('ui.time_speed')}</span><b>${prefs.mode === 'showcase' ? t('ui.mode_showcase') : t('ui.mode_playtest')}</b></button>
       <button type="button" class="btn" id="btn-voice"><span>🗣 ${t('ui.sound_voice')}</span><b>${onOff(prefs.voice)}</b></button>
       <button type="button" class="btn" id="btn-music"><span>🎵 ${t('ui.sound_music')}</span><b>${onOff(prefs.music)}</b></button>
+      <button type="button" class="btn" id="btn-lore"><span>📖 ${t('ui.lore_open')}</span><span></span></button>
       <button type="button" class="btn" id="btn-tutorial"><span>🧭 ${t('ui.restart_tutorial')}</span><span></span></button>
       <button type="button" class="btn" id="btn-reset"><span>🏝 ${t('ui.reset')}</span><span></span></button>
       <p class="muted" style="font-size:12px">${t('placeholder.notice')}</p>
@@ -402,6 +404,10 @@ function renderMenu(): void {
     sound.setMusic(prefs.music);
     savePrefs();
     renderMenu();
+  });
+  on('btn-lore', () => {
+    closeSheet();
+    openLore();
   });
   on('btn-tutorial', () => {
     prefs.tutorial = 0;
@@ -959,16 +965,30 @@ function dayPhase(): number {
   return (((clock.now() - town.foundedAt) / day + 0.22) % 1 + 1) % 1;
 }
 
+/** The lore book opens once for a new player, between the title and Rawi's tutorial. [ASSUMPTION] */
+const LORE_SEEN = 'aoa.lore.seen';
+function firstLore(): void {
+  if (browserStorage.get(LORE_SEEN)) return;
+  openLore(() => browserStorage.set(LORE_SEEN, '1'));
+}
+
 /** Title screen: sets the tone, and its tap lets the browser start the music. */
 function showTitle(): void {
   const el = $('title');
-  // Automated tests skip it unless they ask for it with ?title.
+  // A link ending in ?lore opens the book straight away (presentations, and the automated check).
+  if (location.search.includes('lore')) {
+    el.remove();
+    openLore();
+    return;
+  }
+  // Automated tests skip the title unless they ask for it with ?title.
   if (navigator.webdriver && !location.search.includes('title')) return el.remove();
   el.innerHTML = `<div class="sky"></div><div class="star"></div>
     <div class="logo"><h1>${t('app.title_short')}</h1><p class="sub">${t('ui.subtitle')}</p><p class="tag">${t('ui.tagline')}</p></div>
     <p class="begin">${t('ui.tap_to_begin')}</p>`;
   el.hidden = false;
   el.addEventListener('pointerdown', () => {
+    if (!navigator.webdriver) firstLore();
     el.classList.add('out');
     window.setTimeout(() => el.remove(), 900);
   }, { once: true });

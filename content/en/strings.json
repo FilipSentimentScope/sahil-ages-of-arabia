@@ -379,5 +379,11 @@
   "ui.later": "Later",
   "ui.free": "free",
   "ui.land_opened": "New land has opened around your town",
-  "ui.rawi_name": "The Rawi"
+  "ui.rawi_name": "The Rawi",
+  "ui.lore_open": "The Book of Suhail",
+  "ui.lore_next": "Next",
+  "ui.lore_back": "Back",
+  "ui.lore_skip": "Skip",
+  "ui.lore_begin": "Begin",
+  "ui.lore_draft": "Draft text · sources"
 }

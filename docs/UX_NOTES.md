@@ -67,3 +67,22 @@ moved was hard to tap (it now glows instead); banners hid behind the advisor (no
 
 Still open: real interface art (icons, frames, buttons), a Rawi portrait, decorative props
 (palms, rocks, boats) so the land looks lived in, and a device test on a mid-range Android phone.
+
+## 12 Nov 2026: the lore book
+
+Filip asked for a lore book of seven to nine pages for presentations: engaging, educational, a source
+of pride for players in the region, and an introduction for a first-time player. His answers: an
+illustrated book page, English with Arabic subtitles, the star Suhail as the thread, the whole Arab
+world with a lean to the Gulf and UAE.
+
+Built: "The Book of Suhail", nine pages. Each has a picture with the star in it, a title in both
+languages, about seventy words of English, two lines of Arabic, a line from Rawi tying the age to the
+game, and its sources behind a small "Draft text, sources" fold. A new player sees it once after the
+title screen; Skip is always there; it reopens from the menu. On a wide screen it is a two-page
+spread, on a phone the picture sits above the text. Arrow keys, buttons, dots and swipes turn pages.
+
+Checked in screenshots on a phone and at 16:9 (tests/e2e/lore-check.mjs). On a short phone screen the
+text scrolls a little.
+
+Still open: painted pages to replace the code drawings; a native Arabic writer; historian review;
+the GDD's Age VII line ("seven emirates signed") should be corrected to six plus Ras Al Khaimah in 1972.

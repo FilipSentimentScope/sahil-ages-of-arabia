@@ -267,5 +267,11 @@
   "ui.later": "لاحقاً",
   "ui.free": "متاح",
   "ui.land_opened": "فُتحت أرض جديدة حول بلدتك",
-  "ui.rawi_name": "الراوي"
+  "ui.rawi_name": "الراوي",
+  "ui.lore_open": "كتاب سهيل",
+  "ui.lore_next": "التالي",
+  "ui.lore_back": "السابق",
+  "ui.lore_skip": "تخطٍّ",
+  "ui.lore_begin": "ابدأ",
+  "ui.lore_draft": "نص مسودة · المصادر"
 }

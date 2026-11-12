@@ -147,3 +147,21 @@ a plain background, no ground tile or water block under it, three-quarter top-do
 1. **Rawi portrait (RAWI-01), 1024 x 1024.** `an elderly Gulf storyteller (rawi) of the early 1900s, kind lined face, white beard, plain white thobe and a brown bisht, ghutra loosely worn, seated, one hand raised as if telling a story, warm lamplight, head and shoulders, plain parchment background, [STYLE BLOCK]`. Fictional character, no real person.
 2. **Decor set (DEC-01..08), 512 x 512 each:** `a single date palm` · `a cluster of three young palms` · `a few sun-bleached rocks` · `a low saltbush shrub` · `a beached small wooden boat` · `a resting camel` · `fishing nets drying on poles` · `a pile of pearl oyster shells`. The game scatters these on empty and locked land so the town looks lived in.
 3. **Date grove and fish trap without bases:** the same two buildings with no square stone base and no block of water: just the palms and low wall, and just the reed fences standing in a little water.
+
+## Round 6 (12 Nov): painted pages for The Book of Suhail
+
+Nine illustrations, 4:3, 2048 px wide, same painted-canvas style block as the style frames. Each must
+show one bright star low in the sky (Suhail) and leave no text in the image. No recognisable real
+person in any of them; Age II shows buildings only, no human figures at all.
+
+| ID | Page | Prompt core |
+| --- | --- | --- |
+| LORE-01 | The Star Called Suhail | Night desert before dawn, a traveller and camel on a dune ridge seen from behind, one brilliant star just above the southern horizon, amber glow at the horizon |
+| LORE-02 | Age of Oases | Iron Age oasis at first light below bare mountains, a stone-lined falaj channel carrying water into date-palm gardens, mud-brick houses, a farmer with a hoe |
+| LORE-03 | Age of Faith and Law | Small early Islamic town at dusk, a simple mud-brick mosque with a low dome and a square minaret at its centre, lamplight in arches, empty courtyard, no people |
+| LORE-04 | Age of Wisdom | Interior of a 9th-century Baghdad library, shelves of bound manuscripts, a brass astrolabe and open book on a low desk, a great pointed arch open to the night sky, two scholars seen from behind |
+| LORE-05 | Age of Sails | A sewn-plank dhow under a full lateen sail on the Indian Ocean at night, two more sails far off, the star and its reflection on the water |
+| LORE-06 | Age of Pearls | Split view at the waterline: a pearling boat and hauler above, a diver on a weighted rope below with a nose clip and basket, an open oyster with one pearl on the sand |
+| LORE-07 | Age of Oil | Gulf shore at sunset about 1960, an abandoned wooden pearling boat on the sand in front, an offshore drilling rig with a small flare, a tanker on the horizon |
+| LORE-08 | Age of Union | Morning of 2 December 1971, the UAE flag on a tall pole over a coastal town of wind-tower houses, a crowd seen from behind, dhows in the bay |
+| LORE-09 | Your Turn | A tiny camp on an empty Gulf shore at dawn: one stone well, two palm-frond huts, one small boat on the sand, the star over the sea |

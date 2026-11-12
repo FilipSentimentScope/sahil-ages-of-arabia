@@ -473,3 +473,45 @@ h1, h2, h3, .sheet-head h2, #card h3, .round .lbl, .btn, #taskbar, .rcard b, .bc
 #res-col { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
 #btn-goals.goals-pill { position: static; max-width: 100%; }
 @media (max-width: 520px) { #trackers, #placebar, #notice { top: calc(128px + var(--safe-top)); } #app.sheet-open #rawi { top: calc(4px + var(--safe-top)); } }
+
+/* The Book of Suhail: lore book (12 Nov) */
+#lore { position: absolute; inset: 0; z-index: 39; background: radial-gradient(ellipse at 50% 30%, #2a1d3a, #0b0e22 75%); display: grid; place-items: center; transition: opacity 0.45s ease; padding: calc(6px + env(safe-area-inset-top, 0px)) 6px calc(6px + var(--safe-bottom)); }
+#lore.out { opacity: 0; pointer-events: none; }
+.lore-book { width: min(100%, 1080px); height: min(100%, 760px); display: grid; grid-template-rows: auto 1fr auto; color: #3a2a1a; border-radius: 14px; overflow: hidden;
+  background: linear-gradient(90deg, rgba(120, 80, 30, 0.14), transparent 6%, transparent 94%, rgba(120, 80, 30, 0.14)), radial-gradient(ellipse at 30% 20%, #fbf1d6, #f0deb4 60%, #e2c98f);
+  box-shadow: 0 0 0 2px #7a4a1e, 0 0 0 5px #e2b85c, 0 0 0 7px #7a4a1e, 0 24px 60px rgba(0, 0, 0, 0.6); }
+.lore-book header { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; font-family: var(--display); font-size: 13px; color: #7a4a1e; border-bottom: 1px solid rgba(122, 74, 30, 0.3); }
+.lore-skip { border: 0; background: none; color: #7a4a1e; font: inherit; padding: 6px 4px; cursor: pointer; }
+.lore-spread { min-height: 0; display: grid; grid-template-rows: minmax(150px, 36%) 1fr; }
+.lore-book.fwd .lore-spread { animation: lore-fwd 0.45s ease; } .lore-book.back .lore-spread { animation: lore-back 0.45s ease; } .lore-book.first { animation: lore-open 0.6s ease; }
+@keyframes lore-fwd { from { opacity: 0; transform: translateX(28px); } } @keyframes lore-back { from { opacity: 0; transform: translateX(-28px); } } @keyframes lore-open { from { opacity: 0; transform: scale(0.94); } }
+.lore-art { position: relative; margin: 10px 12px 0; border: 2px solid #7a4a1e; outline: 1px solid #e2b85c; outline-offset: -5px; border-radius: 4px; overflow: hidden; background: #0b0e22; }
+.lore-art svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lore-art .corner { position: absolute; width: 14px; height: 14px; border: 2px solid #e2b85c; }
+.lore-art .tl { top: 7px; left: 7px; border-right: 0; border-bottom: 0; } .lore-art .tr { top: 7px; right: 7px; border-left: 0; border-bottom: 0; }
+.lore-art .bl { bottom: 7px; left: 7px; border-right: 0; border-top: 0; } .lore-art .br { bottom: 7px; right: 7px; border-left: 0; border-top: 0; }
+.lore-art .suhail { animation: twinkle 3.2s ease-in-out infinite; }
+.lore-art .flag { animation: lore-flag 3s ease-in-out infinite; transform-origin: 202px 80px; } @keyframes lore-flag { 50% { transform: skewY(-2.5deg); } }
+.lore-text { overflow-y: auto; padding: 10px 18px 8px; -webkit-overflow-scrolling: touch; }
+.lore-text .kicker { margin: 0; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #a8721e; font-weight: 700; }
+.lore-text h2 { margin: 2px 0 0; font-size: clamp(24px, 6.4vw, 38px); line-height: 1.1; color: #4a2a12; }
+.lore-text .ar-title { margin: 0 0 8px; font-family: var(--display); font-size: clamp(18px, 4.6vw, 26px); color: #a8721e; text-align: right; border-bottom: 1px solid rgba(122, 74, 30, 0.35); padding-bottom: 6px; }
+.lore-text .body { margin: 0 0 10px; font-family: Georgia, 'Times New Roman', serif; font-size: 15.5px; line-height: 1.55; }
+.lore-text .body::first-letter { font-family: Georgia, 'Times New Roman', serif; float: left; font-size: 3.1em; line-height: 0.82; padding: 4px 6px 0 0; color: #a8721e; font-weight: 700; }
+.lore-text .ar-sub { margin: 0 0 10px; font-family: var(--display); font-size: 15px; line-height: 1.7; color: #5a3a1e; text-align: right; padding-inline-start: 10px; border-inline-start: 3px solid #e2b85c; }
+.lore-game { display: grid; grid-template-columns: 38px 1fr; gap: 8px; align-items: center; background: rgba(20, 33, 61, 0.9); color: #fff7e0; border-radius: 10px; padding: 7px 10px; }
+.lore-game .rawi-svg { width: 38px; height: 38px; } .lore-game p { margin: 0; font-size: 13px; line-height: 1.4; }
+.lore-src { margin-top: 8px; font-size: 11px; color: #7a5a3a; } .lore-src summary { cursor: pointer; } .lore-src ul { margin: 4px 0 0; padding-inline-start: 16px; } .lore-src li { margin-bottom: 3px; }
+.lore-book footer { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 8px 12px; border-top: 1px solid rgba(122, 74, 30, 0.3); }
+.lore-nav { min-width: 84px; } .lore-nav[disabled] { opacity: 0.3; }
+.lore-dots { display: flex; justify-content: center; gap: 5px; } .lore-dots button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 1px solid #7a4a1e; background: transparent; cursor: pointer; } .lore-dots button.on { background: #e2b85c; transform: scale(1.3); }
+@media (min-aspect-ratio: 5/4) and (min-width: 760px) {
+  #lore { padding: 18px; }
+  .lore-spread { grid-template-rows: 1fr; grid-template-columns: 1.15fr 1fr; background: linear-gradient(90deg, transparent 53%, rgba(90, 50, 10, 0.22) 53.4%, transparent 55.5%); }
+  .lore-art { margin: 16px 0 16px 18px; } .lore-text { padding: 22px 30px 12px 34px; } .lore-text .body { font-size: 17px; } .lore-text .ar-sub { font-size: 17px; } .lore-game p { font-size: 14px; }
+}
+.lore-text { background: linear-gradient(#0000, #0000) , radial-gradient(farthest-side at 50% 100%, rgba(90, 50, 10, 0.28), transparent) bottom / 100% 10px no-repeat scroll; }
+@media (max-height: 780px) and (max-width: 759px) {
+  .lore-spread { grid-template-rows: minmax(130px, 27%) 1fr; } .lore-text { padding: 8px 14px 6px; }
+  .lore-text .body { font-size: 14.5px; line-height: 1.48; margin-bottom: 8px; } .lore-text .ar-sub { font-size: 14px; line-height: 1.6; margin-bottom: 8px; } .lore-text .ar-title { margin-bottom: 6px; padding-bottom: 4px; }
+}

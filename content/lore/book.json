@@ -1,0 +1,113 @@
+{
+  "_about": "The Book of Suhail: the lore book shown to first-time players and in presentations (Filip, 11 Nov 2026). English text with Arabic subtitles. Every page is DRAFT: agents wrote it, a historian and a native Arabic writer must review it before any public playtest (decision of 1 Nov 2026). Age II also needs the religious scholar's review the GDD asks for. No Group C figure appears; no real person is given words.",
+  "status": "draft",
+  "title": { "en": "The Book of Suhail", "ar": "كتاب سهيل" },
+  "pages": [
+    {
+      "id": "prologue",
+      "scene": "star",
+      "kicker": { "en": "Before the first page", "ar": "قبل الصفحة الأولى" },
+      "title": { "en": "The Star Called Suhail", "ar": "نجم سهيل" },
+      "body": "Every year, at the end of August, a star climbs over the southern edge of Arabia just before dawn. Its name is Suhail. People here have always watched for it. When Suhail rises, the worst of the summer is over, the nights turn kind, and the pearl divers come home. Pilgrims and sailors found their way by it. Farmers counted their year from it. This book follows that one star across twenty-five centuries, and the people who kept looking up.",
+      "subtitle": "في أواخر أغسطس يطلع سهيل قبيل الفجر، فيعرف أهل الجزيرة أن القيظ قد انكسر. هذه حكاية نجم واحد، وأناسٍ لم يكفّوا عن النظر إلى السماء.",
+      "game": "You are the founder of one small town. You will lead it through seven ages. Rawi, the storyteller, walks beside you.",
+      "sources": ["L1", "L2"]
+    },
+    {
+      "id": "age1",
+      "scene": "oasis",
+      "kicker": { "en": "Age I · about 500 BCE to 630 CE", "ar": "العصر الأول" },
+      "title": { "en": "The Age of Oases", "ar": "عصر الواحات" },
+      "body": "Water first. Around three thousand years ago, people in the oases of Al Ain cut gently sloping tunnels underground to lead water to their fields, with nothing but gravity to move it. They called the channel a falaj. Where it surfaced, palms grew, and under the palms, everything else. Some of those channels still feed the same gardens today. At Mleiha, in today's Sharjah, a trading town struck its own silver coins. The desert was never empty. It was engineered.",
+      "subtitle": "قبل نحو ثلاثة آلاف عام شقّ أهل العين الأفلاج، فجرى الماء تحت الأرض إلى النخيل. وفي مليحة ضُربت نقود من فضة. لم تكن الصحراء خالية قط.",
+      "game": "In the game: every building needs water. Where you dig, and what you place beside the channel, comes first.",
+      "sources": ["L3", "L4", "G"]
+    },
+    {
+      "id": "age2",
+      "scene": "faith",
+      "kicker": { "en": "Age II · about 630 to 800", "ar": "العصر الثاني" },
+      "title": { "en": "The Age of Faith and Law", "ar": "عصر الإيمان والقانون" },
+      "body": "Around the year 630, Islam reached the towns of south-eastern Arabia. With it came a shared faith, a shared law, and Arabic as the common language of government and learning. A merchant could now make a contract in one city and rely on it in another. The mosque became the centre of town life. Charitable endowments paid for wells, schools and guest houses, so a traveller on the road could expect water and a roof.",
+      "subtitle": "نحو سنة ٦٣٠ للميلاد بلغ الإسلام جنوب شرق الجزيرة، فاجتمع الناس على إيمان واحد وقانون واحد ولسان عربي واحد، وصار المسجد قلب المدينة.",
+      "game": "In the game: this age is told through what it built, the mosque, the judge's court, the endowed well. No prophet, companion or caliph ever appears as a character.",
+      "sources": ["G"],
+      "_check": "Text follows GDD v4.0 Age II only; no independent source attached yet. Needs the historical advisor and a qualified religious scholar before it ships (GDD requirement)."
+    },
+    {
+      "id": "age3",
+      "scene": "wisdom",
+      "kicker": { "en": "Age III · about 800 to 1250", "ar": "العصر الثالث" },
+      "title": { "en": "The Age of Wisdom", "ar": "عصر الحكمة" },
+      "body": "In Baghdad, a scholar named al-Khwarizmi wrote a book on solving equations. Its title gave the world the word algebra. His own name became the word algorithm. Every phone, including the one in your hand, runs on an idea with an Arabic name. In the libraries of that age, scholars gathered the learning of Greece, Persia and India, translated it, tested it, and carried it further. None of it was free. Someone chose to pay for knowledge.",
+      "subtitle": "في بغداد كتب الخوارزمي كتابه في الجبر، فأعطى العالم كلمتين: الجبر والخوارزمية. كل هاتف اليوم يعمل بفكرة تحمل اسماً عربياً.",
+      "game": "In the game: research now gives bonuses that last for ever. Invest early and your town speeds up for the rest of the story.",
+      "sources": ["L5", "G"]
+    },
+    {
+      "id": "age4",
+      "scene": "sails",
+      "kicker": { "en": "Age IV · about 1250 to 1650", "ar": "العصر الرابع" },
+      "title": { "en": "The Age of Sails", "ar": "عصر الأشرعة" },
+      "body": "The Indian Ocean was the busiest long-distance trade road in the world, and it ran on the monsoon. Out with one wind, home with the next. Miss the season and you waited months. From Julfar, in today's Ras Al Khaimah, came Ahmad ibn Majid, a navigator who wrote down what the sea had taught him, stars, winds, coasts and harbours, in sailing guides that pilots used for generations. He is remembered as the Lion of the Sea.",
+      "subtitle": "كان المحيط الهندي طريق التجارة الأكبر، ورياح الموسم دليله. ومن جلفار خرج أحمد بن ماجد، أسد البحار، فدوّن علم البحر للربابنة من بعده.",
+      "game": "In the game: ports, ships and sailing seasons. Timing a voyage is worth as much as choosing it.",
+      "sources": ["L6", "G"]
+    },
+    {
+      "id": "age5",
+      "scene": "pearls",
+      "kicker": { "en": "Age V · about 1650 to 1929", "ar": "العصر الخامس" },
+      "title": { "en": "The Age of Pearls", "ar": "عصر اللؤلؤ" },
+      "body": "Each summer, for about four months, the boats left for the pearl banks in what was called the great dive. A diver went down on a weighted rope with a clip on his nose, and came up on the strength of the hauler above him. On deck the nahham sang to keep the crew pulling as one. It was hard and dangerous work, and debt followed many men home. Then, at the end of August, Suhail rose. The season was over. The fleet turned for shore.",
+      "subtitle": "كل صيف يخرج الغاصة إلى المغاصات في الغوص الكبير، والنهّام يغنّي ليشدّ عزم البحّارة. فإذا طلع سهيل انتهى الموسم وعادت السفن إلى الديار.",
+      "game": "This is where your story begins. You found a pearling town on this coast, send out its boats, and decide what the catch is for.",
+      "sources": ["L1", "L7", "L8", "G"]
+    },
+    {
+      "id": "age6",
+      "scene": "oil",
+      "kicker": { "en": "Age VI · about 1930 to 1966", "ar": "العصر السادس" },
+      "title": { "en": "The Age of Oil", "ar": "عصر النفط" },
+      "body": "Then the pearls stopped paying. A world depression and cultured pearls from Japan broke the market, and the coast fell on hard years. People held on. In 1958 a drilling rig working over an old pearl bank near Das Island struck oil. In July 1962 the first tanker sailed from Abu Dhabi. The sea that had fed this coast with pearls for thousands of years had one more thing to give.",
+      "subtitle": "كسدت تجارة اللؤلؤ بالكساد العالمي واللؤلؤ الياباني المستزرع، فصبر أهل الساحل. وفي يوليو ١٩٦٢ أبحرت أول ناقلة نفط من أبوظبي.",
+      "game": "In the game: your main income disappears overnight. You rebuild with very little, and so do your rivals.",
+      "sources": ["L9", "L10", "G"]
+    },
+    {
+      "id": "age7",
+      "scene": "union",
+      "kicker": { "en": "Age VII · 1968 to 1971", "ar": "العصر السابع" },
+      "title": { "en": "The Age of Union", "ar": "عصر الاتحاد" },
+      "body": "In January 1968 Britain announced it would leave the Gulf by the end of 1971. The small states of the coast had under four years to decide who they would be. They talked, disagreed, and talked again. On 2 December 1971 six emirates raised one flag as the United Arab Emirates. Ras Al Khaimah joined in February 1972, and six became seven. A coast of pearling towns had become a country.",
+      "subtitle": "في الثاني من ديسمبر ١٩٧١ رفعت ستّ إمارات علماً واحداً، ثم انضمّت رأس الخيمة في فبراير ١٩٧٢، فاكتمل الاتحاد سبعاً.",
+      "game": "In the game: everything you built across six ages is tested. You choose how your town's story ends.",
+      "sources": ["L10", "L11", "G"],
+      "_check": "GDD v4.0 says 'seven emirates signed' on 2 December 1971. UAE Ministry of Foreign Affairs: six on that day, Ras Al Khaimah on 10 February 1972. The page follows the Ministry; the GDD line should be corrected."
+    },
+    {
+      "id": "yours",
+      "scene": "town",
+      "kicker": { "en": "The next page", "ar": "الصفحة التالية" },
+      "title": { "en": "Your Turn", "ar": "دورك الآن" },
+      "body": "Channel diggers. Judges and teachers. Scholars, navigators, divers, and the ones who signed. None of them knew how their age would end. They built anyway. Suhail still rises every August over the same coast. Tonight it rises over a small camp with one well and no name yet. That part is yours.",
+      "subtitle": "حفّارو الأفلاج، والقضاة والمعلّمون، والعلماء والربابنة والغاصة... كلّهم بنوا ولم يعرفوا كيف ينتهي عصرهم. وسهيل ما زال يطلع كل عام. الآن دورك.",
+      "game": "How to play: build, collect what your buildings make, send boats out, and answer Rawi's questions. He will show you each step.",
+      "sources": ["L1"]
+    }
+  ],
+  "sources": {
+    "G": "Game Design Document v4.0 (27 Oct 2026), section 7, 'The Seven Ages'. Design source, not a historical authority.",
+    "L1": "Khaleej Times, report on the rising of the Suhail star, 23 Aug 2022 (Suhail is Canopus; rises before dawn around 24 August; end of peak summer and of the pearl-diving season; first day of the Drour calendar).",
+    "L2": "The National and Gulf News, annual reports on the Suhail star (once a guide for pearl divers and pilgrims; seen only from southern latitudes).",
+    "L3": "UNESCO World Heritage Centre, 'Cultural Sites of Al Ain (Hafit, Hili, Bidaa Bint Saud and Oases Areas)', whc.unesco.org/en/list/1343 (falaj irrigation from the Iron Age, still in use in the oases).",
+    "L4": "Sharjah Archaeology Authority, 'Mleiha discloses its silver coin treasures', saa.shj.ae (silver coins minted and circulated at Mleiha, 3rd century BCE).",
+    "L5": "Encyclopaedia Britannica, 'al-Khwarizmi', britannica.com/biography/al-Khwarizmi.",
+    "L6": "Bridgette Byrd O'Connor, 'The Lion of the Sea: Ahmad Ibn Majid', OER Project.",
+    "L7": "Qatar Museums, National Museum of Qatar, 'Diver's Nose Clip' and 'Pearl diver's (weight)', collections.qm.org.qa.",
+    "L8": "UNESCO Intangible Cultural Heritage, 'Fjiri', ich.unesco.org/en/RL/01747 (the nahham and the songs of the pearling crews).",
+    "L9": "The National, 'The Das Island dream' (oil struck at Umm Shaif in 1958; first export from Das Island, July 1962).",
+    "L10": "UAE Ministry of Foreign Affairs, 'History', mofa.gov.ae/en/the-uae/history (pearling, its collapse, first oil cargo 1962, federation 2 December 1971, Ras Al Khaimah 10 February 1972).",
+    "L11": "Fanack, 'Formation of the UAE' (British announcement of 1968; nine parties; six emirates on 2 December 1971)."
+  }
+}

@@ -23,6 +23,8 @@ interface Page {
   subtitle: string;
   game: string;
   sources: string[];
+  /** Which part of a painted page to keep when the frame crops it (CSS object-position). */
+  focus?: string;
 }
 
 const PAGES = book.pages as Page[];
@@ -31,7 +33,7 @@ const PAGES = book.pages as Page[];
  * Painted pages, when they exist. Any image dropped into assets/lore/ and named lore_<page id>_v<NN>
  * (for example lore_age5_v01.jpg) replaces that page's code drawing; the highest version wins.
  */
-const PAINTED = import.meta.glob('../../assets/lore/*.{png,jpg,jpeg,webp}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const PAINTED = import.meta.glob('../../assets/lore/lore_*.{png,jpg,jpeg,webp}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 function painted(id: string): string | undefined {
   const hits = Object.keys(PAINTED).filter((k) => (k.split('/').pop() ?? '').startsWith(`lore_${id}_`)).sort();
   const last = hits[hits.length - 1];
@@ -330,7 +332,7 @@ export function openLore(onClose?: () => void, startAt = 0): void {
       <header><span class="lore-name">${esc(book.title.en)} · <span lang="ar" dir="rtl">${book.title.ar}</span></span>
         <button type="button" class="lore-skip" id="lore-skip">${last ? '✕' : `${t('ui.lore_skip')} ✕`}</button></header>
       <div class="lore-spread">
-        <figure class="lore-art">${painted(p.id) ? `<img src="${painted(p.id)}" alt="">` : illustration(p.scene)}<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></figure>
+        <figure class="lore-art">${painted(p.id) ? `<img src="${painted(p.id)}" alt="" style="object-position:${p.focus ?? '50% 50%'}">` : illustration(p.scene)}<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></figure>
         <article class="lore-text">
           <p class="kicker">${esc(p.kicker.en)}</p>
           <h2>${esc(p.title.en)}</h2>

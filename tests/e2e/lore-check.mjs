@@ -20,9 +20,15 @@ for (const [name, opts] of [['phone', devices['Pixel 5']], ['wide', { viewport: 
   const page = await (await browser.newContext(opts)).newPage();
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   page.on('pageerror', (e) => errors.push(String(e)));
+  // The title screen first: it now shows the painted cover.
+  await page.goto(`http://localhost:${PORT}/?title`);
+  await page.waitForSelector('#title.painted');
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: `${OUT}/${name}-0-title.jpg`, type: 'jpeg', quality: 86 });
   await page.goto(URL);
   await page.waitForSelector('#lore .lore-text h2');
   for (let i = 0; i < 9; i++) {
+    await page.waitForFunction(() => { const im = document.querySelector('.lore-art img'); return !im || im.complete; });
     await page.waitForTimeout(550);
     await page.screenshot({ path: `${OUT}/${name}-${i + 1}.jpg`, type: 'jpeg', quality: 86 });
     const over = await page.evaluate(() => { const e = document.querySelector('.lore-text'); return e.scrollHeight - e.clientHeight; });

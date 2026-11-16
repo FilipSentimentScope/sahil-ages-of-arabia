@@ -66,6 +66,7 @@ import { icon, installIconSwap, rawiAvatar } from './icons';
 import { suggest, type Suggestion } from './guide';
 import { fmt, lang, setLang, t, type Lang } from './i18n';
 import { openLore } from './lore';
+import coverArt from '../../assets/lore/lore_cover_v01.jpg';
 import { RoutesPanel, routeIcon } from './routes-panel';
 import { openArchive, openQuestion, type QuestionsHost } from './questions-ui';
 import { browserStorage } from './storage';
@@ -1020,6 +1021,9 @@ function showTitle(): void {
   }
   // Automated tests skip the title unless they ask for it with ?title.
   if (navigator.webdriver && !location.search.includes('title')) return el.remove();
+  // The painted cover of The Book of Suhail (Gemini, 16 Nov) is the title screen.
+  el.classList.add('painted');
+  el.style.setProperty('--cover', `url(${coverArt})`);
   el.innerHTML = `<div class="sky"></div><div class="star"></div>
     <div class="logo"><h1>${t('app.title_short')}</h1><p class="sub">${t('ui.subtitle')}</p><p class="tag">${t('ui.tagline')}</p></div>
     <p class="begin">${t('ui.tap_to_begin')}</p>`;

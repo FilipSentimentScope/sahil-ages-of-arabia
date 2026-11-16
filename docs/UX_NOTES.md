@@ -103,3 +103,12 @@ from Rawi offers the day's questions and names the reward. The 150-second remind
 players who chose "Later" while the Chronicle is unfinished.
 
 Still open (A26): how many questions a day, and how many the Chronicle needs.
+
+## 16 Nov 2026: painted lore pages
+
+Filip generated the nine pages and a cover in Gemini from LORE_GEMINI_PROMPTS.md. All ten are in the
+game: the nine replace the code drawings, the cover is the title screen (on a wide screen it sits in
+the middle over a blurred copy of itself). Pictures now keep their 4:3 shape on wide screens; on a
+phone the frame is wider than tall and each page has its own framing point (content/lore/book.json,
+"focus") so the important part stays in view. Review notes per picture are in ASSET_INVENTORY.md
+(LORE-00 to LORE-09). Checked in screenshots on a phone and at 16:9.

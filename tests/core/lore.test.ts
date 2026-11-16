@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { readdirSync } from 'node:fs';
 import book from '../../content/lore/book.json';
 
 // Rule 4: every page of the lore book cites a source, and nothing leaves draft without review.
@@ -20,5 +21,9 @@ describe('lore book content', () => {
   });
   it('names Suhail on the pages that carry the thread', () => {
     for (const id of ['prologue', 'age5', 'yours']) expect(book.pages.find((p) => p.id === id)?.body).toContain('Suhail');
+  });
+  it('has a painted picture for every page (code drawings remain only as a fallback)', () => {
+    const files = readdirSync('assets/lore');
+    for (const p of book.pages) expect(files.some((f) => f.startsWith(`lore_${p.id}_v`)), p.id).toBe(true);
   });
 });

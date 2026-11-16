@@ -23,7 +23,8 @@
       "sources": [
         "L1",
         "L2"
-      ]
+      ],
+      "focus": "50% 50%"
     },
     {
       "id": "age1",
@@ -43,7 +44,8 @@
         "L3",
         "L4",
         "G"
-      ]
+      ],
+      "focus": "50% 62%"
     },
     {
       "id": "age2",
@@ -62,7 +64,8 @@
       "sources": [
         "G"
       ],
-      "_check": "Text follows GDD v4.0 Age II only; no independent source attached yet. Needs the historical advisor and a qualified religious scholar before it ships (GDD requirement)."
+      "_check": "Text follows GDD v4.0 Age II only; no independent source attached yet. Needs the historical advisor and a qualified religious scholar before it ships (GDD requirement).",
+      "focus": "50% 58%"
     },
     {
       "id": "age3",
@@ -81,7 +84,8 @@
       "sources": [
         "L5",
         "G"
-      ]
+      ],
+      "focus": "50% 50%"
     },
     {
       "id": "age4",
@@ -100,7 +104,8 @@
       "sources": [
         "L6",
         "G"
-      ]
+      ],
+      "focus": "50% 45%"
     },
     {
       "id": "age5",
@@ -121,7 +126,8 @@
         "L7",
         "L8",
         "G"
-      ]
+      ],
+      "focus": "50% 78%"
     },
     {
       "id": "age6",
@@ -141,7 +147,8 @@
         "L9",
         "L10",
         "G"
-      ]
+      ],
+      "focus": "50% 55%"
     },
     {
       "id": "age7",
@@ -162,7 +169,8 @@
         "L11",
         "G"
       ],
-      "_check": "GDD v4.0 says 'seven emirates signed' on 2 December 1971. UAE Ministry of Foreign Affairs: six on that day, Ras Al Khaimah on 10 February 1972. The page follows the Ministry; the GDD line should be corrected."
+      "_check": "GDD v4.0 says 'seven emirates signed' on 2 December 1971. UAE Ministry of Foreign Affairs: six on that day, Ras Al Khaimah on 10 February 1972. The page follows the Ministry; the GDD line should be corrected.",
+      "focus": "50% 40%"
     },
     {
       "id": "yours",
@@ -180,7 +188,8 @@
       "game": "Build, gather, trade, and answer my questions when I ask. I will be beside you.",
       "sources": [
         "L1"
-      ]
+      ],
+      "focus": "50% 62%"
     }
   ],
   "sources": {
